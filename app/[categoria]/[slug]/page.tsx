@@ -98,7 +98,7 @@ export default async function ArticlePage({ params }: Props) {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(newsLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: "3rem", alignItems: "start" }}>
+      <div className="article-page-grid" style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: "3rem", alignItems: "start" }}>
 
         {/* ── Artigo ── */}
         <article>
@@ -113,8 +113,8 @@ export default async function ArticlePage({ params }: Props) {
 
           {/* Badge categoria */}
           <Link href={`/${article.category}`} style={{ textDecoration: "none" }}>
-            <span style={{ background: cat.color, color: "#fff", fontSize: "0.72rem", fontWeight: 700, padding: "0.2rem 0.6rem", borderRadius: 4, textTransform: "uppercase", letterSpacing: 1 }}>
-              {cat.emoji} {cat.label}
+            <span style={{ color: cat.color, fontSize: "0.72rem", fontWeight: 800, textTransform: "uppercase", letterSpacing: "1px" }}>
+              {cat.label}
             </span>
           </Link>
 
@@ -123,10 +123,12 @@ export default async function ArticlePage({ params }: Props) {
           </h1>
           <p style={{ color: "#64748b", fontSize: "1.05rem", marginBottom: "1rem", lineHeight: 1.6 }}>{article.description}</p>
 
-          <div style={{ display: "flex", gap: "1rem", fontSize: "0.82rem", color: "#94a3b8", marginBottom: "1.5rem", flexWrap: "wrap", alignItems: "center" }}>
-            <span>📅 <time dateTime={article.date} title={fullDate}>{date}</time></span>
-            <span>⏱ {article.readTime} de leitura</span>
-            <span style={{ background: "#f1f5f9", padding: "0.1rem 0.5rem", borderRadius: 4 }}>✍️ Hoje Notícia</span>
+          <div style={{ display: "flex", gap: "1rem", fontSize: "0.8rem", color: "#94a3b8", marginBottom: "1.5rem", flexWrap: "wrap", alignItems: "center" }}>
+            <time dateTime={article.date} title={fullDate} style={{ fontWeight: 500 }}>{date}</time>
+            <span>·</span>
+            <span>{article.readTime} de leitura</span>
+            <span>·</span>
+            <span style={{ fontWeight: 600, color: "#475569" }}>Hoje Notícia</span>
           </div>
 
           {/* Thumbnail */}
@@ -197,7 +199,7 @@ export default async function ArticlePage({ params }: Props) {
           {related.length > 0 && (
             <section aria-label="Leia também" style={{ marginTop: "2rem", background: "#f8fafc", borderRadius: 8, padding: "1.25rem", border: "1px solid #e2e8f0" }}>
               <h3 style={{ fontSize: "0.85rem", fontWeight: 800, color: "#0f172a", textTransform: "uppercase", letterSpacing: 1, marginBottom: "0.75rem" }}>
-                📖 Leia Também
+                Leia Também
               </h3>
               <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
                 {related.map((a) => (
@@ -213,7 +215,7 @@ export default async function ArticlePage({ params }: Props) {
         </article>
 
         {/* ── Sidebar ── */}
-        <aside style={{ position: "sticky", top: "2rem" }}>
+        <aside className="article-page-sidebar" style={{ position: "sticky", top: "2rem" }}>
           <MaisLidos articles={maisLidos} currentSlug={slug} />
 
           {/* AdSense sidebar */}

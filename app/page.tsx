@@ -1,88 +1,68 @@
 import { getAllArticles } from "@/lib/mdx";
-import { CATEGORIES, getCategoryMeta } from "@/lib/categories";
 import ArticleCard from "@/components/ArticleCard";
 import MaisLidos from "@/components/MaisLidos";
+import InfiniteArticleList from "@/components/InfiniteArticleList";
 import Link from "next/link";
+import { getCategoryMeta } from "@/lib/categories";
 
 export const revalidate = 3600;
 
 export default function HomePage() {
-  const all    = getAllArticles();
-  const latest = all.slice(0, 6);
+  const all      = getAllArticles();
+  const destaque = all.slice(0, 3);   // top 3 — destaque visual
+  const feed     = all.slice(3);      // restante — scroll infinito
 
   return (
-    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "2rem 1.25rem" }}>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: "3rem", alignItems: "start" }}>
+    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "1.5rem 1.25rem" }}>
 
-        {/* ── Coluna principal ── */}
-        <div>
-          {/* Últimas notícias */}
-          {latest.length > 0 && (
-            <section style={{ marginBottom: "3rem" }}>
-              <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "1.25rem" }}>
-                <span style={{ background: "#ef4444", color: "#fff", fontWeight: 800, fontSize: "0.75rem", padding: "0.2rem 0.6rem", borderRadius: 4, letterSpacing: 1, textTransform: "uppercase" }}>🔴 Agora</span>
-                <h1 style={{ fontSize: "1.4rem", fontWeight: 800, color: "#0f172a" }}>Últimas Notícias</h1>
-              </div>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "1.25rem" }}>
-                {latest.map((a) => <ArticleCard key={`${a.category}/${a.slug}`} article={a} large />)}
-              </div>
-            </section>
-          )}
-
-          {/* AdSense */}
-          <div style={{ background: "#f1f5f9", borderRadius: 8, padding: "1.5rem", textAlign: "center", marginBottom: "3rem", color: "#94a3b8", fontSize: "0.8rem" }}>
-            [Anúncio Google AdSense]
+      {/* ── Destaques (grid 3 cards) ── */}
+      {destaque.length > 0 && (
+        <section style={{ marginBottom: "2rem" }}>
+          <div style={{ borderBottom: "2px solid #dc2626", paddingBottom: "0.4rem", marginBottom: "1rem" }}>
+            <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#dc2626", textTransform: "uppercase", letterSpacing: "1.5px" }}>
+              Últimas notícias
+            </span>
           </div>
+          <div className="destaque-grid">
+            {destaque.map((a) => <ArticleCard key={`${a.category}/${a.slug}`} article={a} large />)}
+          </div>
+        </section>
+      )}
 
-          {/* Por categoria */}
-          {Object.entries(CATEGORIES).map(([slug, { label, emoji, color }]) => {
-            const articles = all.filter((a) => a.category === slug).slice(0, 4);
-            if (!articles.length) return null;
-            return (
-              <section key={slug} style={{ marginBottom: "3rem" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem", borderBottom: `3px solid ${color}`, paddingBottom: "0.5rem" }}>
-                  <h2 style={{ fontSize: "1.2rem", fontWeight: 800, color: "#0f172a" }}>{emoji} {label}</h2>
-                  <Link href={`/${slug}`} style={{ fontSize: "0.82rem", color, fontWeight: 600 }}>Ver tudo →</Link>
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "1rem" }}>
-                  {articles.map((a) => <ArticleCard key={`${a.category}/${a.slug}`} article={a} />)}
-                </div>
-              </section>
-            );
-          })}
+      <div className="home-layout">
 
-          {all.length === 0 && (
-            <div style={{ textAlign: "center", padding: "4rem 0", color: "#94a3b8" }}>
-              <div style={{ fontSize: "3rem", marginBottom: "1rem" }}>📰</div>
-              <p>Conteúdo sendo publicado em breve.</p>
-            </div>
-          )}
-        </div>
+        {/* ── Feed principal com scroll infinito ── */}
+        <main>
+          <div style={{ borderBottom: "2px solid #e2e8f0", paddingBottom: "0.4rem", marginBottom: "1.25rem" }}>
+            <span style={{ fontSize: "0.72rem", fontWeight: 800, color: "#374151", textTransform: "uppercase", letterSpacing: "1.5px" }}>
+              Todas as notícias
+            </span>
+          </div>
+          <InfiniteArticleList articles={feed} />
+        </main>
 
         {/* ── Sidebar ── */}
-        <aside style={{ position: "sticky", top: "2rem" }}>
+        <aside className="sidebar">
           <MaisLidos articles={all} />
 
-          {/* AdSense sidebar */}
-          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 8, padding: "2rem 1rem", textAlign: "center", color: "#94a3b8", fontSize: "0.78rem", marginBottom: "1.5rem" }}>
-            [Anúncio Sidebar]
+          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 4, padding: "1.5rem 1rem", textAlign: "center", color: "#94a3b8", fontSize: "0.75rem", marginBottom: "1.5rem" }}>
+            Publicidade
           </div>
 
-          {/* Categorias rápidas */}
-          <div style={{ background: "#fff", borderRadius: 10, padding: "1.25rem", boxShadow: "0 1px 4px rgba(0,0,0,0.08)" }}>
-            <div style={{ fontWeight: 800, color: "#0f172a", marginBottom: "1rem", fontSize: "0.9rem", textTransform: "uppercase", letterSpacing: 1 }}>
+          {/* Editorias */}
+          <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 4, padding: "1rem" }}>
+            <h3 style={{ fontSize: "0.72rem", fontWeight: 800, color: "#374151", textTransform: "uppercase", letterSpacing: "1.5px", margin: "0 0 0.75rem 0", paddingBottom: "0.4rem", borderBottom: "2px solid #e2e8f0" }}>
               Editorias
-            </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
-              {Object.entries(CATEGORIES).map(([slug, { label, emoji, color }]) => (
-                <Link
-                  key={slug}
-                  href={`/${slug}`}
-                  style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 0.75rem", borderRadius: 6, background: "#f8fafc", textDecoration: "none", fontSize: "0.85rem", fontWeight: 600, color: "#1e293b", borderLeft: `3px solid ${color}` }}
-                >
-                  <span>{emoji}</span> {label}
-                </Link>
-              ))}
+            </h3>
+            <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
+              {["futebol","politica","fofoca","noticias","financas","saude","tecnologia","entretenimento","crime","religiao"].map((slug) => {
+                const cat = getCategoryMeta(slug);
+                return (
+                  <Link key={slug} href={`/${slug}`} style={{ display: "block", padding: "0.4rem 0.6rem", textDecoration: "none", fontSize: "0.82rem", fontWeight: 600, color: "#374151", borderLeft: `3px solid ${cat.color}`, background: "#f8fafc" }}>
+                    {cat.label}
+                  </Link>
+                );
+              })}
             </div>
           </div>
         </aside>
