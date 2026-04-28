@@ -24,7 +24,18 @@ export default function ArticleCard({ article, large = false }: { article: Artic
       >
         {thumb && (
           <div style={{ aspectRatio: "16/9", overflow: "hidden", background: "#e2e8f0" }}>
-            <img src={thumb} alt={article.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} loading="lazy" />
+            <img
+              src={thumb}
+              alt={article.title}
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              loading="lazy"
+              onError={(e) => {
+                const img = e.currentTarget;
+                if (article.youtubeId && img.src.includes("maxresdefault")) {
+                  img.src = `https://img.youtube.com/vi/${article.youtubeId}/hqdefault.jpg`;
+                }
+              }}
+            />
           </div>
         )}
         <div style={{ padding: large ? "1.25rem" : "1rem" }}>

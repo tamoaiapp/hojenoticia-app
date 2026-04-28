@@ -132,18 +132,26 @@ export default async function ArticlePage({ params }: Props) {
             <img src={thumb} alt={article.title} style={{ width: "100%", borderRadius: 10, marginBottom: "1.5rem", maxHeight: 400, objectFit: "cover" }} />
           )}
 
-          {/* YouTube embed */}
+          {/* YouTube thumbnail link (evita age-restriction iframe) */}
           {article.youtubeId && (
-            <div style={{ position: "relative", paddingBottom: "56.25%", height: 0, marginBottom: "1.75rem", borderRadius: 10, overflow: "hidden" }}>
-              <iframe
-                src={`https://www.youtube.com/embed/${article.youtubeId}`}
-                title={article.title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                loading="lazy"
-                style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", border: 0 }}
+            <a
+              href={`https://www.youtube.com/watch?v=${article.youtubeId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ display: "block", position: "relative", marginBottom: "1.75rem", borderRadius: 10, overflow: "hidden", aspectRatio: "16/9" }}
+            >
+              <img
+                src={`https://img.youtube.com/vi/${article.youtubeId}/maxresdefault.jpg`}
+                alt={article.title}
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                onError={(e) => { (e.currentTarget as HTMLImageElement).src = `https://img.youtube.com/vi/${article.youtubeId}/hqdefault.jpg` }}
               />
-            </div>
+              <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.3)" }}>
+                <div style={{ width: 68, height: 48, background: "#ff0000", borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <svg viewBox="0 0 68 48" width="68" height="48"><path d="M66.5 7.7a8.5 8.5 0 0 0-6-6C56.2 0 34 0 34 0S11.8 0 7.5 1.7a8.5 8.5 0 0 0-6 6C0 12 0 24 0 24s0 12 1.5 16.3a8.5 8.5 0 0 0 6 6C11.8 48 34 48 34 48s22.2 0 26.5-1.7a8.5 8.5 0 0 0 6-6C68 36 68 24 68 24s0-12-1.5-16.3z" fill="#ff0000"/><path d="M45 24 27 14v20" fill="#fff"/></svg>
+                </div>
+              </div>
+            </a>
           )}
 
           {/* AdSense topo */}
