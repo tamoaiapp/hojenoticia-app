@@ -9,6 +9,7 @@ export const metadata: Metadata = {
   keywords: "noticias brasil, futebol, politica, fofoca, saude, financas, hoje",
   metadataBase: new URL("https://hojenoticia.com"),
   openGraph: { siteName: "Hoje Notícia", locale: "pt_BR", type: "website" },
+  twitter: { card: "summary_large_image", site: "@hojenoticia" },
   robots: { index: true, follow: true },
 };
 
