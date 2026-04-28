@@ -2,11 +2,12 @@
 import Link from "next/link";
 import { ArticleMeta } from "@/lib/mdx";
 import { getCategoryMeta } from "@/lib/categories";
+import { formatRelativeDate } from "@/lib/dateUtils";
 
 export default function ArticleCard({ article, large = false }: { article: ArticleMeta; large?: boolean }) {
   const cat = getCategoryMeta(article.category);
   const thumb = article.image ?? (article.youtubeId ? `https://img.youtube.com/vi/${article.youtubeId}/maxresdefault.jpg` : null);
-  const date = new Date(article.date).toLocaleDateString("pt-BR", { day: "numeric", month: "short", year: "numeric" });
+  const date = formatRelativeDate(article.date);
 
   return (
     <Link href={`/${article.category}/${article.slug}`} style={{ display: "block", textDecoration: "none" }}>

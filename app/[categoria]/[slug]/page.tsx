@@ -6,6 +6,7 @@ import { getArticleBySlug, getArticlesByCategory, getAllArticles } from "@/lib/m
 import { getCategoryMeta } from "@/lib/categories";
 import VejaTambem from "@/components/VejaTambem";
 import MaisLidos from "@/components/MaisLidos";
+import { formatRelativeDate, formatFullDate } from "@/lib/dateUtils";
 
 interface Props { params: Promise<{ categoria: string; slug: string }> }
 
@@ -61,7 +62,8 @@ export default async function ArticlePage({ params }: Props) {
   const vejaTambem = byCat.slice(3, 7);
   const maisLidos  = allArts;
 
-  const date    = new Date(article.date).toLocaleDateString("pt-BR", { day: "numeric", month: "long", year: "numeric" });
+  const date    = formatRelativeDate(article.date);
+  const fullDate = formatFullDate(article.date);
   const thumb   = article.image ?? (article.youtubeId ? `https://img.youtube.com/vi/${article.youtubeId}/maxresdefault.jpg` : null);
   const tags    = Array.isArray(article.keywords) ? article.keywords : [];
   const base    = "https://hojenoticia.com";
@@ -122,7 +124,7 @@ export default async function ArticlePage({ params }: Props) {
           <p style={{ color: "#64748b", fontSize: "1.05rem", marginBottom: "1rem", lineHeight: 1.6 }}>{article.description}</p>
 
           <div style={{ display: "flex", gap: "1rem", fontSize: "0.82rem", color: "#94a3b8", marginBottom: "1.5rem", flexWrap: "wrap", alignItems: "center" }}>
-            <span>📅 <time dateTime={article.date}>{date}</time></span>
+            <span>📅 <time dateTime={article.date} title={fullDate}>{date}</time></span>
             <span>⏱ {article.readTime} de leitura</span>
             <span style={{ background: "#f1f5f9", padding: "0.1rem 0.5rem", borderRadius: 4 }}>✍️ Hoje Notícia</span>
           </div>

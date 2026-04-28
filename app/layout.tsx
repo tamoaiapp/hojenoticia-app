@@ -10,7 +10,10 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://hojenoticia.com"),
   openGraph: { siteName: "Hoje Notícia", locale: "pt_BR", type: "website" },
   twitter: { card: "summary_large_image", site: "@hojenoticia" },
-  robots: { index: true, follow: true },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, "max-snippet": -1, "max-image-preview": "large", "max-video-preview": -1 } },
+  other: {
+    "google-site-verification": "",  // adicionar código do Search Console aqui
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
