@@ -17,27 +17,34 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!a) return {};
   const image = a.image ?? (a.youtubeId ? `https://img.youtube.com/vi/${a.youtubeId}/maxresdefault.jpg` : undefined);
   const keywords = Array.isArray(a.keywords) ? a.keywords.join(", ") : a.keywords;
+  const canonical = `https://hojenoticia.com/${a.category}/${slug}`;
   return {
-    title: a.title,
+    title: `${a.title} - Hoje Notícia`,
     description: a.description,
     keywords,
+    alternates: { canonical },
     openGraph: {
       title: a.title,
       description: a.description,
       type: "article",
       publishedTime: a.date,
-      ...(image ? { images: [{ url: image, width: 1280, height: 720 }] } : {}),
+      siteName: "Hoje Notícia",
+      locale: "pt_BR",
+      url: canonical,
+      ...(image ? { images: [{ url: image, width: 1280, height: 720, alt: a.title }] } : {}),
     },
     twitter: {
       card: "summary_large_image",
       title: a.title,
       description: a.description,
+      site: "@hojenoticia",
       ...(image ? { images: [image] } : {}),
     },
     other: {
       "article:published_time": a.date,
       "article:modified_time":  a.date,
       "article:section":        a.category,
+      ...(keywords ? { "news_keywords": keywords } : {}),
     },
   };
 }
