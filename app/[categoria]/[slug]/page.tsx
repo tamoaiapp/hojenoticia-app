@@ -11,6 +11,12 @@ import { formatRelativeDate, formatFullDate } from "@/lib/dateUtils";
 interface Props { params: Promise<{ categoria: string; slug: string }> }
 
 export const dynamicParams = true;
+export const revalidate = 3600;  // revalida cada artigo a cada 1h
+
+export async function generateStaticParams() {
+  const articles = getAllArticles();
+  return articles.map((a) => ({ categoria: a.category, slug: a.slug }));
+}
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { categoria, slug } = await params;

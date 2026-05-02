@@ -8,7 +8,7 @@ export default function VejaTambem({ articles }: { articles: ArticleMeta[] }) {
   return (
     <section aria-label="Veja também" style={{ marginTop: "2.5rem", borderTop: "3px solid #e2e8f0", paddingTop: "1.5rem" }}>
       <h2 style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", textTransform: "uppercase", letterSpacing: 1, marginBottom: "1.25rem" }}>
-        👀 Veja Também
+        Veja Também
       </h2>
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: "1rem" }}>
         {articles.map((a) => {
