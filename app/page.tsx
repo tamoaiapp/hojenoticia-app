@@ -8,9 +8,28 @@ import { getCategoryMeta } from "@/lib/categories";
 export const revalidate = 3600;
 
 export default function HomePage() {
-  const all      = getAllArticles();
-  const destaque = all.slice(0, 3);   // top 3 — destaque visual
-  const feed     = all.slice(3);      // restante — scroll infinito
+  const all = getAllArticles();
+
+  // Destaques: 1 artigo de cada categoria diferente (ordem de prioridade)
+  const prioridade = ['noticias','politica','crime','fofoca','entretenimento','futebol','financas','saude','tecnologia','religiao']
+  const usadas = new Set<string>()
+  const destaque = prioridade
+    .map(cat => all.find(a => a.category === cat && !usadas.has(a.category) && usadas.add(a.category) !== undefined))
+    .filter(Boolean)
+    .slice(0, 3) as typeof all
+
+  // Feed: tudo exceto os 3 destaques, intercalando categorias
+  const destaqueslugs = new Set(destaque.map(a => a.slug))
+  const semDestaque = all.filter(a => !destaqueslugs.has(a.slug))
+  // Intercala: pega 1 de cada categoria ciclicamente
+  const porCategoria: Record<string, typeof all> = {}
+  semDestaque.forEach(a => { (porCategoria[a.category] ??= []).push(a) })
+  const feed: typeof all = []
+  const cats = Object.keys(porCategoria)
+  const maxLen = Math.max(...cats.map(c => porCategoria[c].length))
+  for (let i = 0; i < maxLen; i++) {
+    cats.forEach(c => { if (porCategoria[c][i]) feed.push(porCategoria[c][i]) })
+  }
 
   return (
     <div style={{ maxWidth: 1200, margin: "0 auto", padding: "1.5rem 1.25rem" }}>
