@@ -7,7 +7,7 @@ import {
   formatBRL, formatDate, formatDateShort,
 } from "@/lib/loterias";
 
-export const revalidate = 900;
+export const revalidate = false; // resultado histórico nunca muda
 export const dynamicParams = true;
 
 const BASE = "https://hojenoticia.com";

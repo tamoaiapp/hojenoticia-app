@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { LOTERIAS_CONFIG, getLatestDrawPerLoteria, formatBRL, formatDateShort } from "@/lib/loterias";
 
-export const revalidate = 1800;
+export const revalidate = 86400; // 24h — novos concursos saem 1-2x/semana
 
 const BASE = "https://hojenoticia.com";
 
