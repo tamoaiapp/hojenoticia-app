@@ -7,28 +7,44 @@ import { getCategoryMeta } from "@/lib/categories";
 
 export const revalidate = 3600;
 
-export default function HomePage() {
-  const all = getAllArticles();
+// Ordem de prioridade editorial: política em primeiro, resto misturado
+const PRIORIDADE = [
+  'politica','noticias','crime','fofoca','futebol',
+  'entretenimento','financas','saude','tecnologia','religiao','automoveis',
+]
 
-  // Destaques: 1 artigo de cada categoria diferente (ordem de prioridade)
-  const prioridade = ['noticias','politica','crime','fofoca','entretenimento','futebol','financas','saude','tecnologia','religiao']
+const CAP_POR_CAT = 50 // máximo de artigos por categoria no feed — evita entretenimento dominar
+
+export default function HomePage() {
+  const all = getAllArticles()
+
+  // Destaques: 1 artigo de cada categoria na ordem de prioridade (política primeiro)
   const usadas = new Set<string>()
-  const destaque = prioridade
-    .map(cat => all.find(a => a.category === cat && !usadas.has(a.category) && usadas.add(a.category) !== undefined))
+  const destaque = PRIORIDADE
+    .map(cat => all.find(a => a.category === cat && !usadas.has(cat) && (usadas.add(cat), true)))
     .filter(Boolean)
     .slice(0, 3) as typeof all
 
-  // Feed: tudo exceto os 3 destaques, intercalando categorias
+  // Feed: intercala categorias em ordem de prioridade, cap por categoria
   const destaqueslugs = new Set(destaque.map(a => a.slug))
   const semDestaque = all.filter(a => !destaqueslugs.has(a.slug))
-  // Intercala: pega 1 de cada categoria ciclicamente
+
+  // Monta mapa por categoria respeitando a ordem de prioridade
   const porCategoria: Record<string, typeof all> = {}
-  semDestaque.forEach(a => { (porCategoria[a.category] ??= []).push(a) })
+  PRIORIDADE.forEach(c => { porCategoria[c] = [] })
+  semDestaque.forEach(a => {
+    const cat = a.category
+    if (!porCategoria[cat]) porCategoria[cat] = []
+    if (porCategoria[cat].length < CAP_POR_CAT) porCategoria[cat].push(a)
+  })
+
+  // Round-robin: 1 artigo de cada categoria por rodada, na ordem de prioridade
   const feed: typeof all = []
-  const cats = Object.keys(porCategoria)
-  const maxLen = Math.max(...cats.map(c => porCategoria[c].length))
+  const maxLen = Math.max(...PRIORIDADE.map(c => porCategoria[c]?.length ?? 0))
   for (let i = 0; i < maxLen; i++) {
-    cats.forEach(c => { if (porCategoria[c][i]) feed.push(porCategoria[c][i]) })
+    PRIORIDADE.forEach(c => {
+      if (porCategoria[c]?.[i]) feed.push(porCategoria[c][i])
+    })
   }
 
   return (
@@ -74,7 +90,7 @@ export default function HomePage() {
               Editorias
             </h3>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.2rem" }}>
-              {["futebol","politica","fofoca","noticias","financas","saude","tecnologia","entretenimento","crime","religiao"].map((slug) => {
+              {PRIORIDADE.map((slug) => {
                 const cat = getCategoryMeta(slug);
                 return (
                   <Link key={slug} href={`/${slug}`} style={{ display: "block", padding: "0.4rem 0.6rem", textDecoration: "none", fontSize: "0.82rem", fontWeight: 600, color: "#374151", borderLeft: `3px solid ${cat.color}`, background: "#f8fafc" }}>
