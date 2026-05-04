@@ -5,7 +5,7 @@ import InfiniteArticleList from "@/components/InfiniteArticleList";
 import Link from "next/link";
 import { getCategoryMeta } from "@/lib/categories";
 
-export const revalidate = 3600;
+export const revalidate = 172800; // 48h
 
 // Ordem de prioridade editorial: política em primeiro, resto misturado
 const PRIORIDADE = [

@@ -11,7 +11,7 @@ import { formatRelativeDate, formatFullDate } from "@/lib/dateUtils";
 interface Props { params: Promise<{ categoria: string; slug: string }> }
 
 export const dynamicParams = true;
-export const revalidate = 3600;  // revalida cada artigo a cada 1h
+export const revalidate = 172800; // 48h
 
 export async function generateStaticParams() {
   // Pré-renderiza só os 100 mais recentes — o resto usa ISR on-demand (dynamicParams=true)
