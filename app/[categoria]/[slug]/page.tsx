@@ -14,7 +14,8 @@ export const dynamicParams = true;
 export const revalidate = 3600;  // revalida cada artigo a cada 1h
 
 export async function generateStaticParams() {
-  const articles = getAllArticles();
+  // Pré-renderiza só os 100 mais recentes — o resto usa ISR on-demand (dynamicParams=true)
+  const articles = getAllArticles().slice(0, 100);
   return articles.map((a) => ({ categoria: a.category, slug: a.slug }));
 }
 
