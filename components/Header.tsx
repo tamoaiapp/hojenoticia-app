@@ -25,7 +25,13 @@ export default function Header() {
             <span style={{ display: "block", width: 22, height: 2, background: "#374151" }} />
           </button>
 
-          <Link href="/" style={{ textDecoration: "none" }}>
+          <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "0.55rem" }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="38" height="38" style={{ flexShrink: 0 }}>
+              <rect width="48" height="48" rx="8" fill="#dc2626"/>
+              <text x="24" y="20" fontFamily="Arial Black, Impact, sans-serif" fontSize="11" fontWeight="900" fill="white" textAnchor="middle" letterSpacing="0.5">HOJE</text>
+              <rect x="6" y="23" width="36" height="1.5" fill="rgba(255,255,255,0.4)"/>
+              <text x="24" y="38" fontFamily="Arial Black, Impact, sans-serif" fontSize="10" fontWeight="900" fill="white" textAnchor="middle" letterSpacing="0.3">NOTÍCIA</text>
+            </svg>
             <span style={{ fontSize: "1.7rem", fontWeight: 900, color: "#0f172a", letterSpacing: "-1.5px" }}>
               Hoje<span style={{ color: "#dc2626" }}>Notícia</span>
             </span>
