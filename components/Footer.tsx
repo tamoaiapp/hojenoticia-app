@@ -23,17 +23,26 @@ export default function Footer() {
             </div>
           </div>
           <div>
-            <div style={{ fontWeight: 700, color: "#e2e8f0", marginBottom: "0.75rem", fontSize: "0.85rem" }}>LEGAL</div>
+            <div style={{ fontWeight: 700, color: "#e2e8f0", marginBottom: "0.75rem", fontSize: "0.85rem" }}>INSTITUCIONAL</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.82rem" }}>
+              <Link href="/quem-somos" style={{ color: "#94a3b8" }}>Quem Somos</Link>
+              <Link href="/contato" style={{ color: "#94a3b8" }}>Contato</Link>
               <Link href="/privacidade" style={{ color: "#94a3b8" }}>Privacidade</Link>
               <Link href="/termos" style={{ color: "#94a3b8" }}>Termos de Uso</Link>
-              <Link href="/contato" style={{ color: "#94a3b8" }}>Contato</Link>
             </div>
           </div>
         </div>
       </div>
-      <div style={{ maxWidth: 1200, margin: "2rem auto 0", borderTop: "1px solid #1e293b", paddingTop: "1.5rem", fontSize: "0.78rem", textAlign: "center" }}>
+      <div style={{ maxWidth: 1200, margin: "2rem auto 0", borderTop: "1px solid #1e293b", paddingTop: "1.5rem", fontSize: "0.78rem", textAlign: "center", lineHeight: 1.8 }}>
         © {new Date().getFullYear()} HojeNotícia. Todos os direitos reservados.
+        <span style={{ display: "block", color: "#64748b", marginTop: "0.25rem" }}>
+          CNPJ 29.434.321/0001-20 &nbsp;·&nbsp;
+          <Link href="/quem-somos" style={{ color: "#64748b" }}>Quem Somos</Link>
+          &nbsp;·&nbsp;
+          <Link href="/privacidade" style={{ color: "#64748b" }}>Política de Privacidade</Link>
+          &nbsp;·&nbsp;
+          <Link href="/termos" style={{ color: "#64748b" }}>Termos de Uso</Link>
+        </span>
       </div>
     </footer>
   );
