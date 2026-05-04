@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 60" width="220" height="60">
+  <rect width="220" height="60" fill="#ffffff"/>
+  <!-- Ícone -->
+  <rect x="4" y="4" width="52" height="52" rx="8" fill="#dc2626"/>
+  <text x="30" y="26" font-family="Arial Black,Impact,sans-serif" font-size="11" font-weight="900" fill="white" text-anchor="middle" letter-spacing="0.5">HOJE</text>
+  <rect x="7" y="30" width="46" height="1.5" fill="rgba(255,255,255,0.45)"/>
+  <text x="30" y="46" font-family="Arial Black,Impact,sans-serif" font-size="9.5" font-weight="900" fill="white" text-anchor="middle" letter-spacing="0.3">NOTÍCIA</text>
+  <!-- Texto -->
+  <text x="68" y="38" font-family="Arial Black,Impact,sans-serif" font-size="24" font-weight="900" fill="#0f172a">Hoje</text>
+  <text x="131" y="38" font-family="Arial Black,Impact,sans-serif" font-size="24" font-weight="900" fill="#dc2626">Notícia</text>
+</svg>

@@ -51,6 +51,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       "article:published_time": a.date,
       "article:modified_time":  a.date,
       "article:section":        a.category,
+      "article:author":         "https://hojenoticia.com/quem-somos",
+      "article:publisher":      "https://hojenoticia.com",
       ...(keywords ? { "news_keywords": keywords } : {}),
     },
   };
@@ -82,10 +84,21 @@ export default async function ArticlePage({ params }: Props) {
     description:     article.description,
     datePublished:   article.date,
     dateModified:    article.date,
-    author:    { "@type": "Organization", name: "Hoje Notícia", url: base },
-    publisher: { "@type": "Organization", name: "Hoje Notícia", logo: { "@type": "ImageObject", url: `${base}/logo.png` } },
+    inLanguage:      "pt-BR",
+    author:    { "@type": "Organization", name: "Hoje Notícia", url: base, "@id": `${base}/#organization` },
+    publisher: {
+      "@type":  "NewsMediaOrganization",
+      "@id":    `${base}/#organization`,
+      name:     "Hoje Notícia",
+      url:      base,
+      logo:     { "@type": "ImageObject", url: `${base}/logo.svg`, width: 220, height: 60 },
+      publishingPrinciples: `${base}/quem-somos`,
+      masthead: `${base}/quem-somos`,
+    },
     mainEntityOfPage: { "@type": "WebPage", "@id": `${base}/${article.category}/${slug}` },
+    isAccessibleForFree: true,
     ...(thumb ? { image: { "@type": "ImageObject", url: thumb, width: 1280, height: 720 } } : {}),
+    speakable: { "@type": "SpeakableSpecification", cssSelector: ["h1", ".article-body p:first-of-type"] },
   };
 
   // BreadcrumbList JSON-LD
@@ -130,11 +143,13 @@ export default async function ArticlePage({ params }: Props) {
           <p style={{ color: "#64748b", fontSize: "1.05rem", marginBottom: "1rem", lineHeight: 1.6 }}>{article.description}</p>
 
           <div style={{ display: "flex", gap: "1rem", fontSize: "0.8rem", color: "#94a3b8", marginBottom: "1.5rem", flexWrap: "wrap", alignItems: "center" }}>
+            <span>Por <strong style={{ color: "#475569" }}>
+              <a href="/quem-somos" rel="author" style={{ color: "#475569", textDecoration: "none" }}>Redação HojeNotícia</a>
+            </strong></span>
+            <span>·</span>
             <time dateTime={article.date} title={fullDate} style={{ fontWeight: 500 }}>{date}</time>
             <span>·</span>
             <span>{article.readTime} de leitura</span>
-            <span>·</span>
-            <span style={{ fontWeight: 600, color: "#475569" }}>Hoje Notícia</span>
           </div>
 
           {/* Thumbnail */}

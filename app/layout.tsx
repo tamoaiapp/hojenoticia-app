@@ -16,6 +16,34 @@ export const metadata: Metadata = {
   },
 };
 
+const organizationLd = {
+  "@context": "https://schema.org",
+  "@type": "NewsMediaOrganization",
+  "@id": "https://hojenoticia.com/#organization",
+  name: "Hoje Notícia",
+  url: "https://hojenoticia.com",
+  logo: { "@type": "ImageObject", url: "https://hojenoticia.com/logo.svg", width: 220, height: 60 },
+  publishingPrinciples: "https://hojenoticia.com/quem-somos",
+  masthead: "https://hojenoticia.com/quem-somos",
+  foundingDate: "2025",
+  inLanguage: "pt-BR",
+};
+
+const websiteLd = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": "https://hojenoticia.com/#website",
+  name: "Hoje Notícia",
+  url: "https://hojenoticia.com",
+  inLanguage: "pt-BR",
+  publisher: { "@id": "https://hojenoticia.com/#organization" },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: { "@type": "EntryPoint", urlTemplate: "https://hojenoticia.com/?q={search_term_string}" },
+    "query-input": "required name=search_term_string",
+  },
+};
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
@@ -24,6 +52,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX" crossOrigin="anonymous" />
       </head>
       <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }} />
         <Header />
         <main style={{ minHeight: "80vh" }}>{children}</main>
         <Footer />
