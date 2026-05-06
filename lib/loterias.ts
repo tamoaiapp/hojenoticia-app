@@ -18,7 +18,7 @@ export const LOTERIAS_CONFIG: Record<string, {
   },
   "lotofacil": {
     name: "Lotofácil", emoji: "🌸", color: "#930089", ballColor: "#780070",
-    numCount: 15, apiKey: "lotofacil", freq: "Segunda a Sábado",
+    numCount: 15, apiKey: "lotofacil", freq: "Todos os dias",
     description: "15 números de 1 a 25. A loteria com maior chance de ganhar.",
   },
   "lotomania": {
@@ -33,8 +33,13 @@ export const LOTERIAS_CONFIG: Record<string, {
   },
   "diadesorte": {
     name: "Dia de Sorte", emoji: "🍀", color: "#B37009", ballColor: "#8a5607",
-    numCount: 7, apiKey: "diadesorte", freq: "Segunda, Quarta e Sexta",
+    numCount: 7, apiKey: "diadesorte", freq: "Terça, Quinta e Sábado",
     description: "7 números de 1 a 31 mais um mês da sorte.",
+  },
+  "dupla-sena": {
+    name: "Dupla Sena", emoji: "🎲", color: "#D22F27", ballColor: "#a82420",
+    numCount: 6, apiKey: "duplasena", freq: "Terça, Quinta e Sábado",
+    description: "6 números de 1 a 50 sorteados duas vezes por concurso.",
   },
 };
 
