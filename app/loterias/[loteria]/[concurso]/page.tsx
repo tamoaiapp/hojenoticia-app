@@ -8,16 +8,27 @@ import {
 } from "@/lib/loterias";
 
 export const revalidate = false; // resultado histórico nunca muda
-export const dynamicParams = true;
+export const dynamicParams = true; // demais páginas carregam sob demanda (sem ISR write)
 
 const BASE = "https://hojenoticia.com";
 
 interface Props { params: Promise<{ loteria: string; concurso: string }> }
 
 export async function generateStaticParams() {
+  // Pré-gera: últimos 60 dias de resultados publicados + próximos 14 dias aguardando
+  const today = new Date();
+  const cutoffPast  = new Date(today); cutoffPast.setDate(today.getDate() - 60);
+  const cutoffFuture = new Date(today); cutoffFuture.setDate(today.getDate() + 14);
+  const pastISO   = cutoffPast.toISOString().split("T")[0];
+  const futureISO = cutoffFuture.toISOString().split("T")[0];
+
   const params: { loteria: string; concurso: string }[] = [];
   for (const lot of Object.keys(LOTERIAS_CONFIG)) {
-    const draws = getDrawsByLoteria(lot);
+    const draws = getDrawsByLoteria(lot).filter(d => {
+      if (d.status === "publicado") return d.draw_date >= pastISO;
+      if (d.status === "aguardando") return d.draw_date <= futureISO;
+      return false;
+    });
     for (const d of draws) params.push({ loteria: lot, concurso: d.slug });
   }
   return params;
