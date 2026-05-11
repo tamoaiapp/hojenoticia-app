@@ -57,8 +57,7 @@ export default function PrivacidadePage() {
       <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>6. Encarregado de Dados (DPO)</h2>
       <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
         O responsável pelo tratamento de dados do HojeNotícia pode ser contatado por meio do{" "}
-        <a href="/contato" style={{ color: "#dc2626" }}>formulário de contato</a>. Informações sobre o Portal disponíveis em{" "}
-        <a href="/quem-somos" style={{ color: "#dc2626" }}>Quem Somos</a>.
+        <a href="/contato" style={{ color: "#dc2626" }}>formulário de contato</a>.
       </p>
 
       <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>7. Alterações desta Política</h2>

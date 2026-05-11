@@ -4,9 +4,9 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 
 export const metadata: Metadata = {
-  title: { default: "Hoje Notícia — Futebol, Política, Fofoca e Mais", template: "%s | Hoje Notícia" },
-  description: "Fique por dentro das principais notícias do Brasil: futebol, política, fofoca, saúde, finanças e muito mais.",
-  keywords: "noticias brasil, futebol, politica, fofoca, saude, financas, hoje",
+  title: { default: "Hoje Notícia — Resultados de Loterias", template: "%s | Hoje Notícia" },
+  description: "Resultados das loterias da Caixa: Mega-Sena, Quina, Lotofácil, Lotomania, Timemania, Dia de Sorte e Dupla Sena. Atualizado após cada sorteio.",
+  keywords: "resultado loteria, mega sena, quina, lotofacil, lotomania, timemania, dia de sorte, dupla sena, loterias caixa",
   metadataBase: new URL("https://hojenoticia.com"),
   openGraph: { siteName: "Hoje Notícia", locale: "pt_BR", type: "website" },
   twitter: { card: "summary_large_image", site: "@hojenoticia" },
@@ -18,13 +18,11 @@ export const metadata: Metadata = {
 
 const organizationLd = {
   "@context": "https://schema.org",
-  "@type": "NewsMediaOrganization",
+  "@type": "Organization",
   "@id": "https://hojenoticia.com/#organization",
   name: "Hoje Notícia",
   url: "https://hojenoticia.com",
   logo: { "@type": "ImageObject", url: "https://hojenoticia.com/logo.svg", width: 220, height: 60 },
-  publishingPrinciples: "https://hojenoticia.com/quem-somos",
-  masthead: "https://hojenoticia.com/quem-somos",
   foundingDate: "2025",
   inLanguage: "pt-BR",
 };

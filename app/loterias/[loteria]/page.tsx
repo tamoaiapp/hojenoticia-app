@@ -81,8 +81,6 @@ export default async function LoteriasPage({ params }: Props) {
       <nav aria-label="Breadcrumb" style={{ fontSize: "0.82rem", color: "#94a3b8", marginBottom: "1.25rem", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
         <Link href="/" style={{ color: "#2563eb" }}>Início</Link>
         <span>/</span>
-        <Link href="/loterias" style={{ color: "#2563eb" }}>Loterias</Link>
-        <span>/</span>
         <span>{cfg.name}</span>
       </nav>
 

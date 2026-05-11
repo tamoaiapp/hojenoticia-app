@@ -6,9 +6,6 @@ export default function robots(): MetadataRoute.Robots {
       { userAgent: "*", allow: "/" },
       { userAgent: "Googlebot-News", allow: "/" },
     ],
-    sitemap: [
-      "https://hojenoticia.com/sitemap.xml",
-      "https://hojenoticia.com/sitemap-news.xml",
-    ],
+    sitemap: ["https://hojenoticia.com/sitemap.xml"],
   };
 }

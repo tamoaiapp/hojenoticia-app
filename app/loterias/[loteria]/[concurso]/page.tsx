@@ -106,9 +106,8 @@ export default async function DrawPage({ params }: Props) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Início",   item: BASE },
-      { "@type": "ListItem", position: 2, name: "Loterias", item: `${BASE}/loterias` },
-      { "@type": "ListItem", position: 3, name: cfg.name,   item: `${BASE}/loterias/${loteria}` },
-      { "@type": "ListItem", position: 4, name: draw.title },
+      { "@type": "ListItem", position: 2, name: cfg.name,   item: `${BASE}/loterias/${loteria}` },
+      { "@type": "ListItem", position: 3, name: draw.title },
     ],
   };
 
@@ -120,8 +119,6 @@ export default async function DrawPage({ params }: Props) {
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" style={{ fontSize: "0.82rem", color: "#94a3b8", marginBottom: "1.25rem", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
         <Link href="/" style={{ color: "#2563eb" }}>Início</Link>
-        <span>/</span>
-        <Link href="/loterias" style={{ color: "#2563eb" }}>Loterias</Link>
         <span>/</span>
         <Link href={`/loterias/${loteria}`} style={{ color: "#2563eb" }}>{cfg.name}</Link>
         <span>/</span>

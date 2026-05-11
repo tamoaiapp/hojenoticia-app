@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useState } from "react";
-import { CATEGORIES } from "@/lib/categories";
+import { LOTERIAS_CONFIG } from "@/lib/loterias-config";
 
 export default function Header() {
   const [open, setOpen] = useState(false);
@@ -42,12 +42,12 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Nav desktop */}
-        <nav aria-label="Editorias" className={`header-nav${open ? " open" : ""}`}>
-          {Object.entries(CATEGORIES).map(([slug, { label, color }]) => (
+        {/* Nav — loterias */}
+        <nav aria-label="Loterias" className={`header-nav${open ? " open" : ""}`}>
+          {Object.entries(LOTERIAS_CONFIG).map(([slug, { name, color }]) => (
             <Link
               key={slug}
-              href={`/${slug}`}
+              href={`/loterias/${slug}`}
               onClick={() => setOpen(false)}
               style={{
                 padding: "0.55rem 1rem",
@@ -64,7 +64,7 @@ export default function Header() {
               onMouseEnter={(e) => { const el = e.currentTarget; el.style.color = color; el.style.borderBottomColor = color; }}
               onMouseLeave={(e) => { const el = e.currentTarget; el.style.color = "#374151"; el.style.borderBottomColor = "transparent"; }}
             >
-              {label}
+              {name}
             </Link>
           ))}
         </nav>

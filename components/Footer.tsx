@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { LOTERIAS_CONFIG } from "@/lib/loterias-config";
 
 export default function Footer() {
   return (
@@ -9,23 +10,21 @@ export default function Footer() {
             Hoje<span style={{ color: "#ef4444" }}>Notícia</span>
           </div>
           <p style={{ fontSize: "0.85rem", maxWidth: 280 }}>
-            As principais notícias do Brasil em um só lugar. Futebol, política, fofoca, saúde e muito mais.
+            Resultados das loterias da Caixa Econômica Federal, atualizados após cada sorteio.
           </p>
         </div>
         <div style={{ display: "flex", gap: "3rem" }}>
           <div>
-            <div style={{ fontWeight: 700, color: "#e2e8f0", marginBottom: "0.75rem", fontSize: "0.85rem" }}>PORTAL</div>
+            <div style={{ fontWeight: 700, color: "#e2e8f0", marginBottom: "0.75rem", fontSize: "0.85rem" }}>LOTERIAS</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.82rem" }}>
-              <Link href="/" style={{ color: "#94a3b8" }}>Início</Link>
-              <Link href="/futebol" style={{ color: "#94a3b8" }}>Futebol</Link>
-              <Link href="/politica" style={{ color: "#94a3b8" }}>Política</Link>
-              <Link href="/fofoca" style={{ color: "#94a3b8" }}>Fofoca</Link>
+              {Object.entries(LOTERIAS_CONFIG).slice(0, 4).map(([slug, cfg]) => (
+                <Link key={slug} href={`/loterias/${slug}`} style={{ color: "#94a3b8" }}>{cfg.name}</Link>
+              ))}
             </div>
           </div>
           <div>
             <div style={{ fontWeight: 700, color: "#e2e8f0", marginBottom: "0.75rem", fontSize: "0.85rem" }}>INSTITUCIONAL</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.82rem" }}>
-              <Link href="/quem-somos" style={{ color: "#94a3b8" }}>Quem Somos</Link>
               <Link href="/contato" style={{ color: "#94a3b8" }}>Contato</Link>
               <Link href="/privacidade" style={{ color: "#94a3b8" }}>Privacidade</Link>
               <Link href="/termos" style={{ color: "#94a3b8" }}>Termos de Uso</Link>
@@ -37,8 +36,6 @@ export default function Footer() {
         © {new Date().getFullYear()} HojeNotícia. Todos os direitos reservados.
         <span style={{ display: "block", color: "#64748b", marginTop: "0.25rem" }}>
           CNPJ 29.434.321/0001-20 &nbsp;·&nbsp;
-          <Link href="/quem-somos" style={{ color: "#64748b" }}>Quem Somos</Link>
-          &nbsp;·&nbsp;
           <Link href="/privacidade" style={{ color: "#64748b" }}>Política de Privacidade</Link>
           &nbsp;·&nbsp;
           <Link href="/termos" style={{ color: "#64748b" }}>Termos de Uso</Link>
