@@ -25,13 +25,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const latest = draws[0];
   const prize = latest?.proximo_premio ? ` — próximo prêmio ${formatBRL(latest.proximo_premio)}` : "";
   return {
-    title: `Resultado ${cfg.name} – Último Concurso e Histórico${prize} | Hoje Notícia`,
+    title: `Resultado ${cfg.name} – Último Concurso e Histórico${prize}`,
     description: `Confira o resultado da ${cfg.name}, o último concurso sorteado e o histórico completo de resultados. ${cfg.description}`,
     keywords: `resultado ${loteria}, ${loteria} resultado hoje, concurso ${loteria}, dezenas ${loteria}`,
+    alternates: { canonical: `${BASE}/loterias/${loteria}` },
     openGraph: {
-      title: `Resultado ${cfg.name} | Hoje Notícia`,
+      title: `Resultado ${cfg.name}`,
       description: `Último resultado e histórico completo da ${cfg.name}.`,
       url: `${BASE}/loterias/${loteria}`,
+      type: "website",
     },
   };
 }
@@ -61,21 +63,73 @@ export default async function LoteriasPage({ params }: Props) {
   const latest     = published[0];
   const recent     = published.slice(1, 10);
 
-  const ldJson = {
+  const pageUrl = `${BASE}/loterias/${loteria}`;
+
+  const itemListLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
     name: `Histórico ${cfg.name}`,
-    url: `${BASE}/loterias/${loteria}`,
+    url: pageUrl,
     itemListElement: published.slice(0, 20).map((d, i) => ({
-      "@type": "ListItem", position: i + 1,
+      "@type": "ListItem",
+      position: i + 1,
       name: d.title,
       url: `${BASE}/loterias/${loteria}/${d.slug}`,
     })),
   };
 
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Início", item: BASE },
+      { "@type": "ListItem", position: 2, name: cfg.name, item: pageUrl },
+    ],
+  };
+
+  // Maior prêmio histórico (entre os publicados) — útil pro FAQ
+  const biggestPrize = published.reduce(
+    (max, d) => (d.premio_principal > max.premio_principal ? d : max),
+    published[0] ?? { premio_principal: 0, concurso: 0, draw_date: "" },
+  );
+
+  const faqMain: { q: string; a: string }[] = [
+    {
+      q: `Como funciona a ${cfg.name}?`,
+      a: `${cfg.description} Os sorteios acontecem ${cfg.freq.toLowerCase()} e são realizados pela Caixa Econômica Federal.`,
+    },
+    {
+      q: `Quando são os sorteios da ${cfg.name}?`,
+      a: `Os sorteios da ${cfg.name} acontecem ${cfg.freq.toLowerCase()}, geralmente por volta das 20h (horário de Brasília).`,
+    },
+  ];
+  if (latest) {
+    faqMain.push({
+      q: `Qual foi o último resultado da ${cfg.name}?`,
+      a: `O último resultado da ${cfg.name} foi o concurso ${latest.concurso}, sorteado em ${formatDate(latest.draw_date)}. As dezenas foram: ${latest.numeros.map((n) => n.padStart(2, "0")).join(", ")}.`,
+    });
+  }
+  if (biggestPrize && biggestPrize.concurso > 0 && biggestPrize.premio_principal > 0) {
+    faqMain.push({
+      q: `Qual o maior prêmio já pago pela ${cfg.name}?`,
+      a: `Entre os concursos registrados aqui, o maior prêmio principal pago pela ${cfg.name} foi de ${formatBRL(biggestPrize.premio_principal)} no concurso ${biggestPrize.concurso}, em ${formatDate(biggestPrize.draw_date)}.`,
+    });
+  }
+  const faqLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqMain.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
+  };
+
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "2rem 1.25rem" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
       {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" style={{ fontSize: "0.82rem", color: "#94a3b8", marginBottom: "1.25rem", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>

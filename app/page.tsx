@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   },
 };
 
-const ldJson = {
+const itemListLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   name: "Loterias da Caixa",
@@ -30,6 +30,55 @@ const ldJson = {
     name: cfg.name,
     url: `${BASE}/loterias/${slug}`,
   })),
+};
+
+const faqLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "Quais loterias da Caixa estão disponíveis no site?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "Acompanhamos as 7 modalidades oficiais: Mega-Sena, Quina, Lotofácil, Lotomania, Timemania, Dia de Sorte e Dupla Sena. Cada uma tem página própria com último resultado, histórico de concursos e estimativa do próximo prêmio.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "A que horas saem os resultados das loterias?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "Os sorteios da Caixa Econômica Federal acontecem por volta das 20h (horário de Brasília) e o resultado costuma sair em até 30 minutos após o sorteio. Atualizamos a página assim que o resultado oficial é divulgado.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Como conferir se ganhei na loteria?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "Compare as dezenas do seu volante com as números sorteados publicados aqui ou no site da Caixa. Para resgatar o prêmio você pode usar o aplicativo Loterias Caixa, qualquer casa lotérica ou agências da Caixa, conforme o valor.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Qual loteria tem a maior chance de ganhar?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text:
+          "A Lotofácil é tradicionalmente a loteria com maior chance estatística de premiação, pois sorteia 15 números de 1 a 25. A Mega-Sena tem chances menores mas oferece os maiores prêmios.",
+      },
+    },
+  ],
+};
+
+const breadcrumbLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [{ "@type": "ListItem", position: 1, name: "Início", item: BASE }],
 };
 
 function NumberBall({ num, color }: { num: string; color: string }) {
@@ -50,7 +99,9 @@ export default function HomePage() {
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "2rem 1.25rem" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
       {/* Hero */}
       <div style={{ marginBottom: "2.5rem", borderBottom: "4px solid #209869", paddingBottom: "1rem" }}>

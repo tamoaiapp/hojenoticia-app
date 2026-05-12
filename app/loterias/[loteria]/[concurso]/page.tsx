@@ -8,24 +8,25 @@ import {
 } from "@/lib/loterias";
 
 export const revalidate = false; // resultado histórico nunca muda
-export const dynamicParams = true; // demais páginas carregam sob demanda (sem ISR write)
+export const dynamicParams = true; // qualquer slug existente no content/ é válido (ISR on-demand pros raros)
 
 const BASE = "https://hojenoticia.com";
 
 interface Props { params: Promise<{ loteria: string; concurso: string }> }
 
 export async function generateStaticParams() {
-  // Pré-gera: últimos 60 dias de resultados publicados + próximos 14 dias aguardando
+  // Pre-renderiza TODOS os publicados (cauda longa) + próximos 14 dias aguardando.
+  // Concursos antigos publicados não vão mudar, então gerar uma vez no build é mais barato
+  // que servir com ISR cada vez que algum bot indexar.
   const today = new Date();
-  const cutoffPast  = new Date(today); cutoffPast.setDate(today.getDate() - 60);
-  const cutoffFuture = new Date(today); cutoffFuture.setDate(today.getDate() + 14);
-  const pastISO   = cutoffPast.toISOString().split("T")[0];
+  const cutoffFuture = new Date(today);
+  cutoffFuture.setDate(today.getDate() + 14);
   const futureISO = cutoffFuture.toISOString().split("T")[0];
 
   const params: { loteria: string; concurso: string }[] = [];
   for (const lot of Object.keys(LOTERIAS_CONFIG)) {
-    const draws = getDrawsByLoteria(lot).filter(d => {
-      if (d.status === "publicado") return d.draw_date >= pastISO;
+    const draws = getDrawsByLoteria(lot).filter((d) => {
+      if (d.status === "publicado") return true;
       if (d.status === "aguardando") return d.draw_date <= futureISO;
       return false;
     });
@@ -88,32 +89,119 @@ export default async function DrawPage({ params }: Props) {
 
   const isPublished = draw.status === "publicado";
   const drawDateFmt = formatDate(draw.draw_date);
+  const pageUrl = `${BASE}/loterias/${loteria}/${concurso}`;
 
-  // JSON-LD
-  const ldEvent = {
+  // === JSON-LD ===
+
+  // Event — sorteio em si (rich result em busca por evento)
+  const ldEvent: Record<string, unknown> = {
     "@context": "https://schema.org",
-    "@type": isPublished ? "Event" : "Event",
-    name: draw.title,
+    "@type": "Event",
+    "@id": `${pageUrl}#event`,
+    name: `Sorteio ${cfg.name} — Concurso ${draw.concurso}`,
     description: draw.description,
     startDate: draw.draw_date,
-    location: { "@type": "Place", name: "Brasil" },
-    organizer: { "@type": "Organization", name: "Caixa Econômica Federal" },
-    url: `${BASE}/loterias/${loteria}/${concurso}`,
+    endDate: draw.draw_date,
+    eventStatus: isPublished
+      ? "https://schema.org/EventScheduled"
+      : "https://schema.org/EventScheduled",
+    eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
+    location: {
+      "@type": "VirtualLocation",
+      url: "https://loterias.caixa.gov.br/",
+    },
+    organizer: {
+      "@type": "GovernmentOrganization",
+      name: "Caixa Econômica Federal",
+      url: "https://www.caixa.gov.br/",
+    },
+    url: pageUrl,
+    ...(isPublished && draw.premio_principal > 0 && {
+      offers: {
+        "@type": "Offer",
+        name: `Prêmio ${cfg.name} concurso ${draw.concurso}`,
+        price: draw.premio_principal,
+        priceCurrency: "BRL",
+        availability:
+          draw.ganhadores > 0
+            ? "https://schema.org/SoldOut"
+            : "https://schema.org/InStock",
+        validFrom: draw.draw_date,
+      },
+    }),
+  };
+
+  // NewsArticle — pra aparecer em Google Notícias
+  const ldArticle = {
+    "@context": "https://schema.org",
+    "@type": "NewsArticle",
+    "@id": `${pageUrl}#article`,
+    mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
+    headline: draw.title,
+    description: draw.description,
+    datePublished: draw.draw_date,
+    dateModified: draw.draw_date,
+    inLanguage: "pt-BR",
+    isAccessibleForFree: true,
+    articleSection: cfg.name,
+    keywords: draw.keywords,
+    author: { "@type": "Organization", "@id": `${BASE}/#organization`, name: "Hoje Notícia" },
+    publisher: { "@id": `${BASE}/#organization` },
+    image: `${BASE}/loterias/${loteria}/${concurso}/opengraph-image`,
+    url: pageUrl,
+  };
+
+  // FAQPage — perguntas frequentes (rich result)
+  const numerosStr = draw.numeros.map((n) => n.padStart(2, "0")).join(", ");
+  const faqItems: { q: string; a: string }[] = [];
+  if (isPublished && draw.numeros.length > 0) {
+    faqItems.push({
+      q: `Quais foram os números sorteados no concurso ${draw.concurso} da ${cfg.name}?`,
+      a: `As dezenas sorteadas no concurso ${draw.concurso} da ${cfg.name} em ${drawDateFmt} foram: ${numerosStr}.`,
+    });
+    faqItems.push({
+      q: `Quantos ganhadores teve o concurso ${draw.concurso} da ${cfg.name}?`,
+      a:
+        draw.ganhadores > 0
+          ? `O concurso ${draw.concurso} da ${cfg.name} teve ${draw.ganhadores} ganhador${draw.ganhadores > 1 ? "es" : ""}, com prêmio de ${formatBRL(draw.premio_principal)}${draw.cidade ? ` em ${draw.cidade}` : ""}.`
+          : `O concurso ${draw.concurso} da ${cfg.name} não teve ganhadores do prêmio principal — o valor acumulou para o próximo sorteio.`,
+    });
+  }
+  if (draw.proxima_data && draw.proximo_concurso) {
+    faqItems.push({
+      q: `Quando é o próximo sorteio da ${cfg.name}?`,
+      a: `O próximo sorteio da ${cfg.name} é o concurso ${draw.proximo_concurso}, em ${formatDate(draw.proxima_data)}${draw.proximo_premio ? `, com prêmio estimado de ${formatBRL(draw.proximo_premio)}` : ""}.`,
+    });
+  }
+  faqItems.push({
+    q: `Como funciona a ${cfg.name}?`,
+    a: `${cfg.description} Os sorteios acontecem ${cfg.freq.toLowerCase()}.`,
+  });
+  const ldFaq = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: { "@type": "Answer", text: item.a },
+    })),
   };
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      { "@type": "ListItem", position: 1, name: "Início",   item: BASE },
-      { "@type": "ListItem", position: 2, name: cfg.name,   item: `${BASE}/loterias/${loteria}` },
-      { "@type": "ListItem", position: 3, name: draw.title },
+      { "@type": "ListItem", position: 1, name: "Início", item: BASE },
+      { "@type": "ListItem", position: 2, name: cfg.name, item: `${BASE}/loterias/${loteria}` },
+      { "@type": "ListItem", position: 3, name: `Concurso ${draw.concurso}`, item: pageUrl },
     ],
   };
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "2rem 1.25rem" }}>
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldArticle) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldEvent) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldFaq) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
       {/* Breadcrumb */}
