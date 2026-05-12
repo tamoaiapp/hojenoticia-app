@@ -1,6 +1,7 @@
 import { MetadataRoute } from "next";
 import { LOTERIAS_CONFIG, getAllDraws, getDrawsByLoteria } from "@/lib/loterias";
 import { UFS } from "@/lib/eleicoes-config";
+import { getJogos } from "@/lib/copa-jogos";
 
 const BASE = "https://hojenoticia.com";
 
@@ -51,8 +52,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   entries.push(
     { url: `${BASE}/copa`,                 lastModified: now, changeFrequency: "daily",  priority: 0.95 },
     { url: `${BASE}/copa/grupos`,          lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${BASE}/copa/jogos`,           lastModified: now, changeFrequency: "daily",  priority: 0.92 },
     { url: `${BASE}/copa/onde-assistir`,   lastModified: now, changeFrequency: "weekly", priority: 0.8 },
   );
+  // 104 jogos individuais
+  for (const j of getJogos().jogos) {
+    entries.push({
+      url: `${BASE}/copa/jogos/${j.id}`,
+      lastModified: new Date(j.data),
+      changeFrequency: "weekly",
+      priority: 0.75,
+    });
+  }
 
   // Eleições 2026
   entries.push(
