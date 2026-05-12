@@ -58,6 +58,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   let title: string;
   let description: string;
+  let extraKeywords: (string | null)[] = [];
+
   if (isPublished && draw.numeros.length > 0) {
     title = isToday
       ? `${cfg.name} ${num} Resultado HOJE (${dateShortDM}) — Dezenas e Ganhadores`
@@ -65,25 +67,46 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description = draw.ganhadores > 0
       ? `Resultado ${cfg.name} concurso ${num} de ${dateShort}: dezenas ${dezenas}. ${draw.ganhadores} ganhador${draw.ganhadores > 1 ? "es" : ""}, prêmio de ${formatBRL(draw.premio_principal)}${draw.cidade ? ` em ${draw.cidade}` : ""}. Confira os números sorteados agora.`
       : `Resultado ${cfg.name} ${num} de ${dateShort}: dezenas sorteadas ${dezenas}. Sem ganhador principal — acumulou${draw.proximo_premio ? `, próximo prêmio ${formatBRL(draw.proximo_premio)}` : ""}. Veja todos os detalhes.`;
+    extraKeywords = [
+      isToday ? `${cfg.name.toLowerCase()} ${num} resultado de hoje` : null,
+      `dezenas ${cfg.name.toLowerCase()} ${num}`,
+      `${cfg.name.toLowerCase()} ${num} ganhadores`,
+    ];
   } else {
-    title = `${cfg.name} ${num} — Próximo Sorteio (${dateShortDM}) e Estimativa de Prêmio`;
-    description = `Concurso ${num} da ${cfg.name} acontece em ${dateShort}${draw.premio_principal > 0 ? ` com prêmio estimado de ${formatBRL(draw.premio_principal)}` : ""}. Acompanhe o resultado em tempo real após o sorteio.`;
+    // === PRÉ-SORTEIO: mira nas queries "que horas sai", "ao vivo", "acumulou", "estimativa" ===
+    const premioStr = draw.premio_principal > 0 ? `Estimativa R$ ${formatBRL(draw.premio_principal).replace("R$ ", "")}` : "";
+    title = isToday
+      ? `${cfg.name} ${num} HOJE (${dateShortDM}) — Que Horas Sai${premioStr ? `, ${premioStr}` : ""} e Como Apostar`
+      : `${cfg.name} ${num} (${dateShortDM}) — Próximo Sorteio${premioStr ? `, ${premioStr}` : ""} e Apostas`;
+    description = isToday
+      ? `${cfg.name} concurso ${num} é sorteada hoje, ${dateShort}, às 20h (Brasília)${draw.premio_principal > 0 ? `. Estimativa de prêmio: ${formatBRL(draw.premio_principal)}` : ""}. Acompanhe o resultado ao vivo aqui assim que sair.`
+      : `Próximo sorteio da ${cfg.name}, concurso ${num}, acontece em ${dateShort} às 20h${draw.premio_principal > 0 ? `. Estimativa: ${formatBRL(draw.premio_principal)}` : ""}. Veja como apostar e onde acompanhar ao vivo.`;
+    extraKeywords = [
+      `${cfg.name.toLowerCase()} ${num} hoje`,
+      `${cfg.name.toLowerCase()} ${num} acumulou`,
+      `${cfg.name.toLowerCase()} ${num} estimativa`,
+      `${cfg.name.toLowerCase()} ${num} ao vivo`,
+      `${cfg.name.toLowerCase()} hoje`,
+      `${cfg.name.toLowerCase()} hoje horario`,
+      `que horas sai ${cfg.name.toLowerCase()}`,
+      `que horas sai ${cfg.name.toLowerCase()} ${num}`,
+      `proximo sorteio ${cfg.name.toLowerCase()}`,
+      `proximo concurso ${cfg.name.toLowerCase()}`,
+      `como apostar ${cfg.name.toLowerCase()}`,
+    ];
   }
 
-  // Cobre variações: "mega sena 3007", "mega-sena 3007", "megasena 3007",
-  // "concurso 3007 mega sena", "resultado de hoje", etc.
+  // Variações ortográficas universais (servem em qualquer status)
   const keywords = [
     `${cfg.name.toLowerCase()} ${num}`,
     `${cfg.name.toLowerCase()} ${num} resultado`,
     `resultado ${cfg.name.toLowerCase()} ${num}`,
-    `${cfg.name.toLowerCase()} ${num} hoje`,
     `${nomeSemHifen.toLowerCase()} ${num}`,
     `${nomeColado} ${num}`,
     `concurso ${num} ${cfg.name.toLowerCase()}`,
     `resultado da ${cfg.name.toLowerCase()} ${num}`,
-    `dezenas ${cfg.name.toLowerCase()} ${num}`,
     `${cfg.name.toLowerCase()} concurso ${num}`,
-    isToday ? `${cfg.name.toLowerCase()} ${num} resultado de hoje` : null,
+    ...extraKeywords,
   ].filter(Boolean).join(", ");
 
   return {
