@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { COPA_INFO, GRUPOS, SEDES, ONDE_ASSISTIR } from "@/lib/copa-config";
+import { getJogosBrasil, getProximosJogos, getBandeiraDoTime, formatData } from "@/lib/copa-jogos";
 
 export const revalidate = 3600;
 const BASE = "https://hojenoticia.com";
@@ -120,10 +121,78 @@ export default function CopaHubPage() {
           <strong>Estados Unidos, Canadá e México</strong>.
         </p>
         <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-          <Link href="/copa/grupos" style={pillStyle}>📋 Grupos e tabela</Link>
+          <Link href="/copa/jogos" style={pillStyle}>📅 Tabela de jogos (104)</Link>
+          <Link href="/copa/grupos" style={pillStyle}>📋 Grupos</Link>
           <Link href="/copa/onde-assistir" style={pillStyle}>📺 Onde assistir</Link>
         </div>
       </div>
+
+      {/* Jogos do Brasil */}
+      {(() => {
+        const jogosBR = getJogosBrasil();
+        if (jogosBR.length === 0) return null;
+        return (
+          <section style={{ marginBottom: "2.5rem" }}>
+            <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#0f172a", marginBottom: "1rem" }}>
+              🇧🇷 Jogos do Brasil na Copa 2026
+            </h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(290px, 1fr))", gap: "0.75rem" }}>
+              {jogosBR.map((j) => {
+                const adv = j.time1 === "Brasil" ? j.time2 : j.time1;
+                const advBandeira = getBandeiraDoTime(adv);
+                return (
+                  <Link key={j.id} href={`/copa/jogos/${j.id}`} style={{ textDecoration: "none" }}>
+                    <div style={{
+                      background: "#fff", borderRadius: 12, padding: "1rem 1.25rem",
+                      border: "2px solid #009739",
+                    }}>
+                      <div style={{ fontSize: "0.72rem", color: "#94a3b8", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: "0.4rem" }}>
+                        {formatData(j.data)} · {j.horario_brasilia} (Brasília)
+                      </div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.4rem", fontSize: "1.1rem", fontWeight: 800, color: "#0f172a" }}>
+                        🇧🇷 Brasil <span style={{ color: "#94a3b8", fontWeight: 400 }}>x</span> {advBandeira} {adv}
+                      </div>
+                      <div style={{ fontSize: "0.82rem", color: "#64748b" }}>{j.estadio !== "A confirmar" ? `${j.estadio}, ` : ""}{j.cidade}</div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })()}
+
+      {/* Próximos jogos */}
+      {(() => {
+        const proximos = getProximosJogos(6);
+        if (proximos.length === 0) return null;
+        return (
+          <section style={{ marginBottom: "2.5rem" }}>
+            <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#0f172a", marginBottom: "1rem" }}>
+              📅 Próximos jogos
+            </h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "0.6rem" }}>
+              {proximos.map((j) => (
+                <Link key={j.id} href={`/copa/jogos/${j.id}`} style={{ textDecoration: "none" }}>
+                  <div style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 10, padding: "0.75rem 1rem" }}>
+                    <div style={{ fontSize: "0.7rem", color: "#94a3b8", textTransform: "uppercase", marginBottom: "0.3rem" }}>
+                      {formatData(j.data)} · {j.horario_brasilia}
+                    </div>
+                    <div style={{ fontSize: "0.92rem", color: "#0f172a", fontWeight: 700 }}>
+                      {getBandeiraDoTime(j.time1)} {j.time1} <span style={{ color: "#94a3b8", fontWeight: 400 }}>x</span> {getBandeiraDoTime(j.time2)} {j.time2}
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+            <div style={{ marginTop: "0.75rem" }}>
+              <Link href="/copa/jogos" style={{ color: "#009739", fontWeight: 700, fontSize: "0.9rem" }}>
+                Ver tabela completa dos 104 jogos →
+              </Link>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Brasil em destaque */}
       {brasil && (

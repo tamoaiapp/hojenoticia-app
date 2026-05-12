@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { LOTERIAS_CONFIG, getLatestDrawPerLoteria, formatBRL, formatDateShort } from "@/lib/loterias";
+import { LOTERIAS_CONFIG, getLatestDrawPerLoteria, getAllDraws, formatBRL, formatDateShort } from "@/lib/loterias";
 
 export const revalidate = 86400;
 
@@ -214,6 +214,47 @@ export default function HomePage() {
           );
         })}
       </div>
+
+      {/* Últimos resultados — internal linking pra Google indexar concursos recentes */}
+      {(() => {
+        const ultimos = getAllDraws()
+          .filter((d) => d.status === "publicado")
+          .slice(0, 24);
+        if (ultimos.length === 0) return null;
+        return (
+          <section style={{ marginBottom: "2.5rem" }}>
+            <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#0f172a", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ background: "#dc2626", color: "#fff", borderRadius: 4, padding: "0.1rem 0.5rem", fontSize: "0.7em", letterSpacing: 1 }}>RECENTES</span>
+              Últimos resultados sorteados
+            </h2>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "0.5rem" }}>
+              {ultimos.map((d) => {
+                const cfg = LOTERIAS_CONFIG[d.loteria];
+                if (!cfg) return null;
+                return (
+                  <Link key={`${d.loteria}-${d.slug}`} href={`/loterias/${d.loteria}/${d.slug}`} style={{ textDecoration: "none" }}>
+                    <div style={{
+                      background: "#fff", borderRadius: 10, padding: "0.65rem 0.85rem",
+                      border: "1px solid #e2e8f0",
+                      display: "flex", alignItems: "center", gap: "0.6rem",
+                    }}>
+                      <span style={{ fontSize: "1.4rem" }}>{cfg.emoji}</span>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{ fontWeight: 700, color: cfg.color, fontSize: "0.82rem" }}>
+                          {cfg.name} {d.concurso}
+                        </div>
+                        <div style={{ fontSize: "0.74rem", color: "#94a3b8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                          {formatDateShort(d.draw_date)} · {d.ganhadores > 0 ? `🏆 ${formatBRL(d.premio_principal)}` : "Acumulou"}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })()}
 
       {/* SEO text */}
       <section style={{ background: "#f8fafc", borderRadius: 12, padding: "2rem", border: "1px solid #e2e8f0" }}>

@@ -40,21 +40,68 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const draw = getDrawBySlug(loteria, concurso);
   if (!draw) return {};
   const cfg = LOTERIAS_CONFIG[loteria];
+
+  // Constrói title/description otimizados pra CTR — incluindo "HOJE",
+  // número proeminente, dezenas reais, e múltiplas variações ortográficas
+  // observadas no Google Search Console.
+  const todayISO = new Date().toISOString().split("T")[0];
+  const isToday = draw.draw_date === todayISO;
+  const dateShort = formatDateShort(draw.draw_date); // dd/mm/aaaa
+  const dateShortDM = dateShort.slice(0, 5);          // dd/mm
+  const num = draw.concurso;
+  const isPublished = draw.status === "publicado";
+  const dezenas = draw.numeros.map((n) => n.padStart(2, "0")).join(" ");
+
+  // Variações ortográficas (sem hífen / sem acento) extraídas de queries reais
+  const nomeSemHifen = cfg.name.replace(/-/g, " ");
+  const nomeColado = cfg.name.toLowerCase().replace(/[-\s]/g, "");
+
+  let title: string;
+  let description: string;
+  if (isPublished && draw.numeros.length > 0) {
+    title = isToday
+      ? `${cfg.name} ${num} Resultado HOJE (${dateShortDM}) — Dezenas e Ganhadores`
+      : `${cfg.name} ${num} Resultado (${dateShortDM}) — Dezenas Sorteadas e Prêmio`;
+    description = draw.ganhadores > 0
+      ? `Resultado ${cfg.name} concurso ${num} de ${dateShort}: dezenas ${dezenas}. ${draw.ganhadores} ganhador${draw.ganhadores > 1 ? "es" : ""}, prêmio de ${formatBRL(draw.premio_principal)}${draw.cidade ? ` em ${draw.cidade}` : ""}. Confira os números sorteados agora.`
+      : `Resultado ${cfg.name} ${num} de ${dateShort}: dezenas sorteadas ${dezenas}. Sem ganhador principal — acumulou${draw.proximo_premio ? `, próximo prêmio ${formatBRL(draw.proximo_premio)}` : ""}. Veja todos os detalhes.`;
+  } else {
+    title = `${cfg.name} ${num} — Próximo Sorteio (${dateShortDM}) e Estimativa de Prêmio`;
+    description = `Concurso ${num} da ${cfg.name} acontece em ${dateShort}${draw.premio_principal > 0 ? ` com prêmio estimado de ${formatBRL(draw.premio_principal)}` : ""}. Acompanhe o resultado em tempo real após o sorteio.`;
+  }
+
+  // Cobre variações: "mega sena 3007", "mega-sena 3007", "megasena 3007",
+  // "concurso 3007 mega sena", "resultado de hoje", etc.
+  const keywords = [
+    `${cfg.name.toLowerCase()} ${num}`,
+    `${cfg.name.toLowerCase()} ${num} resultado`,
+    `resultado ${cfg.name.toLowerCase()} ${num}`,
+    `${cfg.name.toLowerCase()} ${num} hoje`,
+    `${nomeSemHifen.toLowerCase()} ${num}`,
+    `${nomeColado} ${num}`,
+    `concurso ${num} ${cfg.name.toLowerCase()}`,
+    `resultado da ${cfg.name.toLowerCase()} ${num}`,
+    `dezenas ${cfg.name.toLowerCase()} ${num}`,
+    `${cfg.name.toLowerCase()} concurso ${num}`,
+    isToday ? `${cfg.name.toLowerCase()} ${num} resultado de hoje` : null,
+  ].filter(Boolean).join(", ");
+
   return {
-    title: draw.title,
-    description: draw.description,
-    keywords: draw.keywords,
+    title,
+    description,
+    keywords,
     openGraph: {
-      title: draw.title,
-      description: draw.description,
+      title,
+      description,
       url: `${BASE}/loterias/${loteria}/${concurso}`,
       type: "article",
       publishedTime: draw.draw_date,
+      modifiedTime: draw.draw_date,
     },
     twitter: {
-      card: "summary",
-      title: draw.title,
-      description: draw.description,
+      card: "summary_large_image",
+      title,
+      description,
     },
     alternates: { canonical: `${BASE}/loterias/${loteria}/${concurso}` },
   };
@@ -221,7 +268,21 @@ export default async function DrawPage({ params }: Props) {
       </Link>
 
       <h1 style={{ fontSize: "1.9rem", fontWeight: 900, color: "#0f172a", lineHeight: 1.3, margin: "0.75rem 0 0.5rem" }}>
-        {draw.title}
+        {(() => {
+          const isHoje = draw.draw_date === new Date().toISOString().split("T")[0];
+          if (isPublished && isHoje) {
+            return (
+              <>
+                {cfg.name} {draw.concurso} — Resultado{" "}
+                <span style={{ background: "#dc2626", color: "#fff", padding: "0.1rem 0.5rem", borderRadius: 6, fontSize: "0.7em", verticalAlign: "middle", letterSpacing: 1 }}>
+                  HOJE
+                </span>{" "}
+                ({drawDateFmt})
+              </>
+            );
+          }
+          return `${cfg.name} ${draw.concurso} — ${isPublished ? "Resultado" : "Próximo Sorteio"} (${drawDateFmt})`;
+        })()}
       </h1>
       <p style={{ color: "#64748b", fontSize: "1.05rem", marginBottom: "1.5rem" }}>{draw.description}</p>
 
