@@ -237,7 +237,7 @@ async function main() {
     process.chdir(ROOT);
     execSync('git add content/loterias/', { stdio: 'inherit' });
     execSync(`git commit -m "loterias: resultados do dia ${today} (${totalUpdated} atualizado(s))"`, { stdio: 'inherit' });
-    execSync('git push', { stdio: 'inherit' });
+    execSync('git push origin HEAD:master', { stdio: 'inherit' });
     console.log('✅ Deploy iniciado no Vercel!');
   } catch (e) {
     console.error('Erro no git push:', e.message);

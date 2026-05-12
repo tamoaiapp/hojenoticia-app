@@ -393,6 +393,35 @@ export default async function DrawPage({ params }: Props) {
       {/* Anúncio 300x250 logo após o resultado (alta visibilidade) */}
       <AdsterraBanner size="300x250" />
 
+      {/* CTA Estatísticas — chama curiosidade pré-próximo sorteio */}
+      <Link href={`/loterias/${loteria}/estatisticas`} style={{ textDecoration: "none", display: "block" }}>
+        <div style={{
+          background: `linear-gradient(135deg, ${cfg.color}, ${cfg.ballColor})`,
+          borderRadius: 16, padding: "1.5rem 1.75rem",
+          marginBottom: "2rem", color: "#fff",
+          display: "flex", alignItems: "center", gap: "1rem",
+          boxShadow: `0 4px 16px ${cfg.color}40`,
+        }}>
+          <div style={{ fontSize: "3rem", lineHeight: 1 }}>🔮</div>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "1.1rem", fontWeight: 900, marginBottom: "0.25rem" }}>
+              Qual a probabilidade dos números no próximo sorteio?
+            </div>
+            <div style={{ fontSize: "0.88rem", opacity: 0.95 }}>
+              Veja os números mais sorteados, os mais atrasados e a sugestão estatística pra {cfg.name}.
+            </div>
+          </div>
+          <div style={{
+            background: "rgba(255,255,255,0.25)",
+            border: "1px solid rgba(255,255,255,0.4)",
+            borderRadius: 999, padding: "0.5rem 1rem",
+            fontSize: "0.85rem", fontWeight: 800, whiteSpace: "nowrap",
+          }}>
+            Ver estatísticas →
+          </div>
+        </div>
+      </Link>
+
       {/* Próximo sorteio */}
       {draw.proxima_data && (
         <div style={{ background: "#f8fafc", borderRadius: 12, padding: "1rem 1.25rem", border: "1px solid #e2e8f0", marginBottom: "2rem", display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>

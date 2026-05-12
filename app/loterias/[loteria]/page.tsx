@@ -138,6 +138,27 @@ export default async function LoteriasPage({ params }: Props) {
         <span>{cfg.name}</span>
       </nav>
 
+      {/* CTA Estatísticas no topo */}
+      <Link href={`/loterias/${loteria}/estatisticas`} style={{ textDecoration: "none", display: "block" }}>
+        <div style={{
+          background: "#fff", border: `2px solid ${cfg.color}`,
+          borderRadius: 12, padding: "0.85rem 1.25rem",
+          marginBottom: "1.5rem",
+          display: "flex", alignItems: "center", gap: "0.75rem",
+        }}>
+          <span style={{ fontSize: "1.4rem" }}>🔮</span>
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "#0f172a" }}>
+              Quais números saem mais na {cfg.name}?
+            </div>
+            <div style={{ fontSize: "0.8rem", color: "#64748b" }}>
+              Veja estatística completa + sugestão pro próximo sorteio
+            </div>
+          </div>
+          <span style={{ color: cfg.color, fontWeight: 800, fontSize: "0.85rem" }}>Ver →</span>
+        </div>
+      </Link>
+
       {/* Hero com último resultado */}
       <div style={{
         background: cfg.color, borderRadius: 20, padding: "2rem",

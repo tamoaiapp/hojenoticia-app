@@ -30,11 +30,19 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const lot of Object.keys(LOTERIAS_CONFIG)) {
     const lotDraws = getDrawsByLoteria(lot);
     const latest = lotDraws.find((d) => d.status === "publicado");
+    const lastMod = latest ? new Date(latest.draw_date) : now;
     entries.push({
       url: `${BASE}/loterias/${lot}`,
-      lastModified: latest ? new Date(latest.draw_date) : now,
+      lastModified: lastMod,
       changeFrequency: "daily",
       priority: 0.9,
+    });
+    // Estatísticas (números mais sorteados, atrasados, etc.)
+    entries.push({
+      url: `${BASE}/loterias/${lot}/estatisticas`,
+      lastModified: lastMod,
+      changeFrequency: "daily",
+      priority: 0.85,
     });
   }
 
