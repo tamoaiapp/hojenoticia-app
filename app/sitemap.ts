@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { LOTERIAS_CONFIG, getAllDraws, getDrawsByLoteria } from "@/lib/loterias";
+import { UFS } from "@/lib/eleicoes-config";
 
 const BASE = "https://hojenoticia.com";
 
@@ -43,6 +44,27 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(d.draw_date),
       changeFrequency: d.status === "aguardando" ? "daily" : "yearly",
       priority: d.status === "publicado" ? 0.7 : 0.6,
+    });
+  }
+
+  // Copa do Mundo 2026
+  entries.push(
+    { url: `${BASE}/copa`,                 lastModified: now, changeFrequency: "daily",  priority: 0.95 },
+    { url: `${BASE}/copa/grupos`,          lastModified: now, changeFrequency: "weekly", priority: 0.85 },
+    { url: `${BASE}/copa/onde-assistir`,   lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+  );
+
+  // Eleições 2026
+  entries.push(
+    { url: `${BASE}/eleicoes-2026`,             lastModified: now, changeFrequency: "daily",  priority: 0.95 },
+    { url: `${BASE}/eleicoes-2026/presidente`,  lastModified: now, changeFrequency: "daily",  priority: 0.9 },
+  );
+  for (const u of UFS) {
+    entries.push({
+      url: `${BASE}/eleicoes-2026/${u.sigla.toLowerCase()}`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.7,
     });
   }
 

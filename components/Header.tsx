@@ -42,8 +42,42 @@ export default function Header() {
           </div>
         </div>
 
-        {/* Nav — loterias */}
-        <nav aria-label="Loterias" className={`header-nav${open ? " open" : ""}`}>
+        {/* Nav principal */}
+        <nav aria-label="Navegação principal" className={`header-nav${open ? " open" : ""}`}>
+          <Link
+            href="/copa"
+            onClick={() => setOpen(false)}
+            style={{
+              padding: "0.55rem 1rem",
+              fontSize: "0.78rem",
+              fontWeight: 800,
+              color: "#009739",
+              whiteSpace: "nowrap",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              borderBottom: "3px solid transparent",
+              textDecoration: "none",
+            }}
+          >
+            🏆 Copa 2026
+          </Link>
+          <Link
+            href="/eleicoes-2026"
+            onClick={() => setOpen(false)}
+            style={{
+              padding: "0.55rem 1rem",
+              fontSize: "0.78rem",
+              fontWeight: 800,
+              color: "#dc2626",
+              whiteSpace: "nowrap",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              borderBottom: "3px solid transparent",
+              textDecoration: "none",
+            }}
+          >
+            🗳️ Eleições 2026
+          </Link>
           {Object.entries(LOTERIAS_CONFIG).map(([slug, { name, color }]) => (
             <Link
               key={slug}

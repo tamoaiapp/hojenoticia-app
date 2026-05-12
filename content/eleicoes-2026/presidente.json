@@ -1,0 +1,94 @@
+{
+  "ultima_atualizacao": "2026-05-12",
+  "fonte": "JOTA, CNN Brasil, Pleno News (maio/2026)",
+  "aviso": "Pré-candidaturas anunciadas publicamente — registro oficial até 15/08/2026 no TSE.",
+  "candidatos": [
+    {
+      "slug": "lula",
+      "nome": "Luiz Inácio Lula da Silva",
+      "partido": "Partido dos Trabalhadores",
+      "sigla_partido": "PT",
+      "posicionamento": "esquerda",
+      "cargo_atual": "Presidente da República",
+      "status": "pre-candidato",
+      "data_anuncio": "2025-10-15",
+      "bio_curta": "Presidente em exercício busca reeleição para um quarto mandato."
+    },
+    {
+      "slug": "flavio-bolsonaro",
+      "nome": "Flávio Bolsonaro",
+      "partido": "Partido Liberal",
+      "sigla_partido": "PL",
+      "posicionamento": "direita",
+      "estado_origem": "RJ",
+      "cargo_atual": "Senador (RJ)",
+      "status": "pre-candidato",
+      "data_anuncio": "2025-12-01",
+      "bio_curta": "Senador pelo Rio de Janeiro, filho do ex-presidente Jair Bolsonaro."
+    },
+    {
+      "slug": "ronaldo-caiado",
+      "nome": "Ronaldo Caiado",
+      "partido": "Partido Social Democrático",
+      "sigla_partido": "PSD",
+      "posicionamento": "centro-direita",
+      "estado_origem": "GO",
+      "cargo_atual": "Governador de Goiás",
+      "status": "pre-candidato",
+      "data_anuncio": "2026-03-01",
+      "bio_curta": "Governador de Goiás em segundo mandato, médico de formação."
+    },
+    {
+      "slug": "romeu-zema",
+      "nome": "Romeu Zema",
+      "partido": "Partido Novo",
+      "sigla_partido": "NOVO",
+      "posicionamento": "centro-direita",
+      "estado_origem": "MG",
+      "cargo_atual": "Ex-Governador de Minas Gerais",
+      "status": "pre-candidato",
+      "data_anuncio": "2025-11-01",
+      "bio_curta": "Empresário e ex-governador mineiro pelo Partido Novo."
+    },
+    {
+      "slug": "augusto-cury",
+      "nome": "Augusto Cury",
+      "partido": "Avante",
+      "sigla_partido": "AVANTE",
+      "posicionamento": "centro",
+      "cargo_atual": "Psiquiatra e escritor",
+      "status": "pre-candidato",
+      "bio_curta": "Psiquiatra, escritor e palestrante; primeira candidatura."
+    },
+    {
+      "slug": "renan-santos",
+      "nome": "Renan Santos",
+      "partido": "Partido Missão",
+      "sigla_partido": "MISSÃO",
+      "posicionamento": "centro-direita",
+      "cargo_atual": "Ativista político",
+      "status": "pre-candidato",
+      "bio_curta": "Pré-candidato pelo partido Missão, aprovado pelo TSE em 2025."
+    },
+    {
+      "slug": "costa-pimenta",
+      "nome": "Costa Pimenta",
+      "partido": "Partido da Causa Operária",
+      "sigla_partido": "PCO",
+      "posicionamento": "esquerda",
+      "cargo_atual": "Presidente nacional do PCO",
+      "status": "pre-candidato",
+      "bio_curta": "Líder do PCO, partido trotskista de extrema-esquerda."
+    },
+    {
+      "slug": "samara-martins",
+      "nome": "Samara Martins",
+      "partido": "Unidade Popular",
+      "sigla_partido": "UP",
+      "posicionamento": "esquerda",
+      "cargo_atual": "Vice-presidente do UP",
+      "status": "pre-candidato",
+      "bio_curta": "Vice-presidente nacional do Unidade Popular."
+    }
+  ]
+}

@@ -103,7 +103,44 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
 
-      {/* Hero */}
+      {/* Cards de coberturas especiais */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
+        <Link href="/copa" style={{
+          background: "linear-gradient(135deg, #009739 0%, #FEDD00 100%)",
+          color: "#fff", borderRadius: 16, padding: "1.5rem",
+          textDecoration: "none", display: "block",
+          boxShadow: "0 4px 16px rgba(0,151,57,0.25)",
+        }}>
+          <div style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.5rem", fontWeight: 800, opacity: 0.95 }}>
+            🏆 Cobertura Especial
+          </div>
+          <div style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.3rem" }}>
+            Copa do Mundo 2026
+          </div>
+          <div style={{ fontSize: "0.92rem", opacity: 0.95 }}>
+            Jogos, grupos e onde assistir →
+          </div>
+        </Link>
+
+        <Link href="/eleicoes-2026" style={{
+          background: "linear-gradient(135deg, #dc2626 0%, #0f172a 100%)",
+          color: "#fff", borderRadius: 16, padding: "1.5rem",
+          textDecoration: "none", display: "block",
+          boxShadow: "0 4px 16px rgba(220,38,38,0.25)",
+        }}>
+          <div style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.5rem", fontWeight: 800, opacity: 0.95 }}>
+            🗳️ Cobertura Especial
+          </div>
+          <div style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.3rem" }}>
+            Eleições 2026
+          </div>
+          <div style={{ fontSize: "0.92rem", opacity: 0.95 }}>
+            Candidatos, calendário e resultados →
+          </div>
+        </Link>
+      </div>
+
+      {/* Hero loterias */}
       <div style={{ marginBottom: "2.5rem", borderBottom: "4px solid #209869", paddingBottom: "1rem" }}>
         <h1 style={{ fontSize: "2rem", fontWeight: 900, color: "#0f172a" }}>
           🎰 Resultados de Loterias
