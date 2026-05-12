@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { LOTERIAS_CONFIG, getLatestDrawPerLoteria, getAllDraws, formatBRL, formatDateShort } from "@/lib/loterias";
+import AdsterraBanner from "@/components/AdsterraBanner";
+import AdsterraNative from "@/components/AdsterraNative";
 
 export const revalidate = 86400;
 
@@ -102,6 +104,10 @@ export default function HomePage() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+
+      {/* Banner topo (728x90 desktop / 320x50 mobile) */}
+      <AdsterraBanner size="728x90" showOn="desktop" />
+      <AdsterraBanner size="320x50" showOn="mobile" />
 
       {/* Cards de coberturas especiais */}
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
@@ -255,6 +261,9 @@ export default function HomePage() {
           </section>
         );
       })()}
+
+      {/* Native banner antes do bloco SEO */}
+      <AdsterraNative />
 
       {/* SEO text */}
       <section style={{ background: "#f8fafc", borderRadius: 12, padding: "2rem", border: "1px solid #e2e8f0" }}>

@@ -2,6 +2,14 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* ── Visibilidade responsiva dos anúncios ── */
+.ad-desktop-only { display: block; }
+.ad-mobile-only  { display: none; }
+@media (max-width: 767px) {
+  .ad-desktop-only { display: none; }
+  .ad-mobile-only  { display: block; }
+}
+
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   background: #f8fafc;

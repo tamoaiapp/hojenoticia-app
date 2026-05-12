@@ -6,6 +6,8 @@ import {
   LOTERIAS_CONFIG, getDrawsByLoteria, getDrawBySlug,
   formatBRL, formatDate, formatDateShort,
 } from "@/lib/loterias";
+import AdsterraBanner from "@/components/AdsterraBanner";
+import AdsterraNative from "@/components/AdsterraNative";
 
 export const revalidate = false; // resultado histórico nunca muda
 export const dynamicParams = true; // qualquer slug existente no content/ é válido (ISR on-demand pros raros)
@@ -388,6 +390,9 @@ export default async function DrawPage({ params }: Props) {
         )}
       </div>
 
+      {/* Anúncio 300x250 logo após o resultado (alta visibilidade) */}
+      <AdsterraBanner size="300x250" />
+
       {/* Próximo sorteio */}
       {draw.proxima_data && (
         <div style={{ background: "#f8fafc", borderRadius: 12, padding: "1rem 1.25rem", border: "1px solid #e2e8f0", marginBottom: "2rem", display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
@@ -439,6 +444,9 @@ export default async function DrawPage({ params }: Props) {
           ← Ver todos os resultados da {cfg.name}
         </Link>
       </div>
+
+      {/* Native banner antes do bloco SEO */}
+      <AdsterraNative />
 
       {/* SEO text block */}
       <div style={{ background: "#f8fafc", borderRadius: 12, padding: "1.5rem", border: "1px solid #e2e8f0" }}>
