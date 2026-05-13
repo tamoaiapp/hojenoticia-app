@@ -2,6 +2,9 @@ import { MetadataRoute } from "next";
 import { LOTERIAS_CONFIG, getAllDraws, getDrawsByLoteria } from "@/lib/loterias";
 import { UFS } from "@/lib/eleicoes-config";
 import { getJogos } from "@/lib/copa-jogos";
+import { MOEDA_INFO } from "@/lib/cambio";
+import { SIGNOS_LIST } from "@/lib/horoscopo";
+import { getAnosDisponiveis } from "@/lib/feriados";
 
 const BASE = "https://hojenoticia.com";
 
@@ -85,6 +88,42 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.7,
     });
+  }
+
+  // Cotações
+  entries.push({ url: `${BASE}/cotacao`, lastModified: now, changeFrequency: "daily", priority: 0.85 });
+  for (const m of Object.values(MOEDA_INFO)) {
+    entries.push({
+      url: `${BASE}/cotacao/${m.slug}`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.7,
+    });
+  }
+
+  // Horóscopo
+  entries.push({ url: `${BASE}/horoscopo`, lastModified: now, changeFrequency: "daily", priority: 0.85 });
+  for (const s of SIGNOS_LIST) {
+    entries.push({
+      url: `${BASE}/horoscopo/${s.slug}`,
+      lastModified: now,
+      changeFrequency: "daily",
+      priority: 0.7,
+    });
+  }
+
+  // Feriados
+  const anosFer = getAnosDisponiveis();
+  if (anosFer.length > 0) {
+    entries.push({ url: `${BASE}/feriados`, lastModified: now, changeFrequency: "monthly", priority: 0.75 });
+    for (const ano of anosFer) {
+      entries.push({
+        url: `${BASE}/feriados/${ano}`,
+        lastModified: now,
+        changeFrequency: "monthly",
+        priority: 0.7,
+      });
+    }
   }
 
   // Institucional

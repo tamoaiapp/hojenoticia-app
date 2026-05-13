@@ -78,6 +78,57 @@ export default function Header() {
           >
             🗳️ Eleições 2026
           </Link>
+          <Link
+            href="/cotacao"
+            onClick={() => setOpen(false)}
+            style={{
+              padding: "0.55rem 1rem",
+              fontSize: "0.78rem",
+              fontWeight: 800,
+              color: "#16a34a",
+              whiteSpace: "nowrap",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              borderBottom: "3px solid transparent",
+              textDecoration: "none",
+            }}
+          >
+            💰 Cotação
+          </Link>
+          <Link
+            href="/horoscopo"
+            onClick={() => setOpen(false)}
+            style={{
+              padding: "0.55rem 1rem",
+              fontSize: "0.78rem",
+              fontWeight: 800,
+              color: "#7c3aed",
+              whiteSpace: "nowrap",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              borderBottom: "3px solid transparent",
+              textDecoration: "none",
+            }}
+          >
+            ✨ Horóscopo
+          </Link>
+          <Link
+            href="/feriados"
+            onClick={() => setOpen(false)}
+            style={{
+              padding: "0.55rem 1rem",
+              fontSize: "0.78rem",
+              fontWeight: 800,
+              color: "#0ea5e9",
+              whiteSpace: "nowrap",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              borderBottom: "3px solid transparent",
+              textDecoration: "none",
+            }}
+          >
+            📅 Feriados
+          </Link>
           {Object.entries(LOTERIAS_CONFIG).map(([slug, { name, color }]) => (
             <Link
               key={slug}

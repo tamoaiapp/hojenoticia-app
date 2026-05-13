@@ -110,38 +110,89 @@ export default function HomePage() {
       <AdsterraBanner size="320x50" showOn="mobile" />
 
       {/* Cards de coberturas especiais */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
         <Link href="/copa" style={{
           background: "linear-gradient(135deg, #009739 0%, #FEDD00 100%)",
-          color: "#fff", borderRadius: 16, padding: "1.5rem",
+          color: "#fff", borderRadius: 16, padding: "1.25rem",
           textDecoration: "none", display: "block",
           boxShadow: "0 4px 16px rgba(0,151,57,0.25)",
         }}>
-          <div style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.5rem", fontWeight: 800, opacity: 0.95 }}>
-            🏆 Cobertura Especial
+          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
+            🏆 Especial
           </div>
-          <div style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.3rem" }}>
-            Copa do Mundo 2026
+          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
+            Copa 2026
           </div>
-          <div style={{ fontSize: "0.92rem", opacity: 0.95 }}>
-            Jogos, grupos e onde assistir →
+          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
+            Jogos e onde assistir →
           </div>
         </Link>
 
         <Link href="/eleicoes-2026" style={{
           background: "linear-gradient(135deg, #dc2626 0%, #0f172a 100%)",
-          color: "#fff", borderRadius: 16, padding: "1.5rem",
+          color: "#fff", borderRadius: 16, padding: "1.25rem",
           textDecoration: "none", display: "block",
           boxShadow: "0 4px 16px rgba(220,38,38,0.25)",
         }}>
-          <div style={{ fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.5rem", fontWeight: 800, opacity: 0.95 }}>
-            🗳️ Cobertura Especial
+          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
+            🗳️ Especial
           </div>
-          <div style={{ fontSize: "1.5rem", fontWeight: 900, marginBottom: "0.3rem" }}>
+          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
             Eleições 2026
           </div>
-          <div style={{ fontSize: "0.92rem", opacity: 0.95 }}>
-            Candidatos, calendário e resultados →
+          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
+            Candidatos e calendário →
+          </div>
+        </Link>
+
+        <Link href="/cotacao" style={{
+          background: "linear-gradient(135deg, #16a34a 0%, #065f46 100%)",
+          color: "#fff", borderRadius: 16, padding: "1.25rem",
+          textDecoration: "none", display: "block",
+          boxShadow: "0 4px 16px rgba(22,163,74,0.25)",
+        }}>
+          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
+            💰 Diário
+          </div>
+          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
+            Cotação Hoje
+          </div>
+          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
+            Dólar, Euro, Bitcoin →
+          </div>
+        </Link>
+
+        <Link href="/horoscopo" style={{
+          background: "linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)",
+          color: "#fff", borderRadius: 16, padding: "1.25rem",
+          textDecoration: "none", display: "block",
+          boxShadow: "0 4px 16px rgba(124,58,237,0.25)",
+        }}>
+          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
+            ✨ Diário
+          </div>
+          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
+            Horóscopo do Dia
+          </div>
+          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
+            Previsão dos 12 signos →
+          </div>
+        </Link>
+
+        <Link href="/feriados" style={{
+          background: "linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)",
+          color: "#fff", borderRadius: 16, padding: "1.25rem",
+          textDecoration: "none", display: "block",
+          boxShadow: "0 4px 16px rgba(14,165,233,0.25)",
+        }}>
+          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
+            📅 Calendário
+          </div>
+          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
+            Feriados
+          </div>
+          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
+            Próximos feriados nacionais →
           </div>
         </Link>
       </div>

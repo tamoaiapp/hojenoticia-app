@@ -1,6 +1,8 @@
 # run-updater.ps1
 # Wrapper para o Task Scheduler do Windows.
-# Executa scripts/update-results.mjs e grava log datado em scripts/logs/.
+# Executa scripts/daily-update.mjs (orquestrador unificado: loterias + câmbio + horóscopo + feriados)
+# e grava log datado em scripts/logs/.
+# Faz 1 commit/dia → 1 build/dia no Vercel (economia de minutos de build).
 
 $ErrorActionPreference = 'Continue'
 $ProgressPreference = 'SilentlyContinue'
@@ -29,10 +31,10 @@ if (-not $online) {
     exit 1
 }
 
-# === Rodar updater ===
+# === Rodar daily-update (orquestrador unificado) ===
 Set-Location $ROOT
 try {
-    & node scripts\update-results.mjs *>&1 | Out-File $logFile -Append -Encoding utf8
+    & node scripts\daily-update.mjs *>&1 | Out-File $logFile -Append -Encoding utf8
     $exitCode = $LASTEXITCODE
     "`nExit code: $exitCode" | Out-File $logFile -Append -Encoding utf8
 } catch {

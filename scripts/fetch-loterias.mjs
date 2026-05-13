@@ -14,24 +14,30 @@ const CONTENT_DIR = path.join(ROOT, 'content', 'loterias');
 
 // drawsPerWeek: estimativa para calcular ponto de partida dos concursos 2026
 const LOTERIAS = {
-  'mega-sena':  { api: 'megasena',   name: 'Mega-Sena',    numCount: 6,  drawsPerWeek: 2 },
-  'quina':      { api: 'quina',      name: 'Quina',         numCount: 5,  drawsPerWeek: 6 },
-  'lotofacil':  { api: 'lotofacil',  name: 'Lotofácil',     numCount: 15, drawsPerWeek: 7 },
-  'lotomania':  { api: 'lotomania',  name: 'Lotomania',     numCount: 20, drawsPerWeek: 3 },
-  'timemania':  { api: 'timemania',  name: 'Timemania',     numCount: 7,  drawsPerWeek: 3 },
-  'diadesorte': { api: 'diadesorte', name: 'Dia de Sorte',  numCount: 7,  drawsPerWeek: 3 },
-  'dupla-sena': { api: 'duplasena',  name: 'Dupla Sena',    numCount: 6,  drawsPerWeek: 3 },
+  'mega-sena':      { api: 'megasena',       name: 'Mega-Sena',       numCount: 6,  drawsPerWeek: 2 },
+  'quina':          { api: 'quina',          name: 'Quina',            numCount: 5,  drawsPerWeek: 6 },
+  'lotofacil':      { api: 'lotofacil',      name: 'Lotofácil',        numCount: 15, drawsPerWeek: 7 },
+  'lotomania':      { api: 'lotomania',      name: 'Lotomania',        numCount: 20, drawsPerWeek: 3 },
+  'timemania':      { api: 'timemania',      name: 'Timemania',        numCount: 7,  drawsPerWeek: 3 },
+  'diadesorte':     { api: 'diadesorte',     name: 'Dia de Sorte',     numCount: 7,  drawsPerWeek: 3 },
+  'dupla-sena':     { api: 'duplasena',      name: 'Dupla Sena',       numCount: 6,  drawsPerWeek: 3 },
+  'maismilionaria': { api: 'maismilionaria', name: '+Milionária',      numCount: 6,  drawsPerWeek: 1 },
+  'super-sete':     { api: 'supersete',      name: 'Super Sete',       numCount: 7,  drawsPerWeek: 3 },
+  'federal':        { api: 'federal',        name: 'Loteria Federal',  numCount: 5,  drawsPerWeek: 2 },
 };
 
 // Dias de sorteio por loteria (0=Dom,...,6=Sáb) — usado só para futuro
 const DRAW_DAYS = {
-  'mega-sena':  [3, 6],
-  'quina':      [1, 2, 3, 4, 5, 6],
-  'lotofacil':  [0, 1, 2, 3, 4, 5, 6],
-  'lotomania':  [1, 3, 5],
-  'timemania':  [2, 4, 6],
-  'diadesorte': [2, 4, 6],
-  'dupla-sena': [2, 4, 6],
+  'mega-sena':      [3, 6],
+  'quina':          [1, 2, 3, 4, 5, 6],
+  'lotofacil':      [0, 1, 2, 3, 4, 5, 6],
+  'lotomania':      [1, 3, 5],
+  'timemania':      [2, 4, 6],
+  'diadesorte':     [2, 4, 6],
+  'dupla-sena':     [2, 4, 6],
+  'maismilionaria': [6],
+  'super-sete':     [1, 3, 5],
+  'federal':        [3, 6],
 };
 
 // ── helpers ──────────────────────────────────────────────────────────────────

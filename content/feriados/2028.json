@@ -1,0 +1,104 @@
+{
+  "ano": 2028,
+  "atualizado_em": "2026-05-13",
+  "feriados": [
+    {
+      "data": "2028-01-01",
+      "nome": "Confraternização Universal",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "sábado"
+    },
+    {
+      "data": "2028-02-28",
+      "nome": "Carnaval (segunda)",
+      "tipo": "nacional",
+      "facultativo": true,
+      "dia_semana": "segunda-feira"
+    },
+    {
+      "data": "2028-02-29",
+      "nome": "Carnaval",
+      "tipo": "nacional",
+      "facultativo": true,
+      "dia_semana": "terça-feira"
+    },
+    {
+      "data": "2028-04-14",
+      "nome": "Sexta-feira Santa",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "sexta-feira"
+    },
+    {
+      "data": "2028-04-16",
+      "nome": "Páscoa",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "domingo"
+    },
+    {
+      "data": "2028-04-21",
+      "nome": "Tiradentes",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "sexta-feira"
+    },
+    {
+      "data": "2028-05-01",
+      "nome": "Dia do Trabalhador",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "segunda-feira"
+    },
+    {
+      "data": "2028-06-15",
+      "nome": "Corpus Christi",
+      "tipo": "nacional",
+      "facultativo": true,
+      "dia_semana": "quinta-feira"
+    },
+    {
+      "data": "2028-09-07",
+      "nome": "Independência do Brasil",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "quinta-feira"
+    },
+    {
+      "data": "2028-10-12",
+      "nome": "Nossa Senhora Aparecida",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "quinta-feira"
+    },
+    {
+      "data": "2028-11-02",
+      "nome": "Finados",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "quinta-feira"
+    },
+    {
+      "data": "2028-11-15",
+      "nome": "Proclamação da República",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "quarta-feira"
+    },
+    {
+      "data": "2028-11-20",
+      "nome": "Dia da Consciência Negra",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "segunda-feira"
+    },
+    {
+      "data": "2028-12-25",
+      "nome": "Natal",
+      "tipo": "nacional",
+      "facultativo": false,
+      "dia_semana": "segunda-feira"
+    }
+  ]
+}

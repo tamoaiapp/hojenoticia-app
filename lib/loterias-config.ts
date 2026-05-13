@@ -37,6 +37,21 @@ export const LOTERIAS_CONFIG: Record<string, {
     numCount: 6, apiKey: "duplasena", freq: "Terça, Quinta e Sábado",
     description: "6 números de 1 a 50 sorteados duas vezes por concurso.",
   },
+  "maismilionaria": {
+    name: "+Milionária", emoji: "💎", color: "#005CA9", ballColor: "#003d70",
+    numCount: 6, apiKey: "maismilionaria", freq: "Sábado",
+    description: "6 números de 1 a 50 mais 2 trevos de 1 a 6. Prêmio mínimo de R$ 10 milhões.",
+  },
+  "super-sete": {
+    name: "Super Sete", emoji: "7️⃣", color: "#C5A100", ballColor: "#9c8000",
+    numCount: 7, apiKey: "supersete", freq: "Segunda, Quarta e Sexta",
+    description: "Escolha 1 número de 0 a 9 em cada uma das 7 colunas.",
+  },
+  "federal": {
+    name: "Loteria Federal", emoji: "🎟️", color: "#0066B3", ballColor: "#004680",
+    numCount: 5, apiKey: "federal", freq: "Quarta e Sábado",
+    description: "Sorteio por bilhetes com 5 prêmios principais. Maior loteria do Brasil em duração.",
+  },
 };
 
 export function formatBRL(n: number): string {
