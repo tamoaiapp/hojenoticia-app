@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-05-14T00:30:30.275Z",
+  "updated_at": "2026-05-14T01:00:25.137Z",
   "date": "2026-05-14",
   "pares": {
     "USD-BRL": {
@@ -41,54 +41,59 @@
       "low": 6.60066,
       "varBid": 0.142276,
       "pctChange": 2.140583,
-      "timestamp": 1778714922,
-      "create_date": "2026-05-13 20:28:42"
+      "timestamp": 1778713034,
+      "create_date": "2026-05-13 19:57:14"
     },
     "ARS-BRL": {
       "code": "ARS-BRL",
       "from": "ARS",
       "to": "BRL",
       "name": "Peso Argentino/Real Brasileiro",
-      "bid": 0.0036109,
-      "ask": 0.00361092,
+      "bid": 0.00361067,
+      "ask": 0.00361069,
       "high": 0.00362291,
       "low": 0.0035281,
-      "varBid": 0.000065,
-      "pctChange": 1.823626,
-      "timestamp": 1778715036,
-      "create_date": "2026-05-13 20:30:36"
+      "varBid": 0.000064,
+      "pctChange": 1.81714,
+      "timestamp": 1778712945,
+      "create_date": "2026-05-13 19:55:45"
     },
     "BTC-BRL": {
       "code": "BTC-BRL",
       "from": "BTC",
       "to": "BRL",
       "name": "Bitcoin/Real Brasileiro",
-      "bid": 398050,
-      "ask": 398051,
+      "bid": 398402,
+      "ask": 398403,
       "high": 399628,
       "low": 386500,
-      "varBid": 2697,
-      "pctChange": 0.682,
-      "timestamp": 1778715036,
-      "create_date": "2026-05-13 20:30:36"
+      "varBid": 2951,
+      "pctChange": 0.746,
+      "timestamp": 1778713232,
+      "create_date": "2026-05-13 20:00:32"
     },
     "ETH-BRL": {
       "code": "ETH-BRL",
       "from": "ETH",
       "to": "BRL",
       "name": "Ethereum/Real Brasileiro",
-      "bid": 11323.93,
-      "ask": 11323.94,
+      "bid": 11333.02,
+      "ask": 11333.03,
       "high": 11382.93,
       "low": 10970.2,
-      "varBid": 132.5,
-      "pctChange": 1.184,
-      "timestamp": 1778715030,
-      "create_date": "2026-05-13 20:30:30"
+      "varBid": 140.84,
+      "pctChange": 1.258,
+      "timestamp": 1778713229,
+      "create_date": "2026-05-13 20:00:29"
     }
   },
   "historico": {
     "USD-BRL": [
+      {
+        "bid": 5.025,
+        "timestamp": 1778718524,
+        "date": "2026-05-14"
+      },
       {
         "bid": 5.0052,
         "timestamp": 1778712640,
@@ -233,11 +238,6 @@
         "bid": 4.9944,
         "timestamp": 1776124775,
         "date": "2026-04-13"
-      },
-      {
-        "bid": 5.00044,
-        "timestamp": 1776038348,
-        "date": "2026-04-12"
       }
     ],
     "EUR-BRL": [
@@ -394,8 +394,8 @@
     ],
     "BTC-BRL": [
       {
-        "bid": 397504,
-        "timestamp": 1778711423,
+        "bid": 397961,
+        "timestamp": 1778715008,
         "date": "2026-05-13"
       },
       {
