@@ -1,0 +1,47 @@
+name: Daily Update
+
+on:
+  schedule:
+    # 00:30 UTC = 21:30 BRT — after all Brazilian lottery draws (8 PM BRT)
+    - cron: '30 0 * * *'
+  workflow_dispatch:  # allow manual trigger from Actions tab
+
+permissions:
+  contents: write
+
+concurrency:
+  group: daily-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Run daily update (no auto-push — workflow handles git)
+        run: node scripts/daily-update.mjs --no-push
+
+      - name: Commit and push if changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            DATE=$(date -u +%Y-%m-%d)
+            git commit -m "auto: daily-update $DATE [skip ci]"
+            git push
+          fi
