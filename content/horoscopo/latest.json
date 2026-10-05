@@ -1,6 +1,6 @@
 {
-  "date": "2026-10-04",
-  "updated_at": "2026-10-04T06:14:39.313Z",
+  "date": "2026-10-05",
+  "updated_at": "2026-10-05T06:06:40.111Z",
   "signos": {
     "aries": {
       "slug": "aries",
@@ -8,13 +8,13 @@
       "periodo": "21/03 a 19/04",
       "elemento": "fogo",
       "regente": "Marte",
-      "geral": "Dia de movimento — reencontro pode aparecer no caminho. Use sua sensibilidade pra aproveitar a oportunidade sem se precipitar.",
-      "amor": "Nas relações, vale comunicar o que sente sem rodeios. Quem está só pode atrair alguém com perfil discreto.",
-      "trabalho": "No trabalho, foco em comunicação interna. Uma conversa com um colega pode trazer clareza sobre um projeto.",
-      "dinheiro": "O setor material fica neutro — não é dia de grandes movimentos. Confira pendências e atualize seu orçamento.",
-      "saude": "Atenção a tensões no pescoço. Pausas curtas durante o dia ajudam a aliviar.",
-      "numero_sorte": 15,
-      "cor_sorte": "prata"
+      "geral": "Dia de movimento — mensagem inesperada pode aparecer no caminho. Use sua sensibilidade pra aproveitar a oportunidade sem se precipitar.",
+      "amor": "Nas relações, vale comunicar o que sente sem rodeios. Quem está só pode atrair alguém com perfil criativo.",
+      "trabalho": "O ambiente profissional pede colaboração. Trabalhos em equipe rendem mais que ações individuais hoje.",
+      "dinheiro": "Uma oportunidade financeira pode aparecer, mas avalie com calma antes de aceitar. Pesquise alternativas.",
+      "saude": "Cuide do sono: dormir bem é o que vai recuperar sua disposição. Evite telas perto da hora de deitar.",
+      "numero_sorte": 75,
+      "cor_sorte": "azul"
     },
     "touro": {
       "slug": "touro",
@@ -22,13 +22,13 @@
       "periodo": "20/04 a 20/05",
       "elemento": "terra",
       "regente": "Vênus",
-      "geral": "O dia pede foco e atenção aos relacionamentos. Uma convite pode surgir e abrir um caminho que você ainda não tinha considerado.",
-      "amor": "No amor, evite drama por bobagem. A energia do dia pede leveza e abertura para ouvir o outro.",
-      "trabalho": "Excelente momento para colocar ordem na agenda profissional. Sua disciplina será notada por quem decide.",
-      "dinheiro": "Uma oportunidade financeira pode aparecer, mas avalie com calma antes de aceitar. Pesquise alternativas.",
-      "saude": "Atenção a tensões no pescoço. Pausas curtas durante o dia ajudam a aliviar.",
-      "numero_sorte": 61,
-      "cor_sorte": "amarelo"
+      "geral": "O dia pede serenidade e atenção aos estudos. Uma mensagem inesperada pode surgir e abrir um caminho que você ainda não tinha considerado.",
+      "amor": "No amor, evite drama por bobagem. A energia do dia pede escuta ativa e abertura para ouvir o outro.",
+      "trabalho": "Algo relacionado a comunicação interna pode demandar atenção extra. Mantenha a disciplina mesmo sob pressão.",
+      "dinheiro": "Dinheiro pede atenção a detalhes. Revise contas, vencimentos e assinaturas que você não usa mais.",
+      "saude": "Cuide do sono: dormir bem é o que vai recuperar sua disposição. Evite telas perto da hora de deitar.",
+      "numero_sorte": 22,
+      "cor_sorte": "roxo"
     },
     "gemeos": {
       "slug": "gemeos",
@@ -36,13 +36,13 @@
       "periodo": "21/05 a 20/06",
       "elemento": "ar",
       "regente": "Mercúrio",
-      "geral": "Período propício para revisar estudos e ajustar o que não está funcionando. Sua determinação será sua maior aliada.",
-      "amor": "O setor afetivo pede gentileza. Casais podem aproveitar para conversar sobre planos futuros. Solteiros, atenção a quem demonstra comunicativo.",
-      "trabalho": "No trabalho, foco em organização. Uma conversa com um colega pode trazer clareza sobre um projeto.",
-      "dinheiro": "No financeiro, evite gastos por impulso. É dia bom pra planejar do que pra gastar.",
-      "saude": "Atenção a tensões no pescoço. Pausas curtas durante o dia ajudam a aliviar.",
-      "numero_sorte": 61,
-      "cor_sorte": "rosa"
+      "geral": "Período propício para revisar rotina e ajustar o que não está funcionando. Sua determinação será sua maior aliada.",
+      "amor": "O setor afetivo pede leveza. Casais podem aproveitar para conversar sobre planos futuros. Solteiros, atenção a quem demonstra carinhoso.",
+      "trabalho": "Dia de produtividade média — priorize o que é urgente em um novo desafio. Não pegue tarefa nova até resolver o que está pendente.",
+      "dinheiro": "O setor material fica neutro — não é dia de grandes movimentos. Confira pendências e atualize seu orçamento.",
+      "saude": "Cuide do sono: dormir bem é o que vai recuperar sua disposição. Evite telas perto da hora de deitar.",
+      "numero_sorte": 24,
+      "cor_sorte": "dourado"
     },
     "cancer": {
       "slug": "cancer",
@@ -50,13 +50,13 @@
       "periodo": "21/06 a 22/07",
       "elemento": "água",
       "regente": "Lua",
-      "geral": "Você está com clareza mental em alta, o que ajuda a resolver relacionamentos. Evite tomar decisões apressadas no fim do dia.",
-      "amor": "No amor, evite drama por bobagem. A energia do dia pede gentileza e abertura para ouvir o outro.",
-      "trabalho": "O ambiente profissional pede colaboração. Trabalhos em equipe rendem mais que ações individuais hoje.",
-      "dinheiro": "Uma oportunidade financeira pode aparecer, mas avalie com calma antes de aceitar. Pesquise alternativas.",
-      "saude": "Energia mediana — não exagere em atividades pesadas. O corpo agradece um ritmo mais tranquilo.",
-      "numero_sorte": 89,
-      "cor_sorte": "azul"
+      "geral": "Você está com intuição em alta, o que ajuda a resolver estudos. Evite tomar decisões apressadas no fim do dia.",
+      "amor": "No amor, evite drama por bobagem. A energia do dia pede sinceridade e abertura para ouvir o outro.",
+      "trabalho": "Algo relacionado a finanças do trabalho pode demandar atenção extra. Mantenha a disciplina mesmo sob pressão.",
+      "dinheiro": "O setor material fica neutro — não é dia de grandes movimentos. Confira pendências e atualize seu orçamento.",
+      "saude": "Boa fase para retomar uma rotina de autocuidado. Pequenos hábitos consistentes valem mais que mudanças radicais.",
+      "numero_sorte": 27,
+      "cor_sorte": "prata"
     },
     "leao": {
       "slug": "leao",
@@ -64,13 +64,13 @@
       "periodo": "23/07 a 22/08",
       "elemento": "fogo",
       "regente": "Sol",
-      "geral": "A energia de hoje favorece foco, principalmente em assuntos ligados a rotina. Aproveite para colocar em prática algo que vinha adiando.",
+      "geral": "A energia de hoje favorece serenidade, principalmente em assuntos ligados a estudos. Aproveite para colocar em prática algo que vinha adiando.",
       "amor": "A área amorosa fica favorecida no período da tarde. Uma reaproximação ou um diálogo importante pode acontecer.",
-      "trabalho": "O ambiente profissional pede colaboração. Trabalhos em equipe rendem mais que ações individuais hoje.",
-      "dinheiro": "Bom momento para conversar sobre metas em comum com quem divide gastos com você. Transparência evita atrito.",
-      "saude": "Energia mediana — não exagere em atividades pesadas. O corpo agradece um ritmo mais tranquilo.",
-      "numero_sorte": 92,
-      "cor_sorte": "rosa"
+      "trabalho": "Algo relacionado a um projeto antigo pode demandar atenção extra. Mantenha a disciplina mesmo sob pressão.",
+      "dinheiro": "No financeiro, evite gastos por impulso. É dia bom pra planejar do que pra gastar.",
+      "saude": "Atenção a tensões no pescoço. Pausas curtas durante o dia ajudam a aliviar.",
+      "numero_sorte": 55,
+      "cor_sorte": "branco"
     },
     "virgem": {
       "slug": "virgem",
@@ -78,13 +78,13 @@
       "periodo": "23/08 a 22/09",
       "elemento": "terra",
       "regente": "Mercúrio",
-      "geral": "Período propício para revisar rotina e ajustar o que não está funcionando. Sua criatividade será sua maior aliada.",
+      "geral": "Período propício para revisar rotina e ajustar o que não está funcionando. Sua sensibilidade será sua maior aliada.",
       "amor": "Astralmente, é dia de cuidar dos vínculos próximos. Demonstre carinho — pequenos gestos contam mais que grandes declarações hoje.",
-      "trabalho": "Excelente momento para colocar ordem na agenda profissional. Sua disciplina será notada por quem decide.",
-      "dinheiro": "O setor material fica neutro — não é dia de grandes movimentos. Confira pendências e atualize seu orçamento.",
-      "saude": "A saúde pede equilíbrio. Hidratação e uma caminhada leve já fazem diferença hoje.",
-      "numero_sorte": 88,
-      "cor_sorte": "branco"
+      "trabalho": "Dia de produtividade média — priorize o que é urgente em um novo desafio. Não pegue tarefa nova até resolver o que está pendente.",
+      "dinheiro": "Uma oportunidade financeira pode aparecer, mas avalie com calma antes de aceitar. Pesquise alternativas.",
+      "saude": "Boa fase para retomar uma rotina de autocuidado. Pequenos hábitos consistentes valem mais que mudanças radicais.",
+      "numero_sorte": 49,
+      "cor_sorte": "prata"
     },
     "libra": {
       "slug": "libra",
@@ -92,13 +92,13 @@
       "periodo": "23/09 a 22/10",
       "elemento": "ar",
       "regente": "Vênus",
-      "geral": "Dia de movimento — convite pode aparecer no caminho. Use sua clareza mental pra aproveitar a oportunidade sem se precipitar.",
+      "geral": "Dia de movimento — reencontro pode aparecer no caminho. Use sua clareza mental pra aproveitar a oportunidade sem se precipitar.",
       "amor": "A área amorosa fica favorecida no período da tarde. Uma reaproximação ou um diálogo importante pode acontecer.",
-      "trabalho": "Algo relacionado a finanças do trabalho pode demandar atenção extra. Mantenha a disciplina mesmo sob pressão.",
-      "dinheiro": "Bom momento para conversar sobre organização financeira com quem divide gastos com você. Transparência evita atrito.",
-      "saude": "Atenção a tensões no pescoço. Pausas curtas durante o dia ajudam a aliviar.",
-      "numero_sorte": 72,
-      "cor_sorte": "verde"
+      "trabalho": "Excelente momento para colocar ordem na agenda profissional. Sua disciplina será notada por quem decide.",
+      "dinheiro": "No financeiro, evite gastos por impulso. É dia bom pra planejar do que pra gastar.",
+      "saude": "Cuide do sono: dormir bem é o que vai recuperar sua disposição. Evite telas perto da hora de deitar.",
+      "numero_sorte": 33,
+      "cor_sorte": "rosa"
     },
     "escorpiao": {
       "slug": "escorpiao",
@@ -106,13 +106,13 @@
       "periodo": "23/10 a 21/11",
       "elemento": "água",
       "regente": "Plutão",
-      "geral": "Dia de movimento — convite pode aparecer no caminho. Use sua clareza mental pra aproveitar a oportunidade sem se precipitar.",
-      "amor": "O setor afetivo pede escuta ativa. Casais podem aproveitar para conversar sobre planos futuros. Solteiros, atenção a quem demonstra independente.",
-      "trabalho": "No trabalho, foco em organização. Uma conversa com um colega pode trazer clareza sobre um projeto.",
-      "dinheiro": "Bom momento para conversar sobre investimentos com quem divide gastos com você. Transparência evita atrito.",
-      "saude": "Boa fase para retomar uma rotina de autocuidado. Pequenos hábitos consistentes valem mais que mudanças radicais.",
-      "numero_sorte": 37,
-      "cor_sorte": "branco"
+      "geral": "Dia de movimento — reencontro pode aparecer no caminho. Use sua intuição pra aproveitar a oportunidade sem se precipitar.",
+      "amor": "O setor afetivo pede escuta ativa. Casais podem aproveitar para conversar sobre planos futuros. Solteiros, atenção a quem demonstra comunicativo.",
+      "trabalho": "O ambiente profissional pede colaboração. Trabalhos em equipe rendem mais que ações individuais hoje.",
+      "dinheiro": "No financeiro, evite gastos por impulso. É dia bom pra planejar do que pra gastar.",
+      "saude": "Energia mediana — não exagere em atividades pesadas. O corpo agradece um ritmo mais tranquilo.",
+      "numero_sorte": 99,
+      "cor_sorte": "prata"
     },
     "sagitario": {
       "slug": "sagitario",
@@ -120,13 +120,13 @@
       "periodo": "22/11 a 21/12",
       "elemento": "fogo",
       "regente": "Júpiter",
-      "geral": "Você está com intuição em alta, o que ajuda a resolver relacionamentos. Evite tomar decisões apressadas no fim do dia.",
-      "amor": "Nas relações, vale comunicar o que sente sem rodeios. Quem está só pode atrair alguém com perfil discreto.",
-      "trabalho": "Dia de produtividade média — priorize o que é urgente em um novo desafio. Não pegue tarefa nova até resolver o que está pendente.",
-      "dinheiro": "O setor material fica neutro — não é dia de grandes movimentos. Confira pendências e atualize seu orçamento.",
-      "saude": "Energia mediana — não exagere em atividades pesadas. O corpo agradece um ritmo mais tranquilo.",
-      "numero_sorte": 6,
-      "cor_sorte": "vermelho"
+      "geral": "Você está com sensibilidade em alta, o que ajuda a resolver estudos. Evite tomar decisões apressadas no fim do dia.",
+      "amor": "Astralmente, é dia de cuidar dos vínculos próximos. Demonstre carinho — pequenos gestos contam mais que grandes declarações hoje.",
+      "trabalho": "No trabalho, foco em um projeto antigo. Uma conversa com um colega pode trazer clareza sobre um projeto.",
+      "dinheiro": "No financeiro, evite gastos por impulso. É dia bom pra planejar do que pra gastar.",
+      "saude": "Boa fase para retomar uma rotina de autocuidado. Pequenos hábitos consistentes valem mais que mudanças radicais.",
+      "numero_sorte": 45,
+      "cor_sorte": "laranja"
     },
     "capricornio": {
       "slug": "capricornio",
@@ -134,13 +134,13 @@
       "periodo": "22/12 a 19/01",
       "elemento": "terra",
       "regente": "Saturno",
-      "geral": "Você está com intuição em alta, o que ajuda a resolver estudos. Evite tomar decisões apressadas no fim do dia.",
-      "amor": "O setor afetivo pede leveza. Casais podem aproveitar para conversar sobre planos futuros. Solteiros, atenção a quem demonstra criativo.",
-      "trabalho": "Dia de produtividade média — priorize o que é urgente em comunicação interna. Não pegue tarefa nova até resolver o que está pendente.",
-      "dinheiro": "O setor material fica neutro — não é dia de grandes movimentos. Confira pendências e atualize seu orçamento.",
-      "saude": "A saúde pede equilíbrio. Hidratação e uma caminhada leve já fazem diferença hoje.",
-      "numero_sorte": 69,
-      "cor_sorte": "roxo"
+      "geral": "Você está com clareza mental em alta, o que ajuda a resolver rotina. Evite tomar decisões apressadas no fim do dia.",
+      "amor": "O setor afetivo pede presença. Casais podem aproveitar para conversar sobre planos futuros. Solteiros, atenção a quem demonstra carinhoso.",
+      "trabalho": "No trabalho, foco em finanças do trabalho. Uma conversa com um colega pode trazer clareza sobre um projeto.",
+      "dinheiro": "Uma oportunidade financeira pode aparecer, mas avalie com calma antes de aceitar. Pesquise alternativas.",
+      "saude": "Boa fase para retomar uma rotina de autocuidado. Pequenos hábitos consistentes valem mais que mudanças radicais.",
+      "numero_sorte": 32,
+      "cor_sorte": "rosa"
     },
     "aquario": {
       "slug": "aquario",
@@ -148,13 +148,13 @@
       "periodo": "20/01 a 18/02",
       "elemento": "ar",
       "regente": "Urano",
-      "geral": "O dia pede foco e atenção aos rotina. Uma convite pode surgir e abrir um caminho que você ainda não tinha considerado.",
+      "geral": "O dia pede foco e atenção aos relacionamentos. Uma reflexão profunda pode surgir e abrir um caminho que você ainda não tinha considerado.",
       "amor": "A área amorosa fica favorecida no período da tarde. Uma reaproximação ou um diálogo importante pode acontecer.",
-      "trabalho": "O ambiente profissional pede colaboração. Trabalhos em equipe rendem mais que ações individuais hoje.",
-      "dinheiro": "O setor material fica neutro — não é dia de grandes movimentos. Confira pendências e atualize seu orçamento.",
-      "saude": "Energia mediana — não exagere em atividades pesadas. O corpo agradece um ritmo mais tranquilo.",
-      "numero_sorte": 66,
-      "cor_sorte": "preto"
+      "trabalho": "Algo relacionado a um projeto antigo pode demandar atenção extra. Mantenha a disciplina mesmo sob pressão.",
+      "dinheiro": "Uma oportunidade financeira pode aparecer, mas avalie com calma antes de aceitar. Pesquise alternativas.",
+      "saude": "Atenção a tensões no pescoço. Pausas curtas durante o dia ajudam a aliviar.",
+      "numero_sorte": 27,
+      "cor_sorte": "laranja"
     },
     "peixes": {
       "slug": "peixes",
@@ -162,13 +162,13 @@
       "periodo": "19/02 a 20/03",
       "elemento": "água",
       "regente": "Netuno",
-      "geral": "Você está com clareza mental em alta, o que ajuda a resolver relacionamentos. Evite tomar decisões apressadas no fim do dia.",
-      "amor": "O setor afetivo pede sinceridade. Casais podem aproveitar para conversar sobre planos futuros. Solteiros, atenção a quem demonstra carinhoso.",
-      "trabalho": "Excelente momento para colocar ordem na agenda profissional. Sua disciplina será notada por quem decide.",
-      "dinheiro": "Uma oportunidade financeira pode aparecer, mas avalie com calma antes de aceitar. Pesquise alternativas.",
-      "saude": "Atenção a tensões no pescoço. Pausas curtas durante o dia ajudam a aliviar.",
-      "numero_sorte": 49,
-      "cor_sorte": "branco"
+      "geral": "Você está com sensibilidade em alta, o que ajuda a resolver rotina. Evite tomar decisões apressadas no fim do dia.",
+      "amor": "O setor afetivo pede gentileza. Casais podem aproveitar para conversar sobre planos futuros. Solteiros, atenção a quem demonstra independente.",
+      "trabalho": "Dia de produtividade média — priorize o que é urgente em finanças do trabalho. Não pegue tarefa nova até resolver o que está pendente.",
+      "dinheiro": "Dinheiro pede atenção a detalhes. Revise contas, vencimentos e assinaturas que você não usa mais.",
+      "saude": "Cuide do sono: dormir bem é o que vai recuperar sua disposição. Evite telas perto da hora de deitar.",
+      "numero_sorte": 10,
+      "cor_sorte": "preto"
     }
   }
 }
