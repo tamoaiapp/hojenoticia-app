@@ -12,6 +12,7 @@ export interface DrawMeta {
   concurso: number;
   slug: string;
   status: "aguardando" | "publicado";
+  schedule_status?: "confirmed" | "unconfirmed";
   draw_date: string;
   numeros: string[];
   premio_principal: number;
@@ -45,6 +46,7 @@ function parseDraw(file: string, loteria: string): DrawMeta {
     slug, loteria,
     concurso:         Number(data.concurso ?? 0),
     status:           data.status ?? "aguardando",
+    schedule_status:  data.schedule_status === "confirmed" || data.schedule_status === "unconfirmed" ? data.schedule_status : undefined,
     draw_date:        data.draw_date ?? data.date ?? "2026-01-01",
     numeros:          Array.isArray(data.numeros) ? data.numeros : [],
     premio_principal: Number(data.premio_principal ?? 0),

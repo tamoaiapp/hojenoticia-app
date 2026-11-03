@@ -1,343 +1,158 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
-import { LOTERIAS_CONFIG, getLatestDrawPerLoteria, getAllDraws, formatBRL, formatDateShort } from "@/lib/loterias";
 import AdsterraBanner from "@/components/AdsterraBanner";
 import AdsterraNative from "@/components/AdsterraNative";
+import LotterySearch from "@/components/LotterySearch";
+import { LOTERIAS_CONFIG, getLatestDrawPerLoteria, getAllDraws, getDrawBySlug, formatDateShort, type DrawMeta } from "@/lib/loterias";
+import { formatPublicationTime, getNewsDraws, isOfficialCaixaSource, publicationTime } from "@/lib/news";
 
-export const revalidate = 86400;
+export const revalidate = 1800;
 
 const BASE = "https://www.hojenoticia.com";
+const featured = ["quina", "lotofacil", "mega-sena"];
+const allModalities = [...featured, ...Object.keys(LOTERIAS_CONFIG).filter(slug => !featured.includes(slug))];
+const money = new Intl.NumberFormat("pt-BR", { style: "currency", currency: "BRL" });
+const integer = new Intl.NumberFormat("pt-BR");
 
 export const metadata: Metadata = {
-  title: "Resultados de Loterias – Mega-Sena, Quina, Lotofácil | Hoje Notícia",
-  description: "Confira os resultados de todas as loterias da Caixa: Mega-Sena, Quina, Lotofácil, Lotomania e mais. Atualizado após cada sorteio.",
-  keywords: "resultado loteria hoje, mega sena resultado, quina resultado, lotofacil resultado, loterias caixa",
+  title: "Resultados de loterias: Quina, Lotofácil e Mega-Sena",
+  description: "Consulte os números sorteados, o rateio e o histórico de concursos da Quina, Lotofácil, Mega-Sena e outras loterias. Boletins com dados e fonte Caixa.",
   alternates: { canonical: `${BASE}/` },
   openGraph: {
-    title: "Resultados de Loterias | Hoje Notícia",
-    description: "Mega-Sena, Quina, Lotofácil e mais. Resultados atualizados.",
+    title: "Resultados de loterias — Hoje Notícia",
+    description: "Números sorteados, rateio e histórico de concursos em uma consulta direta.",
     url: `${BASE}/`,
+    type: "website",
   },
 };
 
-const itemListLd = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  name: "Loterias da Caixa",
-  description: "Resultados de loterias brasileiras",
-  url: `${BASE}/`,
-  itemListElement: Object.entries(LOTERIAS_CONFIG).map(([slug, cfg], i) => ({
-    "@type": "ListItem",
-    position: i + 1,
-    name: cfg.name,
-    url: `${BASE}/loterias/${slug}`,
-  })),
-};
+function isCurrentDate(value: string | undefined, today: string): value is string {
+  if (!value || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T12:00:00Z`);
+  return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value && value >= today;
+}
 
-const faqLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: [
-    {
-      "@type": "Question",
-      name: "Quais loterias da Caixa estão disponíveis no site?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text:
-          "Acompanhamos as 7 modalidades oficiais: Mega-Sena, Quina, Lotofácil, Lotomania, Timemania, Dia de Sorte e Dupla Sena. Cada uma tem página própria com último resultado, histórico de concursos e estimativa do próximo prêmio.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "A que horas saem os resultados das loterias?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text:
-          "Os sorteios da Caixa Econômica Federal acontecem por volta das 20h (horário de Brasília) e o resultado costuma sair em até 30 minutos após o sorteio. Atualizamos a página assim que o resultado oficial é divulgado.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Como conferir se ganhei na loteria?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text:
-          "Compare as dezenas do seu volante com as números sorteados publicados aqui ou no site da Caixa. Para resgatar o prêmio você pode usar o aplicativo Loterias Caixa, qualquer casa lotérica ou agências da Caixa, conforme o valor.",
-      },
-    },
-    {
-      "@type": "Question",
-      name: "Qual loteria tem a maior chance de ganhar?",
-      acceptedAnswer: {
-        "@type": "Answer",
-        text:
-          "A Lotofácil é tradicionalmente a loteria com maior chance estatística de premiação, pois sorteia 15 números de 1 a 25. A Mega-Sena tem chances menores mas oferece os maiores prêmios.",
-      },
-    },
-  ],
-};
+function ResultNumbers({ values, color, label = "Números sorteados" }: { values: string[]; color: string; label?: string }) {
+  return <ol className="result-numbers" aria-label={label}>
+    {values.map((value, index) => <li key={`${index}-${value}`} style={{ backgroundColor: color }} className={String(value).length > 2 ? "number-ticket" : undefined}>{String(value).padStart(2, "0")}</li>)}
+  </ol>;
+}
 
-const breadcrumbLd = {
-  "@context": "https://schema.org",
-  "@type": "BreadcrumbList",
-  itemListElement: [{ "@type": "ListItem", position: 1, name: "Início", item: BASE }],
-};
+function LotteryCard({ slug, draw, today }: { slug: string; draw: DrawMeta | null; today: string }) {
+  const cfg = LOTERIAS_CONFIG[slug];
+  const officialNext = draw && isOfficialCaixaSource(draw.source_url) && isCurrentDate(draw.proxima_data, today) &&
+    draw.proximo_concurso && draw.proximo_concurso > draw.concurso;
+  const nextRecord = officialNext ? getDrawBySlug(slug, `concurso-${draw.proximo_concurso}`) : null;
+  const sourceUrl = draw && isOfficialCaixaSource(draw.source_url) ? draw.source_url : undefined;
+  const luckyMonth = draw?.mes_sorte?.trim();
+  const heartTeam = draw?.time_coracao?.trim();
 
-function NumberBall({ num, color }: { num: string; color: string }) {
-  return (
-    <span style={{
-      display: "inline-flex", alignItems: "center", justifyContent: "center",
-      width: 38, height: 38, borderRadius: "50%",
-      background: color, color: "#fff",
-      fontWeight: 800, fontSize: "0.9rem", flexShrink: 0,
-    }}>
-      {num.padStart(2, "0")}
-    </span>
-  );
+  return <article className="lottery-card" style={{ borderTopColor: cfg.color }}>
+    <div className="lottery-card-heading">
+      <h3><span className="lottery-color-dot" style={{ backgroundColor: cfg.color }} aria-hidden="true" />{cfg.name}</h3>
+      {draw && <span className="contest-badge">Concurso {draw.concurso}</span>}
+    </div>
+    {draw ? <>
+      <p className="result-date">Sorteio de <time dateTime={draw.draw_date}>{formatDateShort(draw.draw_date)}</time></p>
+      {draw.numeros_segundo_sorteio?.length ? <p className="numbers-label">Primeiro sorteio</p> : null}
+      <ResultNumbers values={draw.numeros} color={cfg.ballColor} />
+      {!!draw.numeros_segundo_sorteio?.length && <>
+        <p className="numbers-label">Segundo sorteio</p>
+        <ResultNumbers values={draw.numeros_segundo_sorteio} color={cfg.ballColor} label="Números do segundo sorteio" />
+      </>}
+      {luckyMonth && <p className="result-extra">Mês da sorte: <strong>{luckyMonth}</strong></p>}
+      {heartTeam && <p className="result-extra">Time do coração: <strong>{heartTeam}</strong></p>}
+      <p className="result-summary">{draw.ganhadores > 0 ? `${integer.format(draw.ganhadores)} aposta${draw.ganhadores === 1 ? "" : "s"} ganhadora${draw.ganhadores === 1 ? "" : "s"} na faixa principal` : draw.rateio?.length ? "Sem aposta ganhadora na faixa principal" : draw.acumulou === true ? "Prêmio acumulado" : "Premiação aguardando confirmação"}
+        {draw.premio_principal > 0 && <strong>{money.format(draw.premio_principal)} por aposta</strong>}
+      </p>
+      {officialNext && <div className="next-contest-info">
+        <span>Próximo: {draw.proximo_concurso} · {formatDateShort(draw.proxima_data!)}</span>
+        {!!draw.proximo_premio && <strong>Estimativa: {money.format(draw.proximo_premio)}</strong>}
+      </div>}
+      <div className="lottery-card-actions">
+        <Link className="button button-primary" href={`/loterias/${slug}/${draw.slug}`} aria-label={`Resultado completo e rateio da ${cfg.name}, concurso ${draw.concurso}`}>Resultado e rateio <span aria-hidden="true">→</span></Link>
+        <div className="card-secondary-links">
+          <Link href={`/loterias/${slug}`}>Histórico</Link>
+          <Link href={`/loterias/${slug}/estatisticas`}>Estatísticas</Link>
+          {nextRecord && <Link href={`/loterias/${slug}/${nextRecord.slug}`}>Próximo concurso</Link>}
+        </div>
+        {sourceUrl && <a className="card-source" href={sourceUrl} target="_blank" rel="noopener noreferrer">Fonte: Caixa <span aria-hidden="true">↗</span></a>}
+      </div>
+    </> : <>
+      <p className="empty-result">Ainda não há resultado publicado nesta modalidade.</p>
+      <div className="lottery-card-actions"><Link className="button button-secondary" href={`/loterias/${slug}`}>Consultar modalidade <span aria-hidden="true">→</span></Link><div className="card-secondary-links"><Link href={`/loterias/${slug}/estatisticas`}>Estatísticas</Link></div></div>
+    </>}
+  </article>;
 }
 
 export default function HomePage() {
   const latest = getLatestDrawPerLoteria();
-  const todayISO = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date());
+  const now = Date.now();
+  const today = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date(now));
+  const recentResults = getAllDraws().filter(draw => draw.status === "publicado").slice(0, 12);
+  const news = getNewsDraws().filter(draw => {
+    const published = publicationTime(draw.published_at);
+    return published !== null && published <= now && published >= now - 7 * 86400000;
+  }).slice(0, 3);
+  const itemList = {
+    "@context": "https://schema.org", "@type": "ItemList", name: "Resultados de loterias", url: `${BASE}/`,
+    itemListElement: allModalities.map((slug, index) => ({ "@type": "ListItem", position: index + 1, name: LOTERIAS_CONFIG[slug].name, url: `${BASE}/loterias/${slug}` })),
+  };
 
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", padding: "2rem 1.25rem" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
-
-      {/* Banner topo (728x90 desktop / 320x50 mobile) */}
-      <AdsterraBanner size="728x90" showOn="desktop" />
-      <AdsterraBanner size="320x50" showOn="mobile" />
-
-      {/* Cards de coberturas especiais */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
-        <Link href="/copa" style={{
-          background: "linear-gradient(135deg, #009739 0%, #FEDD00 100%)",
-          color: "#fff", borderRadius: 16, padding: "1.25rem",
-          textDecoration: "none", display: "block",
-          boxShadow: "0 4px 16px rgba(0,151,57,0.25)",
-        }}>
-          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
-            🏆 Especial
-          </div>
-          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
-            Copa 2026
-          </div>
-          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
-            Arquivo da competição →
-          </div>
-        </Link>
-
-        <Link href="/eleicoes-2026" style={{
-          background: "linear-gradient(135deg, #dc2626 0%, #0f172a 100%)",
-          color: "#fff", borderRadius: 16, padding: "1.25rem",
-          textDecoration: "none", display: "block",
-          boxShadow: "0 4px 16px rgba(220,38,38,0.25)",
-        }}>
-          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
-            🗳️ Especial
-          </div>
-          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
-            Eleições 2026
-          </div>
-          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
-            Arquivo eleitoral de 2026 →
-          </div>
-        </Link>
-
-        <Link href="/cotacao" style={{
-          background: "linear-gradient(135deg, #16a34a 0%, #065f46 100%)",
-          color: "#fff", borderRadius: 16, padding: "1.25rem",
-          textDecoration: "none", display: "block",
-          boxShadow: "0 4px 16px rgba(22,163,74,0.25)",
-        }}>
-          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
-            💰 Diário
-          </div>
-          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
-            Cotação Hoje
-          </div>
-          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
-            Dólar, Euro, Bitcoin →
-          </div>
-        </Link>
-
-        <Link href="/horoscopo" style={{
-          background: "linear-gradient(135deg, #7c3aed 0%, #4c1d95 100%)",
-          color: "#fff", borderRadius: 16, padding: "1.25rem",
-          textDecoration: "none", display: "block",
-          boxShadow: "0 4px 16px rgba(124,58,237,0.25)",
-        }}>
-          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
-            ✨ Diário
-          </div>
-          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
-            Horóscopo do Dia
-          </div>
-          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
-            Previsão dos 12 signos →
-          </div>
-        </Link>
-
-        <Link href="/feriados" style={{
-          background: "linear-gradient(135deg, #0ea5e9 0%, #0369a1 100%)",
-          color: "#fff", borderRadius: 16, padding: "1.25rem",
-          textDecoration: "none", display: "block",
-          boxShadow: "0 4px 16px rgba(14,165,233,0.25)",
-        }}>
-          <div style={{ fontSize: "0.72rem", textTransform: "uppercase", letterSpacing: 1.5, marginBottom: "0.4rem", fontWeight: 800, opacity: 0.95 }}>
-            📅 Calendário
-          </div>
-          <div style={{ fontSize: "1.3rem", fontWeight: 900, marginBottom: "0.2rem" }}>
-            Feriados
-          </div>
-          <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
-            Próximos feriados nacionais →
-          </div>
-        </Link>
-      </div>
-
-      {/* Hero loterias */}
-      <div style={{ marginBottom: "2.5rem", borderBottom: "4px solid #209869", paddingBottom: "1rem" }}>
-        <h1 style={{ fontSize: "2rem", fontWeight: 900, color: "#0f172a" }}>
-          🎰 Resultados de Loterias
-        </h1>
-        <p style={{ color: "#64748b", marginTop: "0.4rem", fontSize: "1.05rem" }}>
-          Mega-Sena, Quina, Lotofácil e mais — confira a data de cada resultado.
-        </p>
-      </div>
-
-      {/* Cards por loteria */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(320px, 1fr))", gap: "1.5rem", marginBottom: "3rem" }}>
-        {Object.entries(LOTERIAS_CONFIG).map(([slug, cfg]) => {
-          const draw = latest[slug];
-          return (
-            <Link key={slug} href={`/loterias/${slug}`} style={{ textDecoration: "none" }}>
-              <div style={{
-                background: "#fff", borderRadius: 16, overflow: "hidden",
-                boxShadow: "0 2px 12px rgba(0,0,0,0.08)", border: "1px solid #e2e8f0",
-                transition: "transform 0.15s, box-shadow 0.15s",
-              }}>
-                <div style={{ background: cfg.color, padding: "1rem 1.25rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-                  <span style={{ fontSize: "1.8rem" }}>{cfg.emoji}</span>
-                  <div>
-                    <div style={{ color: "#fff", fontWeight: 800, fontSize: "1.1rem" }}>{cfg.name}</div>
-                    <div style={{ color: "rgba(255,255,255,0.75)", fontSize: "0.78rem" }}>{cfg.freq}</div>
-                  </div>
-                  {draw && (
-                    <span style={{ marginLeft: "auto", background: "rgba(0,0,0,0.2)", color: "#fff", fontSize: "0.72rem", fontWeight: 700, padding: "0.2rem 0.6rem", borderRadius: 20 }}>
-                      Concurso {draw.concurso}
-                    </span>
-                  )}
-                </div>
-
-                <div style={{ padding: "1.25rem" }}>
-                  {draw ? (
-                    <>
-                      <div style={{ fontSize: "0.72rem", fontWeight: 700, color: "#94a3b8", textTransform: "uppercase", letterSpacing: 1, marginBottom: "0.75rem" }}>
-                        Último resultado · {formatDateShort(draw.draw_date)}
-                      </div>
-                      <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "1rem" }}>
-                        {draw.numeros.slice(0, 8).map((n) => (
-                          <NumberBall key={n} num={n} color={cfg.ballColor} />
-                        ))}
-                        {draw.numeros.length > 8 && (
-                          <span style={{ alignSelf: "center", fontSize: "0.8rem", color: "#64748b" }}>+{draw.numeros.length - 8}</span>
-                        )}
-                      </div>
-                      {draw.ganhadores > 0 ? (
-                        <div style={{ fontSize: "0.85rem", color: "#16a34a", fontWeight: 700 }}>
-                          🏆 {draw.ganhadores} ganhador{draw.ganhadores > 1 ? "es" : ""} — {formatBRL(draw.premio_principal)}
-                        </div>
-                      ) : (
-                        <div style={{ fontSize: "0.85rem", color: "#94a3b8" }}>
-                          Acumulou{draw.proxima_data && draw.proxima_data >= todayISO && draw.proximo_premio ? ` — próximo: ${formatBRL(draw.proximo_premio)}` : ""}
-                        </div>
-                      )}
-                    </>
-                  ) : (
-                    <div style={{ color: "#94a3b8", fontSize: "0.88rem", padding: "0.5rem 0" }}>
-                      Resultado em breve...
-                    </div>
-                  )}
-
-                  <div style={{ marginTop: "1rem", paddingTop: "0.75rem", borderTop: "1px solid #f1f5f9", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <span style={{ fontSize: "0.8rem", color: "#64748b" }}>{cfg.description.slice(0, 45)}...</span>
-                    <span style={{ fontSize: "0.82rem", color: cfg.color, fontWeight: 700 }}>Ver tudo →</span>
-                  </div>
-                </div>
-              </div>
-            </Link>
-          );
-        })}
-      </div>
-
-      <AdsterraBanner size="300x250" />
-
-      {/* Últimos resultados — internal linking pra Google indexar concursos recentes */}
-      {(() => {
-        const ultimos = getAllDraws()
-          .filter((d) => d.status === "publicado")
-          .slice(0, 24);
-        if (ultimos.length === 0) return null;
-        return (
-          <section style={{ marginBottom: "2.5rem" }}>
-            <h2 style={{ fontSize: "1.3rem", fontWeight: 800, color: "#0f172a", marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
-              <span style={{ background: "#dc2626", color: "#fff", borderRadius: 4, padding: "0.1rem 0.5rem", fontSize: "0.7em", letterSpacing: 1 }}>RECENTES</span>
-              Últimos resultados sorteados
-            </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "0.5rem" }}>
-              {ultimos.map((d) => {
-                const cfg = LOTERIAS_CONFIG[d.loteria];
-                if (!cfg) return null;
-                return (
-                  <Link key={`${d.loteria}-${d.slug}`} href={`/loterias/${d.loteria}/${d.slug}`} style={{ textDecoration: "none" }}>
-                    <div style={{
-                      background: "#fff", borderRadius: 10, padding: "0.65rem 0.85rem",
-                      border: "1px solid #e2e8f0",
-                      display: "flex", alignItems: "center", gap: "0.6rem",
-                    }}>
-                      <span style={{ fontSize: "1.4rem" }}>{cfg.emoji}</span>
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div style={{ fontWeight: 700, color: cfg.color, fontSize: "0.82rem" }}>
-                          {cfg.name} {d.concurso}
-                        </div>
-                        <div style={{ fontSize: "0.74rem", color: "#94a3b8", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                          {formatDateShort(d.draw_date)} · {d.ganhadores > 0 ? `🏆 ${formatBRL(d.premio_principal)}` : "Acumulou"}
-                        </div>
-                      </div>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </section>
-        );
-      })()}
-
-      {/* Native banner antes do bloco SEO */}
-      <AdsterraNative />
-
-      {/* SEO text */}
-      <section style={{ background: "#f8fafc", borderRadius: 12, padding: "2rem", border: "1px solid #e2e8f0" }}>
-        <h2 style={{ fontSize: "1.2rem", fontWeight: 800, color: "#0f172a", marginBottom: "1rem" }}>
-          Sobre as Loterias da Caixa Econômica Federal
-        </h2>
-        <p style={{ color: "#475569", lineHeight: 1.8, marginBottom: "0.75rem" }}>
-          As loterias federais brasileiras são administradas pela <strong>Caixa Econômica Federal</strong> e representam
-          uma forma legal de jogo regulamentado pelo governo. Os sorteios acontecem regularmente, com prêmios que
-          podem chegar a centenas de milhões de reais.
-        </p>
-        <p style={{ color: "#475569", lineHeight: 1.8, marginBottom: "0.75rem" }}>
-          A <strong>Mega-Sena</strong> é o concurso mais famoso, com sorteios às quartas e sábados.
-          A <strong>Quina</strong> e a <strong>Lotofácil</strong> acontecem praticamente todos os dias úteis.
-        </p>
-        <p style={{ color: "#475569", lineHeight: 1.8 }}>
-          Nesta página você encontra os resultados de todos os concursos, incluindo dezenas sorteadas,
-          ganhadores, valores dos prêmios e as estimativas para os próximos sorteios.
-        </p>
+    <div className="home-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemList).replace(/</g, "\\u003c") }} />
+      <section className="home-hero" aria-labelledby="home-title">
+        <div className="home-intro">
+          <p className="eyebrow">Consulta de concursos</p>
+          <h1 id="home-title">Resultados de loterias</h1>
+          <p className="home-lead">Encontre os números sorteados, confira o rateio e consulte o histórico da sua loteria.</p>
+          <p className="home-source-note">Dados da <a href="https://loterias.caixa.gov.br/" target="_blank" rel="noopener noreferrer">Caixa <span aria-hidden="true">↗</span></a>. Confira a data de cada sorteio.</p>
+          <a className="intro-jump" href="#resultados">Ver resultados disponíveis <span aria-hidden="true">↓</span></a>
+        </div>
+        <LotterySearch />
       </section>
+
+      <section id="resultados" className="home-section" aria-labelledby="featured-title">
+        <div className="section-heading"><div><p className="eyebrow">Quina, Lotofácil e Mega-Sena</p><h2 id="featured-title">Últimos resultados publicados</h2></div><Link className="section-link" href="/loterias">Todas as loterias <span aria-hidden="true">→</span></Link></div>
+        <div className="lottery-cards featured-cards">{featured.map(slug => <LotteryCard key={slug} slug={slug} draw={latest[slug]} today={today} />)}</div>
+      </section>
+
+      <div className="home-ad-strip" aria-label="Publicidade">
+        <AdsterraBanner size="728x90" showOn="desktop" />
+        <AdsterraBanner size="320x50" showOn="mobile" />
+      </div>
+
+      <section className="home-section" aria-labelledby="other-lotteries-title">
+        <div className="section-heading"><div><p className="eyebrow">Outras modalidades</p><h2 id="other-lotteries-title">Continue sua consulta</h2></div></div>
+        <div className="lottery-cards">{allModalities.filter(slug => !featured.includes(slug)).map(slug => <LotteryCard key={slug} slug={slug} draw={latest[slug]} today={today} />)}</div>
+      </section>
+
+      {news.length > 0 && <section className="home-section" aria-labelledby="news-title">
+        <div className="section-heading"><div><p className="eyebrow">Boletins publicados</p><h2 id="news-title">Notícias recentes</h2></div><Link className="section-link" href="/noticias">Ver notícias <span aria-hidden="true">→</span></Link></div>
+        <div className="home-news-grid">{news.map(draw => <article key={`${draw.loteria}-${draw.slug}`} className="home-news-card">
+          <Link href={`/loterias/${draw.loteria}/${draw.slug}`} className="home-news-image" aria-label={draw.title}><Image src={`${BASE}/loterias/${draw.loteria}/${draw.slug}/imagem`} alt={`Infográfico do concurso ${draw.concurso} da ${LOTERIAS_CONFIG[draw.loteria].name}`} width={1200} height={675} unoptimized /></Link>
+          <div className="home-news-body"><p className="news-category">{LOTERIAS_CONFIG[draw.loteria].name}</p><h3><Link href={`/loterias/${draw.loteria}/${draw.slug}`}>{draw.title}</Link></h3><p className="news-date">Publicado em <time dateTime={draw.published_at}>{formatPublicationTime(draw.published_at)}</time></p></div>
+        </article>)}</div>
+      </section>}
+
+      {recentResults.length > 0 && <section className="home-section" aria-labelledby="archive-title">
+        <div className="section-heading"><div><p className="eyebrow">Arquivo de concursos</p><h2 id="archive-title">Resultados recentes para conferir</h2></div></div>
+        <ol className="recent-results-list">{recentResults.map(draw => <li key={`${draw.loteria}-${draw.slug}`}><Link href={`/loterias/${draw.loteria}/${draw.slug}`}><span><strong>{LOTERIAS_CONFIG[draw.loteria].name}</strong><span className="recent-contest">Concurso {draw.concurso}</span></span><time dateTime={draw.draw_date}>{formatDateShort(draw.draw_date)}</time><span className="recent-arrow" aria-hidden="true">→</span></Link></li>)}</ol>
+      </section>}
+
+      <div className="home-information-grid">
+        <section className="home-information" aria-labelledby="source-title">
+          <p className="eyebrow">Fonte e transparência</p>
+          <h2 id="source-title">Uma consulta que você pode conferir</h2>
+          <p>Os boletins são montados automaticamente a partir de dados oficiais da Caixa. Cada resultado tem uma página própria com a data do sorteio e o link da fonte.</p>
+          <p>O Hoje Notícia é um site independente. Para conferir seu bilhete, regras e prazos, consulte também os <a href="https://loterias.caixa.gov.br/" target="_blank" rel="noopener noreferrer">canais oficiais das Loterias Caixa</a>.</p>
+          <div className="information-links"><Link href="/politica-editorial">Como publicamos</Link><Link href="/correcoes">Pedir uma correção</Link><Link href="/sobre">Sobre o site</Link></div>
+        </section>
+        <aside className="home-square-ad" aria-label="Publicidade"><AdsterraBanner size="300x250" /></aside>
+      </div>
+      <div className="home-native-ad" aria-label="Publicidade"><AdsterraNative /></div>
     </div>
   );
 }

@@ -1,0 +1,21 @@
+{
+  "method": "first_successful_production_deployment_of_previously_missing_result_pages",
+  "production_commit": "5743e9e0b469508f107a22b47357c2a8b7ff9142",
+  "published_at": "2026-11-03T13:41:41Z",
+  "deployment_status_evidence": "https://api.github.com/repos/tamoaiapp/hojenoticia-app/deployments/7520314652/statuses/21257536034",
+  "note": "Publication records the successful production release, not the draw date or the first byte observed by a visitor. These two routes returned 404 before the release and 200 afterwards. No publication date was assigned to already-existing legacy pages.",
+  "pages": [
+    {
+      "url": "https://www.hojenoticia.com/loterias/mega-sena/concurso-3080",
+      "observed_on": "2026-11-03",
+      "status_before_release": 404,
+      "status_after_release": 200
+    },
+    {
+      "url": "https://www.hojenoticia.com/loterias/diadesorte/concurso-1337",
+      "observed_on": "2026-11-03",
+      "status_before_release": 404,
+      "status_after_release": 200
+    }
+  ]
+}

@@ -117,7 +117,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
         />
         <Header />
-        <main style={{ minHeight: "80vh" }}>{children}</main>
+        <main id="conteudo" style={{ minHeight: "80vh" }}>{children}</main>
         <Footer />
       </body>
     </html>
