@@ -20,6 +20,9 @@ assert.equal((callout.match(/<a\b/g) || []).length, 1, 'Only the image is linked
 assert.match(callout, /<a class="post-result-image-link" href="\/loterias\/mega-sena\/probabilidades"/);
 assert.doesNotMatch(callout, /post-result-button|<h2[^>]*>\s*<a/);
 assert.match(callout, /Imagem ilustrativa gerada por IA/);
+assert.match(callout, /Publicidade ao clicar/);
+assert.match(callout, /data-ad-unit-id="32081506"/);
+assert.match(callout, /abrir publicidade em outra aba e ver as probabilidades aqui/);
 assert.doesNotMatch(callout, /Ao navegar, o site pode abrir publicidade em outra aba/);
 assert.doesNotMatch(callout, /ganhei|ganhador|método para ganhar|window\.open|target="_blank"/i);
 assert.doesNotMatch(result, /adsterra-popunder|https:\/\/abscloud\.org\//, 'Results must not load a page-wide popunder');
