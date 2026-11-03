@@ -63,6 +63,12 @@ export default async function ProbabilidadesPage({ params }: Props) {
         </p>
       </header>
 
+      <nav className="probability-jump-links" aria-label="Explore as probabilidades">
+        <a href="#calculadora">Comparar seleções</a>
+        <a href="#tabela-title">Ver tabela completa</a>
+        <a href="#duvidas-title">Tirar dúvidas</a>
+      </nav>
+
       <aside aria-label="Como interpretar as probabilidades" style={{ borderLeft: "4px solid #146542", background: "#edf7f1", padding: "1rem 1.25rem", color: "#145239", lineHeight: 1.8, marginBottom: "2rem" }}>
         Cada concurso é um novo sorteio aleatório. Frequências, números “atrasados” e resultados anteriores não alteram a chance de uma combinação no próximo sorteio.
         A calculadora explica as probabilidades; não prevê dezenas vencedoras.

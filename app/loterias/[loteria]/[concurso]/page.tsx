@@ -257,6 +257,15 @@ export default async function DrawPage({ params }: Props) {
         <p>Encontrou um erro? <Link href="/correcoes" style={{ color: "#1d4ed8", textDecoration: "underline" }}>Veja como pedir uma correção</Link>.</p>
       </section>
 
+      <nav className="draw-explore" aria-label={`Continue sua consulta da ${cfg.name}`}>
+        <h2>Continue sua consulta</h2>
+        <div className="draw-explore-links">
+          <Link href={`/loterias/${loteria}#historico`}><strong>Outros concursos</strong><span>Navegue pelo histórico da {cfg.name} →</span></Link>
+          {loteria !== "federal" && loteria !== "super-sete" && <Link href={`/loterias/${loteria}/estatisticas`}><strong>Estatísticas dos resultados</strong><span>Explore a frequência dos números publicados →</span></Link>}
+          {loteria === "mega-sena" && <Link href="/loterias/mega-sena/probabilidades"><strong>Compare as probabilidades</strong><span>Entenda a conta de 6 a 20 dezenas →</span></Link>}
+        </div>
+      </nav>
+
       <aside aria-label="Publicidade" style={{ margin: "2rem 0", textAlign: "center" }}>
         <AdsterraBanner size="300x250" />
       </aside>

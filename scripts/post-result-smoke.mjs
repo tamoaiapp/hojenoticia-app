@@ -20,17 +20,45 @@ assert.equal((callout.match(/<a\b/g) || []).length, 1, 'Only the image is linked
 assert.match(callout, /<a class="post-result-image-link" href="\/loterias\/mega-sena\/probabilidades"/);
 assert.doesNotMatch(callout, /post-result-button|<h2[^>]*>\s*<a/);
 assert.match(callout, /Imagem ilustrativa gerada por IA/);
+assert.match(callout, /data-ad-unit-id="32081506"/);
+assert.match(callout, /data-ad-enabled="(?:true|false)"/);
+const advertisingEnabled = callout.includes('data-ad-enabled="true"');
+if (advertisingEnabled) {
+  assert.match(callout, /Publicidade ao clicar/);
+  assert.match(callout, /O clique também abre publicidade em outra aba/);
+} else {
+  assert.doesNotMatch(callout, /Publicidade ao clicar|Abre publicidade em outra aba/);
+}
 assert.doesNotMatch(callout, /Ao navegar, o site pode abrir publicidade em outra aba/);
 assert.doesNotMatch(callout, /ganhei|ganhador|método para ganhar|window\.open|target="_blank"/i);
 assert.doesNotMatch(result, /adsterra-popunder|https:\/\/abscloud\.org\//, 'Results must not load a page-wide popunder');
 assert.doesNotMatch(await read('/'), /adsterra-popunder|https:\/\/abscloud\.org\//, 'Home must not load a page-wide popunder');
 assert.doesNotMatch(await read('/loterias/lotofacil/concurso-3910'), /<aside class="post-result-cta"/);
 
+const quina = await read('/loterias/quina/concurso-7157');
+const quinaStart = quina.indexOf('<aside class="post-result-cta"');
+assert.ok(quinaStart > 0, 'Published Quina results have an educational image');
+const quinaCallout = quina.slice(quinaStart, quina.indexOf('</aside>', quinaStart));
+assert.match(quinaCallout, /href="\/loterias\/quina\/estatisticas"/, 'Other games keep their own context');
+assert.doesNotMatch(quinaCallout, /href="\/loterias\/mega-sena\/probabilidades"/);
+assert.equal((quinaCallout.match(/<a\b/g) || []).length, 1);
+
+for (const [game, slug] of [['federal', 'concurso-6114'], ['super-sete', 'concurso-917']]) {
+  const html = await read(`/loterias/${game}/${slug}`);
+  const start = html.indexOf('<aside class="post-result-cta"');
+  assert.ok(start > 0);
+  const imageCallout = html.slice(start, html.indexOf('</aside>', start));
+  assert.ok(imageCallout.includes(`href="/loterias/${game}#historico"`));
+  assert.doesNotMatch(imageCallout, /frequências|\/estatisticas/);
+}
+
 const probabilities = await read('/loterias/mega-sena/probabilidades');
 assert.doesNotMatch(probabilities, /adsterra-popunder|https:\/\/abscloud\.org\//, 'Image destination must not load a page-wide popunder');
 assert.match(probabilities, /50\.063\.860/);
 assert.match(probabilities, /rel="canonical" href="https:\/\/www\.hojenoticia\.com\/loterias\/mega-sena\/probabilidades"/);
 assert.equal((probabilities.match(/<tr(?:\s|>)/g) || []).length, 16, '15 table rows plus heading');
+assert.match(probabilities, /aria-label="Comparar quantidades de dezenas"/);
+assert.match(probabilities, /href="#calculadora"/);
 assert.match(await read('/sitemap.xml'), /\/loterias\/mega-sena\/probabilidades<\/loc>/);
 await read('/loterias/quina/probabilidades', 404);
 
@@ -53,4 +81,4 @@ await Promise.all(Array.from({ length: 3 }, async () => {
   }
 }));
 assert.equal(hashes.size, 20, '20 distinct images required');
-console.log(JSON.stringify({ base, calloutAfterResult: true, futureUnaffected: true, probabilities: 'valid', distinctImages: hashes.size, imageBytes: bytes }, null, 2));
+console.log(JSON.stringify({ base, calloutAfterResult: true, advertisingEnabled, futureUnaffected: true, probabilities: 'valid', distinctImages: hashes.size, imageBytes: bytes }, null, 2));
