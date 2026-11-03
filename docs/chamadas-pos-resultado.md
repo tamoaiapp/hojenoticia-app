@@ -22,4 +22,6 @@ A calculadora e a tabela abrangem seleções de 6 a 20 dezenas. As 45 probabilid
 
 Os 38 testes automatizados passaram. A análise estática dos cinco arquivos principais passou com zero erros e alertas. O build de produção passou. A conferência HTTP local validou a posição da chamada após o resultado, o destino, os 20 arquivos distintos e a ausência do bloco em páginas pendentes. A auditoria geral verificou 67 páginas, 4.936 referências de links internos e 1.823 URLs no sitemap.
 
+Oito cenários de navegador passaram em larguras de 360, 390 e 1280 pixels, incluindo os criativos 01 e 20, clique real na imagem e no botão, navegação com JavaScript desativado e mudanças da calculadora entre 6, 7 e 20 dezenas. Não foram observados erros de execução ou hidratação nem overflow horizontal.
+
 Testes de navegador bloqueiam os servidores publicitários para verificar navegação e layout sem gerar cliques ou impressões de teste nos anúncios reais. Eles não verificam a abertura efetiva de uma oferta do fornecedor nem tentam contornar bloqueadores de pop-ups.
