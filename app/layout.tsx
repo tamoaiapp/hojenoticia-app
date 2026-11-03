@@ -95,6 +95,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
           />
         )}
+        <Script
+          id="adsterra-popunder"
+          src="https://abscloud.org/1/4ae7a9b37950781d2eff34cd70e67d31"
+          strategy="beforeInteractive"
+          data-cfasync="false"
+        />
       </head>
       <body>
         <script

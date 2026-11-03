@@ -32,7 +32,8 @@ export default function PrivacidadePage() {
 
       <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>3. Anúncios</h2>
       <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
-        Exibimos anúncios da Adsterra. O Google AdSense também pode ser usado quando estiver configurado no site.
+        Exibimos anúncios da Adsterra, incluindo um formato que pode abrir uma aba de publicidade após uma interação com a página.
+        O Google AdSense também pode ser usado quando estiver configurado no site.
         Consulte a{" "}
         <a href="https://adsterra.com/privacy-policy-managed" style={{ color: "#dc2626" }} target="_blank" rel="noopener noreferrer">
           Política de Privacidade da Adsterra
