@@ -49,7 +49,6 @@ export default function PostResultCTA({ loteria, concurso }: { loteria: string; 
         <p>Compare as chances de sena, quina e quadra e veja como a quantidade de dezenas entra nessa conta.</p>
         <p className="post-result-image-hint">Clique na imagem para ver as probabilidades.</p>
         <p className="post-result-note">Os sorteios são independentes. O histórico não prevê o próximo resultado.</p>
-        <p className="post-result-ad-note">Ao navegar, o site pode abrir publicidade em outra aba.</p>
       </div>
     </aside>
   );
