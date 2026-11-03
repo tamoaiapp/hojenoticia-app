@@ -45,9 +45,9 @@ export default function PostResultCTA({ loteria, concurso }: { loteria: string; 
       </figure>
       <div className="post-result-copy">
         <p className="post-result-kicker">Mega-Sena · Entenda as chances</p>
-        <h2 id="post-result-title"><a href={destination} onClick={recordClick}>{creative.title}</a></h2>
+        <h2 id="post-result-title">{creative.title}</h2>
         <p>Compare as chances de sena, quina e quadra e veja como a quantidade de dezenas entra nessa conta.</p>
-        <a className="button post-result-button" href={destination} onClick={recordClick}>Ver probabilidades <span aria-hidden="true">→</span></a>
+        <p className="post-result-image-hint">Clique na imagem para ver as probabilidades.</p>
         <p className="post-result-note">Os sorteios são independentes. O histórico não prevê o próximo resultado.</p>
         <p className="post-result-ad-note">Ao navegar, o site pode abrir publicidade em outra aba.</p>
       </div>

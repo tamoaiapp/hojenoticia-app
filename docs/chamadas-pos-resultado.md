@@ -1,6 +1,6 @@
 # Chamadas depois dos resultados
 
-As páginas de concursos publicados exibem uma chamada logo depois dos números e antes do infográfico. Foto, título e botão levam à página educativa `/loterias/mega-sena/probabilidades`. O nome da modalidade aparece na chamada, inclusive quando ela é apresentada junto ao resultado de outra loteria. As páginas que ainda aguardam resultado mantêm seu fluxo de acompanhamento.
+As páginas de concursos publicados exibem uma chamada logo depois dos números e antes do infográfico. Somente a foto leva à página educativa `/loterias/mega-sena/probabilidades`; o título e os textos são informativos, com uma indicação para clicar na imagem. O nome da modalidade aparece na chamada, inclusive quando ela é apresentada junto ao resultado de outra loteria. As páginas que ainda aguardam resultado mantêm seu fluxo de acompanhamento.
 
 Foram geradas 20 fotos individuais com o **image_gen integrado**: adultos fictícios de idades variadas com bilhetes genéricos. As chamadas tratam de combinações, independência dos sorteios e chances de sena, quina e quadra. A legenda visível identifica cada cena como imagem ilustrativa gerada por IA.
 
@@ -22,6 +22,6 @@ A calculadora e a tabela abrangem seleções de 6 a 20 dezenas. As 45 probabilid
 
 Os 38 testes automatizados passaram. A análise estática dos cinco arquivos principais passou com zero erros e alertas. O build de produção passou. A conferência HTTP local validou a posição da chamada após o resultado, o destino, os 20 arquivos distintos e a ausência do bloco em páginas pendentes. A auditoria geral verificou 67 páginas, 4.936 referências de links internos e 1.823 URLs no sitemap.
 
-Oito cenários de navegador passaram em larguras de 360, 390 e 1280 pixels, incluindo os criativos 01 e 20, clique real na imagem e no botão, navegação com JavaScript desativado e mudanças da calculadora entre 6, 7 e 20 dezenas. Não foram observados erros de execução ou hidratação nem overflow horizontal.
+Na validação inicial, oito cenários de navegador passaram em larguras de 360, 390 e 1280 pixels, incluindo os criativos 01 e 20, navegação com JavaScript desativado e mudanças da calculadora entre 6, 7 e 20 dezenas. Na versão atual, a chamada tem um único link, na imagem.
 
 Testes de navegador bloqueiam os servidores publicitários para verificar navegação e layout sem gerar cliques ou impressões de teste nos anúncios reais. Eles não verificam a abertura efetiva de uma oferta do fornecedor nem tentam contornar bloqueadores de pop-ups.
