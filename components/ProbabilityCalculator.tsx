@@ -16,7 +16,7 @@ export default function ProbabilityCalculator() {
   const result = calcularMegaSena(dezenas);
 
   return (
-    <section aria-labelledby={`${id}-title`} style={{ background: "#fff", border: "1px solid #cbd5e1", borderRadius: 16, padding: "1.25rem", marginBottom: "2rem", minWidth: 0 }}>
+    <section id="calculadora" aria-labelledby={`${id}-title`} style={{ background: "#fff", border: "1px solid #cbd5e1", borderRadius: 16, padding: "1.25rem", marginBottom: "2rem", minWidth: 0 }}>
       <h2 id={`${id}-title`} style={{ fontSize: "1.4rem", marginBottom: ".75rem", color: "#0f172a" }}>Calculadora de probabilidades da Mega-Sena</h2>
       <p id={`${id}-hint`} style={{ color: "#475569", lineHeight: 1.7, marginBottom: "1rem" }}>
         Selecione uma quantidade de dezenas para entender o cálculo em um único concurso.
@@ -35,10 +35,15 @@ export default function ProbabilityCalculator() {
         ))}
       </select>
 
+      <div className="probability-presets" role="group" aria-label="Comparar quantidades de dezenas">
+        {[6, 7, 8, 10].map(value => <button key={value} type="button" aria-pressed={dezenas === value} onClick={() => setDezenas(value)}>{value} dezenas</button>)}
+      </div>
+
       <div role="status" aria-live="polite" aria-atomic="true">
         <p style={{ color: "#334155", lineHeight: 1.7, marginBottom: "1rem" }}>
           Uma seleção de <strong>{dezenas} dezenas</strong> contém {integer.format(result.combinacoesCobertas)} {result.combinacoesCobertas === 1 ? "combinação" : "combinações"} de seis números, entre os {integer.format(result.totalResultados)} resultados possíveis.
         </p>
+        {dezenas > 6 && <p className="probability-comparison">Em comparação com seis dezenas, essa seleção cobre <strong>{integer.format(result.combinacoesCobertas)} vezes</strong> o número de combinações. A comparação é matemática; não garante acerto.</p>}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 190px), 1fr))", gap: ".75rem" }}>
           {result.faixas.map((faixa) => (
             <div key={faixa.acertos} style={{ border: "1px solid #cbd5e1", borderTop: "4px solid #146542", borderRadius: 10, padding: "1rem", minWidth: 0 }}>

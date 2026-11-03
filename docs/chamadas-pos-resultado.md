@@ -1,6 +1,6 @@
 # Chamadas depois dos resultados
 
-As páginas de concursos publicados exibem uma chamada logo depois dos números e antes do infográfico. Somente a foto leva à página educativa `/loterias/mega-sena/probabilidades`; o título e os textos são informativos, com uma indicação para clicar na imagem. O nome da modalidade aparece na chamada, inclusive quando ela é apresentada junto ao resultado de outra loteria. As páginas que ainda aguardam resultado mantêm seu fluxo de acompanhamento.
+As páginas de concursos publicados exibem uma chamada logo depois dos números e antes do infográfico. Somente a foto leva ao conteúdo educativo: probabilidades na Mega-Sena e estatísticas da própria modalidade nos outros jogos. O título e os textos são informativos, com uma indicação para clicar na imagem. As páginas que ainda aguardam resultado mantêm seu fluxo de acompanhamento.
 
 Foram geradas 20 fotos individuais com o **image_gen integrado**: adultos fictícios de idades variadas com bilhetes genéricos. As chamadas tratam de combinações, independência dos sorteios e chances de sena, quina e quadra. A legenda visível identifica cada cena como imagem ilustrativa gerada por IA.
 
@@ -10,7 +10,9 @@ O [manifesto de geração](post-result-image-prompts.json) registra os 20 prompt
 
 ## Clique e publicidade
 
-Somente o clique primário na imagem abre o Smartlink da unidade **32081506**, informado pelo proprietário: `https://auctionr.org/4/a808bcdcfd9eb0f9335210c0c9d7b63a`. A abertura usa `window.open` com `noopener,noreferrer`; o `href` nativo continua levando à calculadora na aba atual. Se a nova aba for bloqueada ou a abertura falhar, a navegação educativa permanece disponível. Cliques com Ctrl, Command, Shift ou Alt seguem o comportamento nativo do link, sem abrir um anúncio adicional. A imagem pode ser acionada por teclado.
+Configuração central: `lib/post-result-ad.ts`. A abertura publicitária permanece desativada até a confirmação de uma unidade Mainstream apropriada ao site. A chave de consulta não é incluída no projeto nem enviada ao navegador. A imagem continua navegando ao conteúdo educativo enquanto a publicidade está desativada.
+
+Quando habilitado, somente o clique primário na imagem abre o Smartlink configurado. A abertura usa `window.open` com `noopener,noreferrer`; o `href` nativo continua levando ao conteúdo na aba atual. Se a nova aba for bloqueada ou a abertura falhar, a navegação educativa permanece disponível. Cliques com Ctrl, Command, Shift ou Alt seguem o comportamento nativo do link, sem abrir um anúncio adicional. A imagem pode ser acionada por teclado. O parâmetro público `psid` distingue site, modalidade e imagem, conforme a [API da Adsterra](https://adsterra.com/blog/how-to-use-adsterra-publishers-api/); não identifica o visitante.
 
 O Popunder global continua removido: menus, textos e outras áreas da página não abrem o Smartlink. Não há carregamento do antigo script de popunder nem tentativa de contornar bloqueios do navegador. A legenda, a indicação de clique e o nome acessível da imagem informam que há publicidade em outra aba. Os banners e anúncios nativos continuam em seus próprios espaços. A calculadora também permanece acessível diretamente. O uso de Smartlink em imagem segue a [orientação da Adsterra](https://adsterra.com/blog/how-to-add-ads-to-wix-website-with-ad-codes/).
 
@@ -18,7 +20,7 @@ Essa separação acompanha os [termos de publicidade da Adsterra](https://adster
 
 ## Página de destino
 
-A calculadora e a tabela abrangem seleções de 6 a 20 dezenas. As 45 probabilidades arredondadas foram conferidas com a tabela oficial da [Caixa](https://loterias.caixa.gov.br/Paginas/Mega-Sena.aspx). A fórmula descreve exatamente quatro, cinco ou seis acertos na seleção completa; a quantidade de prêmios em bilhetes múltiplos é explicada separadamente. A página tem canonical próprio, entrada no sitemap e links no histórico e nas estatísticas da Mega-Sena.
+A calculadora e a tabela abrangem seleções de 6 a 20 dezenas. Os atalhos de 6, 7, 8 e 10 dezenas atualizam a comparação sem abrir publicidade. As 45 probabilidades arredondadas foram conferidas com a tabela oficial da [Caixa](https://loterias.caixa.gov.br/Paginas/Mega-Sena.aspx). A fórmula descreve exatamente quatro, cinco ou seis acertos na seleção completa; a quantidade de prêmios em bilhetes múltiplos é explicada separadamente. A página tem canonical próprio, entrada no sitemap e links no histórico e nas estatísticas da Mega-Sena. Os concursos também oferecem cartões de continuação para o histórico e as estatísticas, sem acionar anúncios.
 
 ## Verificação
 
