@@ -1,0 +1,465 @@
+{
+  "generator": "built-in image_gen",
+  "status": "complete",
+  "intendedUse": "Imagens ilustrativas de adultos fictícios para informação sobre probabilidades; não são depoimentos nem documentação de ganhadores.",
+  "assets": [
+    {
+      "id": "01",
+      "theme": "Cozinha de apartamento, mulher adulta com bilhete",
+      "fictionalAges": [
+        32
+      ],
+      "prompt": "Use case: photorealistic-natural. Asset type: illustrative editorial card for a Brazilian lottery information website, displayed at about 600 by 400 pixels. Create ONE separate landscape image, aspect ratio 3:2. Scene: a bright ordinary Brazilian apartment kitchen in soft morning window light. Subject: a fictional adult Brazilian Black woman around 32 years old, natural curly hair, casual cream blouse, seated at a wooden table, holding a small generic paper lottery slip while considering it with calm curiosity and a subtle relaxed smile. Medium close editorial photograph, eye-level, natural skin texture and realistic hands, clear face and slip, background softly blurred, warm realistic colors. This is a generic illustration, not a real winner or a testimonial. No readable numbers or words on the paper, no logos or Caixa branding, no text anywhere in the image, no captions, no watermark. No money, giant cheque, trophies, confetti, celebration of winnings, implied guaranteed success, distressed people, or children. Natural candid high quality photography, no glossy advertising retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-0c547921-c6ad-4eb8-be2e-48adc80287b0.png",
+        "sha256": "e25b9e562a1173866d22a4ec76a623424f2834d67dea5e902794aa3c5df22850",
+        "bytes": 2444192,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "01",
+        "path": "/images/post-result/creative-01.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 67718,
+        "sha256": "a1b3095fd11b1b6673d253cf743b5d30495dfd1356fb9218b7aa36e3bd12214c"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "02",
+      "theme": "Varanda com senhor de cabelos brancos",
+      "fictionalAges": [
+        68
+      ],
+      "prompt": "A leafy veranda of an ordinary Brazilian house. A fictional Brazilian man about 68 years old with white hair, reading glasses and a light-blue linen shirt sits at a small table, holding a plain generic lottery slip next to a closed notebook. Three-quarter medium portrait from his left, thoughtful and calm, soft late-afternoon light.\n\nUse case: photorealistic-natural. Create ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card, readable at a 600x400 viewport. Natural candid high quality photography with believable skin texture, realistic anatomy and hands, face and paper slip clearly visible, varied authentic composition. The paper is a small generic lottery slip with only abstract unnumbered marks: absolutely no readable words, numbers, logos or Caixa branding. This is a fictional illustrative scene, not a real winner, customer testimonial or documented event. Calm curiosity only. No money, large cheques, trophies, confetti, celebratory gestures, false implication of winnings or guaranteed success, distress, children, text overlays, captions or watermarks. Background signage and writing must be absent or fully unreadable.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-1e22f7f7-218c-4236-9ee8-cf0d5e1d6afe.png",
+        "sha256": "b4d6aa31ea9e058c850310d1357c596fd23f8fa5e1d8e603e8b4b3894852911f",
+        "bytes": 2676253,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "02",
+        "path": "/images/post-result/creative-02.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 100788,
+        "sha256": "1e81088b54d8faef8f16732f3c9b3210985ced377314c2abc24f7c38a67ae07e"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "03",
+      "theme": "Mulher madura em café ao ar livre",
+      "fictionalAges": [
+        61
+      ],
+      "prompt": "A quiet outdoor neighborhood cafe in Brazil. A fictional Brazilian woman around 61 with medium-brown skin and short silver-streaked hair wears a relaxed coral blouse. She glances thoughtfully at a generic lottery slip held in both hands. Medium waist-up candid portrait, blurred green plants and plain cafe chairs behind her, natural overcast daylight.\n\nUse case: photorealistic-natural. Create ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card, readable at a 600x400 viewport. Natural candid high quality photography with believable skin texture, realistic anatomy and hands, face and paper slip clearly visible, varied authentic composition. The paper is a small generic lottery slip with only abstract unnumbered marks: absolutely no readable words, numbers, logos or Caixa branding. This is a fictional illustrative scene, not a real winner, customer testimonial or documented event. Calm curiosity only. No money, large cheques, trophies, confetti, celebratory gestures, false implication of winnings or guaranteed success, distress, children, text overlays, captions or watermarks. Background signage and writing must be absent or fully unreadable.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-a3bf0c7d-d982-48fb-9c39-5ce82d31ee9b.png",
+        "sha256": "1b5698c980e507e973fe9f3d9f5489d84da5424b596378e4c0829edc377a9708",
+        "bytes": 2424702,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "03",
+        "path": "/images/post-result/creative-03.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 70662,
+        "sha256": "6a4de9e1de093bb18e6fb1cd5d39069dc74ce09cd14d6960cb9b54803caad24a"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "04",
+      "theme": "Jovem adulto à mesa de estudo",
+      "fictionalAges": [
+        28
+      ],
+      "prompt": "A modest contemporary Brazilian apartment study corner. A fictional Brazilian man about 28 with brown skin, short curly hair and a plain navy T-shirt sits at a desk, calmly comparing a small generic paper lottery slip with an unmarked notebook. Eye-level medium shot, side-window daylight, relaxed curiosity, no screens or readable writing.\n\nUse case: photorealistic-natural. Create ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card, readable at a 600x400 viewport. Natural candid high quality photography with believable skin texture, realistic anatomy and hands, face and paper slip clearly visible, varied authentic composition. The paper is a small generic lottery slip with only abstract unnumbered marks: absolutely no readable words, numbers, logos or Caixa branding. This is a fictional illustrative scene, not a real winner, customer testimonial or documented event. Calm curiosity only. No money, large cheques, trophies, confetti, celebratory gestures, false implication of winnings or guaranteed success, distress, children, text overlays, captions or watermarks. Background signage and writing must be absent or fully unreadable.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-17e0a20c-dae2-4f5d-97f3-c8b5a3e9e78f.png",
+        "sha256": "a771a5175e5f75f9d33ebe91e1a84b472160735e2b28e65896adbb504c9bd135",
+        "bytes": 2166849,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "04",
+        "path": "/images/post-result/creative-04.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 46008,
+        "sha256": "ba50c5e8641a1dcce8feefcf4d4914eff1d745e144bd65d922626d06a94da19e"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "05",
+      "theme": "Casal maduro em varanda residencial",
+      "fictionalAges": [
+        58,
+        62
+      ],
+      "prompt": "An ordinary residential veranda in Brazil. A fictional Afro-Brazilian couple, a woman about 58 with braided hair and a man about 62 with short gray hair, sit beside each other at a wooden table. One holds a generic lottery slip and both look at it with calm interest, casual everyday clothing, gentle natural expressions, candid medium-wide two-person composition in warm afternoon light.\n\nUse case: photorealistic-natural. Create ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card, displayed about 600x400. Natural candid high quality photography with believable skin texture, realistic anatomy and hands, face and small paper lottery slip clearly visible, authentic composition. Paper contains only abstract unnumbered marks, no readable words or numbers. No logos, Caixa branding, captions, watermarks or visible writing anywhere. This is a fictional illustrative scene, not a real winner, testimonial or documented event. Mood is quiet curiosity, not celebration. No money, large cheques, trophies, confetti, celebratory gestures, implied winnings or guaranteed success, distress, or children. Avoid glossy commercial retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-5d03aa50-6d64-475d-8f81-c00e1f66fc16.png",
+        "sha256": "49e52010e0d73b70e81497b260cc9c4aafb1b3852a6c139de2f7a445b1e142aa",
+        "bytes": 2726931,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "05",
+        "path": "/images/post-result/creative-05.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 98412,
+        "sha256": "9e0f665fb8f46cb964885d0b63c40c45a6de45bf28bed3dfaaf3dda6c8ca33a6"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "06",
+      "theme": "Mulher brasileira de ascendência japonesa na sala",
+      "fictionalAges": [
+        45
+      ],
+      "prompt": "A comfortable small Brazilian living room with a softly blurred bookshelf. A fictional Brazilian woman of Japanese ancestry about 45, shoulder-length dark hair and a simple teal blouse, holds a generic paper lottery slip at chest level and studies it with a thoughtful half-smile. Medium portrait from a slight side angle, soft window light, authentic everyday atmosphere.\n\nUse case: photorealistic-natural. Create ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card, displayed about 600x400. Natural candid high quality photography with believable skin texture, realistic anatomy and hands, face and small paper lottery slip clearly visible, authentic composition. Paper contains only abstract unnumbered marks, no readable words or numbers. No logos, Caixa branding, captions, watermarks or visible writing anywhere. This is a fictional illustrative scene, not a real winner, testimonial or documented event. Mood is quiet curiosity, not celebration. No money, large cheques, trophies, confetti, celebratory gestures, implied winnings or guaranteed success, distress, or children. Avoid glossy commercial retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-c9b0788c-3d7f-4172-8e4c-a0ce4e4d477a.png",
+        "sha256": "b712cbb9e015b4cc89391ee349e5819e4187965e0ee8a6acd0f562d1b46cf28a",
+        "bytes": 2482152,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "06",
+        "path": "/images/post-result/creative-06.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 64594,
+        "sha256": "f7402c95fec9216e7d46a3ea0ad25bca93626f7fff9e0c41c68db7b15960c96a"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "07",
+      "theme": "Senhor negro perto da janela",
+      "fictionalAges": [
+        72
+      ],
+      "prompt": "A sunlit corner of a Brazilian apartment. A fictional Black Brazilian man around 72 with closely cropped gray hair and a light cotton shirt sits near a window, reading a generic lottery slip held comfortably in one hand. Close editorial portrait showing face and hands, natural age lines, calm focused expression, soft neutral colors and shallow depth of field.\n\nUse case: photorealistic-natural. Create ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card, displayed about 600x400. Natural candid high quality photography with believable skin texture, realistic anatomy and hands, face and small paper lottery slip clearly visible, authentic composition. Paper contains only abstract unnumbered marks, no readable words or numbers. No logos, Caixa branding, captions, watermarks or visible writing anywhere. This is a fictional illustrative scene, not a real winner, testimonial or documented event. Mood is quiet curiosity, not celebration. No money, large cheques, trophies, confetti, celebratory gestures, implied winnings or guaranteed success, distress, or children. Avoid glossy commercial retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-d8a01c72-baac-45ee-8816-84ba6949f8f4.png",
+        "sha256": "2df1cbc549c46444e6bdc6e9a24b571ba3ee5811398f0be02ad32d0c3aa2dcc0",
+        "bytes": 2247869,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "07",
+        "path": "/images/post-result/creative-07.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 53230,
+        "sha256": "a822fd6d36851eb39e34a1590b17a30fcb11e3b733c9c2db3ec24d4b6c489875"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "08",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: fotografia ilustrativa para um cartão educativo de um site brasileiro que explica probabilidades de loteria. A interface identificará a imagem como ilustração.\nStyle/medium: foto editorial natural e realista, horizontal 3:2, textura de pele natural, cores vivas equilibradas, luz diurna agradável.\nComposition/framing: retrato de uma única pessoa adulta, da cintura ou do peito para cima. Pessoa e bilhete inteiramente concentrados na região central, com folga nas bordas para recorte responsivo. Rosto e bilhete claramente visíveis, mãos anatomicamente naturais.\nAction: a pessoa segura um pequeno bilhete genérico de loteria na altura do peito, virado para a câmera. O papel tem apenas uma grade abstrata de pequenos quadrados e marcas coloridas, sem letras, números, valores, logotipos, códigos ou identificação de loterias reais.\nMood: expressão tranquila e um sorriso discreto, postura cotidiana, sem gesto de vitória. Não é retrato de um ganhador nem depoimento.\nConstraints: absolutamente nenhum texto, título ou legenda dentro da imagem; sem marcas d'água, logotipos, dinheiro, cheques, luxo, troféus, prêmios, festa, menores ou outras pessoas. Pessoa inteiramente fictícia e não identificável como figura real.\nSubject: mulher brasileira negra de aproximadamente 35 anos, cabelo natural solto, blusa laranja.\nScene/backdrop: quintal residencial comum, plantas discretas ao fundo, luz natural suave.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18a-c3f6-7b11-9b28-379eb27a2da1\\exec-9665064c-aea2-4cc6-8fc8-78d2cd1e1880.png",
+        "sha256": "9c29db1e6b9350ac58cf558532e41837723e3cdad5446ef996ea3574677f4806",
+        "bytes": 2409386,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "08",
+        "path": "/images/post-result/creative-08.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 71882,
+        "sha256": "0fcec679e88e7b8d391a5acd545cee97958b955ae78b5610ed5a60a9405f292a"
+      },
+      "inspection": "Inspected: fictional adult holding a generic ticket, no readable marks or winnings claims."
+    },
+    {
+      "id": "09",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: fotografia ilustrativa para um cartão educativo de um site brasileiro que explica probabilidades de loteria. A interface identificará a imagem como ilustração.\nStyle/medium: foto editorial natural e realista, horizontal 3:2, textura de pele natural, cores vivas equilibradas, luz diurna agradável.\nComposition/framing: retrato de uma única pessoa adulta, da cintura ou do peito para cima. Pessoa e bilhete inteiramente concentrados na região central, com folga nas bordas para recorte responsivo. Rosto e bilhete claramente visíveis, mãos anatomicamente naturais.\nAction: a pessoa segura um pequeno bilhete genérico de loteria na altura do peito, virado para a câmera. O papel tem apenas uma grade abstrata de pequenos quadrados e marcas coloridas, sem letras, números, valores, logotipos, códigos ou identificação de loterias reais.\nMood: expressão tranquila e um sorriso discreto, postura cotidiana, sem gesto de vitória. Não é retrato de um ganhador nem depoimento.\nConstraints: absolutamente nenhum texto, título ou legenda dentro da imagem; sem marcas d'água, logotipos, dinheiro, cheques, luxo, troféus, prêmios, festa, menores ou outras pessoas. Pessoa inteiramente fictícia e não identificável como figura real.\nSubject: homem brasileiro negro de aproximadamente 45 anos, usando óculos e camisa azul.\nScene/backdrop: cozinha residencial comum e organizada, luz natural agradável.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18a-c3f6-7b11-9b28-379eb27a2da1\\exec-6f103c7d-e020-4e2f-9c85-d229fbc50ecc.png",
+        "sha256": "aef89d1bf98cc987caa350858ea288a3eb02b6fc37c5d4781e6df4324236eacf",
+        "bytes": 2441109,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "09",
+        "path": "/images/post-result/creative-09.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 72502,
+        "sha256": "9859ea29916fd929c91af9f8c96c1204f59f136b168caddd0e797381d0bf2feb"
+      },
+      "inspection": "Inspected: fictional adult holding a generic ticket, no readable marks or winnings claims."
+    },
+    {
+      "id": "10",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: fotografia ilustrativa para um cartão educativo de um site brasileiro que explica probabilidades de loteria. A interface identificará a imagem como ilustração.\nStyle/medium: foto editorial natural e realista, horizontal 3:2, textura de pele natural, cores vivas equilibradas, luz diurna agradável.\nComposition/framing: retrato de uma única pessoa adulta, da cintura ou do peito para cima. Pessoa e bilhete inteiramente concentrados na região central, com folga nas bordas para recorte responsivo. Rosto e bilhete claramente visíveis, mãos anatomicamente naturais.\nAction: a pessoa segura um pequeno bilhete genérico de loteria na altura do peito, virado para a câmera. O papel tem apenas uma grade abstrata de pequenos quadrados e marcas coloridas, sem letras, números, valores, logotipos, códigos ou identificação de loterias reais.\nMood: expressão tranquila e um sorriso discreto, postura cotidiana, sem gesto de vitória. Não é retrato de um ganhador nem depoimento.\nConstraints: absolutamente nenhum texto, título ou legenda dentro da imagem; sem marcas d'água, logotipos, dinheiro, cheques, luxo, troféus, prêmios, festa, menores ou outras pessoas. Pessoa inteiramente fictícia e não identificável como figura real.\nSubject: mulher brasileira de ascendência asiática de aproximadamente 30 anos, camiseta amarela.\nScene/backdrop: ambiente doméstico perto de uma janela iluminada, com fundo simples e luz natural difusa.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18a-c3f6-7b11-9b28-379eb27a2da1\\exec-6b474c08-f5fd-42f1-ab39-f7d495e0bde6.png",
+        "sha256": "7855e46ccda3077d4eb496fa7b645ec766911037ba2fd3688b408a71c81b37c1",
+        "bytes": 2280489,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "10",
+        "path": "/images/post-result/creative-10.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 49876,
+        "sha256": "bb88bbe6c511670995f61218f289baafb8591d85429c442a599ec6b510c238cf"
+      },
+      "inspection": "Inspected: fictional adult holding a generic ticket, no readable marks or winnings claims."
+    },
+    {
+      "id": "11",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: fotografia ilustrativa para um cartão educativo de um site brasileiro que explica probabilidades de loteria. A interface identificará a imagem como ilustração.\nStyle/medium: foto editorial natural e realista, horizontal 3:2, textura de pele natural, cores vivas equilibradas, luz diurna agradável.\nComposition/framing: retrato de uma única pessoa adulta, da cintura ou do peito para cima. Pessoa e bilhete inteiramente concentrados na região central, com folga nas bordas para recorte responsivo. Rosto e bilhete claramente visíveis, mãos anatomicamente naturais.\nAction: a pessoa segura um pequeno bilhete genérico de loteria na altura do peito, virado para a câmera. O papel tem apenas uma grade abstrata de pequenos quadrados e marcas coloridas, sem letras, números, valores, logotipos, códigos ou identificação de loterias reais.\nMood: expressão tranquila e um sorriso discreto, postura cotidiana, sem gesto de vitória. Não é retrato de um ganhador nem depoimento.\nConstraints: absolutamente nenhum texto, título ou legenda dentro da imagem; sem marcas d'água, logotipos, dinheiro, cheques, luxo, troféus, prêmios, festa, menores ou outras pessoas. Pessoa inteiramente fictícia e não identificável como figura real.\nSubject: homem brasileiro mestiço de aproximadamente 65 anos, barba curta prateada e roupa casual simples.\nScene/backdrop: sala de uma casa comum, ambiente cotidiano com luz natural.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18a-c3f6-7b11-9b28-379eb27a2da1\\exec-5b373f1e-7e0c-4efd-81c3-42359a2100c1.png",
+        "sha256": "8a41aa214bebd4ae1a58fedee25cb40f7748dce3c44130a7f56dbf8602f1a122",
+        "bytes": 2462851,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "11",
+        "path": "/images/post-result/creative-11.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 72080,
+        "sha256": "78de759b3a2ed2cb5aaf42306cb3659eedce68aa341c48387bcacbb8e9db8b9d"
+      },
+      "inspection": "Inspected: fictional adult holding a generic ticket, no readable marks or winnings claims."
+    },
+    {
+      "id": "12",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: fotografia ilustrativa para um cartão educativo de um site brasileiro que explica probabilidades de loteria. A interface identificará a imagem como ilustração.\nStyle/medium: foto editorial natural e realista, horizontal 3:2, textura de pele natural, cores vivas equilibradas, luz diurna agradável.\nComposition/framing: retrato de uma única pessoa adulta, da cintura ou do peito para cima. Pessoa e bilhete inteiramente concentrados na região central, com folga nas bordas para recorte responsivo. Rosto e bilhete claramente visíveis, mãos anatomicamente naturais.\nAction: a pessoa segura um pequeno bilhete genérico de loteria na altura do peito, virado para a câmera. O papel tem apenas uma grade abstrata de pequenos quadrados e marcas coloridas, sem letras, números, valores, logotipos, códigos ou identificação de loterias reais.\nMood: expressão tranquila e um sorriso discreto, postura cotidiana, sem gesto de vitória. Não é retrato de um ganhador nem depoimento.\nConstraints: absolutamente nenhum texto, título ou legenda dentro da imagem; sem marcas d'água, logotipos, dinheiro, cheques, luxo, troféus, prêmios, festa, menores ou outras pessoas. Pessoa inteiramente fictícia e não identificável como figura real.\nSubject: mulher brasileira branca de aproximadamente 70 anos, cabelos brancos, óculos e roupa casual simples.\nScene/backdrop: varanda residencial comum, fundo leve e luz diurna agradável.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18a-c3f6-7b11-9b28-379eb27a2da1\\exec-9031f200-1ccd-46db-a043-8a5e64c4d3f6.png",
+        "sha256": "4a1ad0b73d18a9d7876a2506f0f1e7328a61bbb1bfb945aa9788b4beb8d6bd9a",
+        "bytes": 2283142,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "12",
+        "path": "/images/post-result/creative-12.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 55960,
+        "sha256": "fdb11b9d68902f9ea11de60c459d4672b3141bbafd0eb9439aaeae48979e9d66"
+      },
+      "inspection": "Inspected: fictional adult holding a generic ticket, no readable marks or winnings claims."
+    },
+    {
+      "id": "13",
+      "prompt": "Use case: photorealistic-natural.\nAsset type: fotografia ilustrativa para um cartão educativo de um site brasileiro que explica probabilidades de loteria. A interface identificará a imagem como ilustração.\nStyle/medium: foto editorial natural e realista, horizontal 3:2, textura de pele natural, cores vivas equilibradas, luz diurna agradável.\nComposition/framing: retrato de uma única pessoa adulta, da cintura ou do peito para cima. Pessoa e bilhete inteiramente concentrados na região central, com folga nas bordas para recorte responsivo. Rosto e bilhete claramente visíveis, mãos anatomicamente naturais.\nAction: a pessoa segura um pequeno bilhete genérico de loteria na altura do peito, virado para a câmera. O papel tem apenas uma grade abstrata de pequenos quadrados e marcas coloridas, sem letras, números, valores, logotipos, códigos ou identificação de loterias reais.\nMood: expressão tranquila e um sorriso discreto, postura cotidiana, sem gesto de vitória. Não é retrato de um ganhador nem depoimento.\nConstraints: absolutamente nenhum texto, título ou legenda dentro da imagem; sem marcas d'água, logotipos, dinheiro, cheques, luxo, troféus, prêmios, festa, menores ou outras pessoas. Pessoa inteiramente fictícia e não identificável como figura real.\nSubject: homem brasileiro branco de aproximadamente 28 anos, cabelo castanho curto, camiseta verde.\nScene/backdrop: interior de uma casa comum, ambiente simples e luz natural.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18a-c3f6-7b11-9b28-379eb27a2da1\\exec-a49aca4b-6599-4514-a1a4-805e338bac1f.png",
+        "sha256": "b2781bdddfaae3728f5ab8d0f557ad787fca4509eab0aa6dbbd06cd81fb90c69",
+        "bytes": 2211557,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "13",
+        "path": "/images/post-result/creative-13.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 43118,
+        "sha256": "cb2ff0d096fe618c0d5fcfc032a8a50e69c23bcf82dd9a68a83914e6b7e067b7"
+      },
+      "inspection": "Inspected: fictional adult holding a generic ticket, no readable marks or winnings claims."
+    },
+    {
+      "id": "14",
+      "theme": "Homem brasileiro de ascendência japonesa no sofá",
+      "fictionalAges": [
+        63
+      ],
+      "prompt": "A modest Brazilian living room. A fictional Brazilian man of Japanese ancestry about 63 with short gray hair and a pale-green casual shirt sits on a sofa, holding a generic paper lottery slip and reading it carefully with a calm expression. Medium portrait slightly off-center, warm window light, natural textures and uncluttered background.\n\nUse case: photorealistic-natural. Generate ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card viewed around 600x400. Natural candid high quality photography, realistic adult faces, skin texture, anatomy and hands, clear face and small generic lottery slip. Paper has only abstract unnumbered grid marks, no readable words or numbers. No logos, Caixa branding, captions, watermarks or readable writing anywhere. This is a fictional illustrative scene, not a real winner, testimonial, endorsement or documented event. Mood is calm curiosity. No money, large cheques, trophies, confetti, celebrations, implied winnings or guaranteed success, distress, children or glossy advertising retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-546af303-d7e3-45f4-8e84-6e14b3d468a9.png",
+        "sha256": "0c9cc753ecff6ee7ee8992b26d24408b33737124bf032cb2f9ad9f45d92c3f6e",
+        "bytes": 2517839,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "14",
+        "path": "/images/post-result/creative-14.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 70200,
+        "sha256": "476ac0624eec260d8cdc90ebffab2cc35b07d9e0d2cb94ecf11f66c57818ed5d"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "15",
+      "theme": "Mulher adulta em praça urbana tranquila",
+      "fictionalAges": [
+        36
+      ],
+      "prompt": "A quiet urban square in Brazil with green trees and a simple bench. A fictional dark-skinned Brazilian woman about 36 with natural short curls and a mustard cardigan sits on the bench, holding a generic folded lottery slip and considering it with a gentle thoughtful smile. Medium candid portrait, bright soft daylight, no crowds or readable signs.\n\nUse case: photorealistic-natural. Generate ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card viewed around 600x400. Natural candid high quality photography, realistic adult faces, skin texture, anatomy and hands, clear face and small generic lottery slip. Paper has only abstract unnumbered grid marks, no readable words or numbers. No logos, Caixa branding, captions, watermarks or readable writing anywhere. This is a fictional illustrative scene, not a real winner, testimonial, endorsement or documented event. Mood is calm curiosity. No money, large cheques, trophies, confetti, celebrations, implied winnings or guaranteed success, distress, children or glossy advertising retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-4c428add-296b-4638-ab6f-c5975843fc94.png",
+        "sha256": "22b25ce3cf8abf3cbc084142f643f863efe701e54f37c36da7f491562cc0b8a5",
+        "bytes": 2608484,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "15",
+        "path": "/images/post-result/creative-15.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 89804,
+        "sha256": "8210d8aa82e7a4fd35175708c55efa2ec40ee07f1b8563a8d3bb57e0c3228de3"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "16",
+      "theme": "Homem em ambiente de livraria simples",
+      "fictionalAges": [
+        47
+      ],
+      "prompt": "A small ordinary neighborhood bookshop in Brazil, books softly blurred with no readable titles. A fictional light-skinned Brazilian man about 47 with curly brown hair, a little gray at the temples and a plain blue shirt sits near a table, holding a generic lottery slip with calm attention. Three-quarter medium photograph, soft warm natural light, authentic editorial lifestyle style.\n\nUse case: photorealistic-natural. Generate ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card viewed around 600x400. Natural candid high quality photography, realistic adult faces, skin texture, anatomy and hands, clear face and small generic lottery slip. Paper has only abstract unnumbered grid marks, no readable words or numbers. No logos, Caixa branding, captions, watermarks or readable writing anywhere. This is a fictional illustrative scene, not a real winner, testimonial, endorsement or documented event. Mood is calm curiosity. No money, large cheques, trophies, confetti, celebrations, implied winnings or guaranteed success, distress, children or glossy advertising retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-7ac2f54c-af5b-4a1b-bc4c-c3a50c50135b.png",
+        "sha256": "862dd12c29e231599b9dec7af9f1de8f8d1a776e82e5477b3a4101c4b1549a6d",
+        "bytes": 2271272,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "16",
+        "path": "/images/post-result/creative-16.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 54160,
+        "sha256": "4d051d1306db7aeb01207143baf218e14cf8f1e112f9d23593a5a190d8b6f165"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "17",
+      "theme": "Mulher negra madura em poltrona",
+      "fictionalAges": [
+        66
+      ],
+      "prompt": "A softly lit Brazilian living room beside a window. A fictional Afro-Brazilian woman about 66 with natural gray curls and a simple blue blouse sits in a comfortable chair, holding a generic paper lottery slip in both hands and looking at it with quiet curiosity. Medium-close portrait, natural age lines, realistic hands, gentle morning light.\n\nUse case: photorealistic-natural. Generate ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card shown at roughly 600x400. Candid natural high quality photography with believable skin texture, anatomically realistic adult faces and hands, clear subject and small generic lottery slip. Only abstract unnumbered grid marks on the paper, no readable words or numbers. No logos or Caixa branding, text, captions or watermarks anywhere. Fictional illustrative people, not actual winners, testimonials or endorsements. Calm curiosity rather than celebration. No money, giant cheques, confetti, trophies, celebratory gestures, implied winnings, promises of success, distress, children, or glossy commercial retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-40b298e2-73ae-4685-a137-51327cb0287f.png",
+        "sha256": "f53d7c26f072ba16af50dc07968bd47c9f07811af3e886036ae492ca1d8ca1a7",
+        "bytes": 2500307,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "17",
+        "path": "/images/post-result/creative-17.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 75722,
+        "sha256": "abbbf5ce2feaa621aa4a8816edc5c1c10876a9a656296cd8148df9bcf00cd15d"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "18",
+      "theme": "Homem jovem adulto em parque urbano",
+      "fictionalAges": [
+        25
+      ],
+      "prompt": "A green urban park in Brazil in daylight. A fictional Brazilian man about 25 with brown skin, short dark hair and a casual gray T-shirt sits on a park bench, holding a small generic lottery slip and studying it with a relaxed thoughtful smile. Candid waist-up editorial photo, eye-level, greenery blurred behind him, natural colors.\n\nUse case: photorealistic-natural. Generate ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card shown at roughly 600x400. Candid natural high quality photography with believable skin texture, anatomically realistic adult faces and hands, clear subject and small generic lottery slip. Only abstract unnumbered grid marks on the paper, no readable words or numbers. No logos or Caixa branding, text, captions or watermarks anywhere. Fictional illustrative people, not actual winners, testimonials or endorsements. Calm curiosity rather than celebration. No money, giant cheques, confetti, trophies, celebratory gestures, implied winnings, promises of success, distress, children, or glossy commercial retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-9224cdd7-21a0-4911-ad2a-49a18f132115.png",
+        "sha256": "20bee47fd32bc6411cc11eeb33bb829cd88659470b39eb458f6aa2fc0c6dd28a",
+        "bytes": 2609374,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "18",
+        "path": "/images/post-result/creative-18.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 82964,
+        "sha256": "2b0cf8f7e8b2530f2d504341f2d00111a7ce6717cb3c7724557924a8910a14cc"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "19",
+      "theme": "Mulher de meia idade em sala de jantar",
+      "fictionalAges": [
+        57
+      ],
+      "prompt": "A welcoming ordinary Brazilian dining room. A fictional Brazilian woman around 57 with medium-brown skin, straight dark hair with a few gray strands and a simple terracotta cotton blouse holds a generic lottery slip at a table. She has a calm curious expression, natural unretouched features, three-quarter medium shot with warm diffuse window light.\n\nUse case: photorealistic-natural. Generate ONE separate landscape 3:2 editorial lifestyle image for an illustrative website card shown at roughly 600x400. Candid natural high quality photography with believable skin texture, anatomically realistic adult faces and hands, clear subject and small generic lottery slip. Only abstract unnumbered grid marks on the paper, no readable words or numbers. No logos or Caixa branding, text, captions or watermarks anywhere. Fictional illustrative people, not actual winners, testimonials or endorsements. Calm curiosity rather than celebration. No money, giant cheques, confetti, trophies, celebratory gestures, implied winnings, promises of success, distress, children, or glossy commercial retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-fcaeb8c8-ee2e-42bf-b5b7-1a252dcbdb91.png",
+        "sha256": "57c000029faec94f6f4f85b5480147f6e2d20c6b785ad7f9a7316e6730511880",
+        "bytes": 2462791,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "19",
+        "path": "/images/post-result/creative-19.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 65374,
+        "sha256": "9bef076fb0760f921809dadcc396d6ca477f469cc0e9da41eb67f208ca99faa4"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    },
+    {
+      "id": "20",
+      "theme": "Dois amigos adultos em café de rua",
+      "fictionalAges": [
+        45,
+        48
+      ],
+      "prompt": "A quiet open-air neighborhood cafe in Brazil. Two fictional adult Brazilian friends, a light-brown-skinned man about 45 with short dark hair and a Black woman about 48 with shoulder-length curls, sit across a small table discussing one generic lottery slip held casually between them. Calm friendly curiosity, no surprise or celebration, candid medium-wide photograph with soft late-afternoon light, no visible signage.\n\nUse case: photorealistic-natural. Create ONE separate landscape 3:2 candid editorial photograph for an illustrative website card at about 600x400. Natural skin texture, realistic adult anatomy and hands, clear faces and one small generic paper lottery slip. Paper has only abstract unnumbered marks, no readable words or numbers, no logos or Caixa branding. No text, captions, watermark, or readable background signs. Fictional illustrative scene, not an actual winner, testimonial, endorsement or documented event. Quiet friendly curiosity only; no money, giant cheque, trophies, confetti, celebration, implied winnings, guaranteed success, distress, children or glossy retouching.",
+      "original": {
+        "path": "C:\\Users\\Notebook\\.codex\\generated_images\\01a1a18e-bfc4-7591-bac2-389357a5da7e\\exec-01e3367c-dcc1-4f2f-b7bf-fbb2884d75db.png",
+        "sha256": "8425b963eaa85282fc9540c9659ea56ea054f60ecad91c2af21bf204ac355589",
+        "bytes": 2697757,
+        "width": 1536,
+        "height": 1024
+      },
+      "delivery": {
+        "id": "20",
+        "path": "/images/post-result/creative-20.webp",
+        "width": 960,
+        "height": 640,
+        "bytes": 91660,
+        "sha256": "0bebc5d43bdfe443d3a2bd470e04d9848e03d249b6701af450369a97e4dd60c6"
+      },
+      "inspection": "Inspecionada: adulto(s) fictício(s), expressão calma, bilhete genérico, sem marca/texto legível nem alegação de prêmio."
+    }
+  ]
+}

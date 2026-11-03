@@ -127,6 +127,7 @@ export default async function EstatisticasPage({ params }: Props) {
           Análise de <strong>{stats.totalConcursos} concursos</strong> publicados neste site. Último sorteio da amostra: {stats.ultimaAtualizacao.split("-").reverse().join("/")}.
         </p>
         <p style={{ fontSize: ".9rem", opacity: .95, marginTop: ".75rem" }}>O arquivo pode ter lacunas. A frequência descreve a amostra disponível e não prevê o próximo sorteio.{loteria === "dupla-sena" ? " Esta análise considera apenas o primeiro sorteio de cada concurso." : loteria === "maismilionaria" ? " Esta análise considera apenas as dezenas, sem os trevos." : ""}</p>
+        {loteria === "mega-sena" && <p style={{ marginTop: "1rem" }}><Link href="/loterias/mega-sena/probabilidades" style={{ color: "#fff", textDecoration: "underline", fontWeight: 700 }}>Entenda as probabilidades de sena, quina e quadra →</Link></p>}
       </div>
 
       {/* Mais sorteados */}

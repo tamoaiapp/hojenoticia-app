@@ -94,6 +94,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Institucional
   entries.push(
+    { url: `${BASE}/loterias/mega-sena/probabilidades`, changeFrequency: "monthly", priority: 0.8 },
     { url: `${BASE}/loterias`, lastModified: homeLastMod, changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE}/noticias`, changeFrequency: "daily", priority: 0.9 },
     { url: `${BASE}/sobre`, changeFrequency: "monthly", priority: 0.4 },

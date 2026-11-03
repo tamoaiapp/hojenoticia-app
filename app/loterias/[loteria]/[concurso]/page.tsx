@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import AdsterraBanner from "@/components/AdsterraBanner";
 import DrawNumbers from "@/components/DrawNumbers";
+import PostResultCTA from "@/components/PostResultCTA";
 import {
   LOTERIAS_CONFIG, getDrawBySlug, getDrawsByLoteria, formatDate, formatDateShort,
   type DrawMeta,
@@ -200,6 +201,8 @@ export default async function DrawPage({ params }: Props) {
           {latestPublished && <p style={{ marginTop: "1rem" }}><Link href={`/loterias/${loteria}/${latestPublished.slug}`} style={{ color: "#1d4ed8", fontWeight: 700, textDecoration: "underline" }}>Conferir o último resultado: {cfg.name} {latestPublished.concurso} →</Link></p>}
         </section>
       )}
+
+      {published && <PostResultCTA loteria={loteria} concurso={draw.concurso} />}
 
       {published && <figure style={{ margin: "0 0 2rem" }}>
         <Image src={imageUrl} alt={`Infográfico da ${cfg.name}, concurso ${draw.concurso}, com data do sorteio e resultados disponíveis`} width={1200} height={675} unoptimized priority style={{ width: "100%", height: "auto", borderRadius: 12 }} />
