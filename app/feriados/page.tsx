@@ -4,10 +4,11 @@ import { redirect } from "next/navigation";
 import { getAnosDisponiveis } from "@/lib/feriados";
 
 const BASE = "https://www.hojenoticia.com";
+export const revalidate = 86400;
 
 export const metadata: Metadata = {
-  title: "Feriados Nacionais — Calendário Completo | Hoje Notícia",
-  description: "Calendário de feriados nacionais brasileiros. Datas fixas e móveis (Páscoa, Carnaval, Corpus Christi) com dia da semana.",
+  title: "Feriados e pontos facultativos: calendário por ano",
+  description: "Consulte as datas listadas por ano e veja a distinção entre feriados e pontos facultativos, com dia da semana e observações sobre regras locais.",
   alternates: { canonical: `${BASE}/feriados` },
 };
 
@@ -21,7 +22,7 @@ export default function FeriadosIndex() {
       </div>
     );
   }
-  const atual = new Date().getFullYear();
+  const atual = Number(new Intl.DateTimeFormat("en", { timeZone: "America/Sao_Paulo", year: "numeric" }).format(new Date()));
   const padrao = anos.includes(atual) ? atual : anos[0];
 
   if (anos.length === 1) redirect(`/feriados/${padrao}`);
@@ -29,9 +30,9 @@ export default function FeriadosIndex() {
   return (
     <div style={{ maxWidth: 800, margin: "0 auto", padding: "2rem 1.25rem" }}>
       <h1 style={{ fontSize: "2rem", fontWeight: 900, color: "#0f172a", marginBottom: "1rem" }}>
-        📅 Feriados Nacionais
+        📅 Feriados e pontos facultativos
       </h1>
-      <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>Selecione o ano:</p>
+      <p style={{ color: "#64748b", marginBottom: "1.5rem" }}>Selecione o ano para consultar as datas listadas e a classificação de cada uma:</p>
       <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
         {anos.map(a => (
           <Link key={a} href={`/feriados/${a}`}

@@ -32,6 +32,7 @@ export interface DrawMeta {
   rateio?: { faixa: number; descricao: string; ganhadores: number; premio: number }[];
   municipios_ganhadores?: { municipio: string; uf: string; ganhadores: number }[];
   numeros_segundo_sorteio?: string[];
+  trevos_sorteados?: string[];
   mes_sorte?: string;
   time_coracao?: string;
 }
@@ -47,7 +48,7 @@ function parseDraw(file: string, loteria: string): DrawMeta {
     concurso:         Number(data.concurso ?? 0),
     status:           data.status ?? "aguardando",
     schedule_status:  data.schedule_status === "confirmed" || data.schedule_status === "unconfirmed" ? data.schedule_status : undefined,
-    draw_date:        data.draw_date ?? data.date ?? "2026-01-01",
+    draw_date:        data.draw_date ?? data.date ?? "",
     numeros:          Array.isArray(data.numeros) ? data.numeros : [],
     premio_principal: Number(data.premio_principal ?? 0),
     ganhadores:       Number(data.ganhadores ?? 0),
@@ -66,6 +67,7 @@ function parseDraw(file: string, loteria: string): DrawMeta {
     rateio:           Array.isArray(data.rateio) ? data.rateio : [],
     municipios_ganhadores: Array.isArray(data.municipios_ganhadores) ? data.municipios_ganhadores : [],
     numeros_segundo_sorteio: Array.isArray(data.numeros_segundo_sorteio) ? data.numeros_segundo_sorteio : [],
+    trevos_sorteados:   Array.isArray(data.trevos_sorteados) ? data.trevos_sorteados.map(String) : [],
     mes_sorte:         typeof data.mes_sorte === "string" ? data.mes_sorte : undefined,
     time_coracao:     typeof data.time_coracao === "string" ? data.time_coracao : undefined,
   };

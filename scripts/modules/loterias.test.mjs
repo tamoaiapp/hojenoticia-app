@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { test } from 'node:test';
-import { updateLoterias } from './loterias.mjs';
+import { FUTURE_STOCK, normalizeLotteryContent, updateLoterias } from './loterias.mjs';
 
 test('recovers a result whose local forecast date is still in the future', async () => {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'hojenoticia-loterias-'));
@@ -15,7 +15,7 @@ test('recovers a result whose local forecast date is still in the future', async
 
   const originalFetch = globalThis.fetch;
   globalThis.fetch = async (url) => {
-    assert.equal(url, 'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena');
+    assert.equal(url, 'https://servicebus3.caixa.gov.br/portaldeloterias/api/megasena');
     return new Response(JSON.stringify({
       numero: 3058,
       dataApuracao: '15/09/2026',
@@ -28,7 +28,7 @@ test('recovers a result whose local forecast date is still in the future', async
   };
 
   try {
-    const result = await updateLoterias({ root, today: '2026-11-03' });
+    const result = await updateLoterias({ root, today: '2026-11-03', onlyLoterias: ['mega-sena'] });
     assert.deepEqual(result.errors, []);
     assert.match(fs.readFileSync(path.join(dir, 'concurso-3058.mdx'), 'utf-8'), /status: publicado[\s\S]*draw_date: "2026-09-15"/);
     assert.equal(fs.readFileSync(path.join(dir, 'concurso-3059.mdx'), 'utf-8'), 'status: aguardando\ndraw_date: "2026-11-07"\n', 'future contest URLs remain available');
@@ -64,6 +64,7 @@ function official(overrides = {}) {
 function options(root, data, now = '2026-11-03T23:01:02.000Z') {
   return {
     root, today: '2026-11-03', now,
+    onlyLoterias: fs.readdirSync(path.join(root, 'content', 'loterias')),
     wait: async () => {},
     fetchImpl: async () => new Response(JSON.stringify(data), { status: 200 }),
   };
@@ -83,7 +84,7 @@ test('records the real publication time and official prize data for a new result
     assert.deepEqual(result.errors, []);
     assert.equal(field(content, 'published_at'), '2026-11-03T23:01:02.000Z');
     assert.equal(field(content, 'source_checked_at'), '2026-11-03T23:01:02.000Z');
-    assert.equal(field(content, 'source_url'), 'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/3058');
+    assert.equal(field(content, 'source_url'), 'https://servicebus3.caixa.gov.br/portaldeloterias/api/megasena/3058');
     assert.equal(field(content, 'ganhadores'), 2, 'rateio takes precedence over a partial municipality list');
     assert.equal(field(content, 'premio_principal'), 12345.67, 'keep the actual cents');
     assert.equal(field(content, 'rateio')[1].descricao, '5 acertos');
@@ -151,7 +152,7 @@ test('confirms only the next official schedule and preserves other future contes
     assert.equal(field(next, 'schedule_status'), 'confirmed');
     assert.equal(field(next, 'draw_date'), '2026-11-04');
     assert.equal(field(next, 'premio_principal'), 1000000);
-    assert.equal(field(next, 'source_url'), 'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/3058');
+    assert.equal(field(next, 'source_url'), 'https://servicebus3.caixa.gov.br/portaldeloterias/api/megasena/3058');
     assert.equal(fs.readFileSync(path.join(f.dir, 'concurso-3060.mdx'), 'utf-8'), otherFuture);
   } finally { f.cleanup(); }
 });
@@ -240,7 +241,7 @@ test('does not infer zero winners while official prize information is unavailabl
     await updateLoterias(options(f.root, official({ acumulado: undefined, listaRateioPremio: [], listaMunicipioUFGanhadores: [] })));
     const content = fs.readFileSync(path.join(f.dir, 'concurso-3058.mdx'), 'utf-8');
     assert.equal(field(content, 'acumulou'), undefined);
-    assert.match(content, /premiação por faixa permanece em confirmação/);
+    assert.match(content, /Referência para conferência/);
     assert.doesNotMatch(content, /Não houve apostas ganhadoras/);
   } finally { f.cleanup(); }
 });
@@ -266,15 +267,15 @@ test('refreshes only selected existing published archives and preserves their or
       requested.push(url);
       if (url.endsWith('/2800')) return new Response(JSON.stringify(official({ numero: 2800, dataApuracao: '02/01/2026' })), { status: 200 });
       if (url.endsWith('/2802')) return new Response(JSON.stringify(official({ numero: 2802, dataApuracao: '02/01/2026' })), { status: 200 });
-      assert.equal(url, 'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena');
+      assert.equal(url, 'https://servicebus3.caixa.gov.br/portaldeloterias/api/megasena');
       return new Response(JSON.stringify(official({ numero: 3200 })), { status: 200 });
     };
     const result = await updateLoterias(opts);
     assert.deepEqual(result.errors, []);
     assert.deepEqual(requested, [
-      'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena',
-      'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/2800',
-      'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/2802',
+      'https://servicebus3.caixa.gov.br/portaldeloterias/api/megasena',
+      'https://servicebus3.caixa.gov.br/portaldeloterias/api/megasena/2800',
+      'https://servicebus3.caixa.gov.br/portaldeloterias/api/megasena/2802',
     ]);
     const archive = fs.readFileSync(path.join(f.dir, 'concurso-2800.mdx'), 'utf-8');
     assert.equal(field(archive, 'published_at'), originalPublication);
@@ -290,5 +291,128 @@ test('refreshes only selected existing published archives and preserves their or
     const repeated = await updateLoterias(opts);
     assert.equal(repeated.changes, 0);
     assert.equal(fs.readFileSync(path.join(f.dir, 'concurso-2800.mdx'), 'utf-8'), archive);
+  } finally { f.cleanup(); }
+});
+
+function stockSource(api, numero = 1000) {
+  const extras = {
+    federal: {
+      listaDezenas: ['056338', '001871', '024389', '062267', '030022'],
+      dataProximoConcurso: '',
+      listaRateioPremio: Array.from({ length: 5 }, (_, index) => ({ faixa: index + 1, descricaoFaixa: `${index + 1}º prêmio`, numeroDeGanhadores: 1, valorPremio: 100000 / (index + 1) })),
+    },
+    maismilionaria: { trevosSorteados: [1, 6] },
+    supersete: { tipoJogo: 'SUPER_7', listaDezenas: ['1', '9', '2', '9', '4', '6', '5'] },
+  };
+  return official({ numero, numeroConcursoProximo: numero + 1, dataProximoConcurso: '04/11/2026', valorEstimadoProximoConcurso: 100000, ...extras[api] });
+}
+
+test('creates all ten modality directories and maintains the 600-page future inventory without deleting URLs', async () => {
+  const f = fixture();
+  try {
+    assert.equal(Object.values(FUTURE_STOCK).reduce((sum, value) => sum + value, 0), 600);
+    const opts = options(f.root, null);
+    delete opts.onlyLoterias;
+    let quinaLatest = 1000;
+    opts.fetchImpl = async url => {
+      const api = new URL(url).pathname.split('/api/')[1];
+      assert.ok(api && !api.includes('/'), 'only one latest query per modality is needed');
+      return new Response(JSON.stringify(stockSource(api, api === 'quina' ? quinaLatest : 1000)), { status: 200 });
+    };
+    const first = await updateLoterias(opts);
+    assert.deepEqual(first.errors, []);
+    assert.equal(first.futureCreated, 600);
+    const contentDir = path.join(f.root, 'content', 'loterias');
+    for (const [game, target] of Object.entries(FUTURE_STOCK)) {
+      const dir = path.join(contentDir, game);
+      assert.equal(fs.readdirSync(dir).length, target + 1, game);
+      for (let number = 1001; number <= 1000 + target; number++) {
+        const content = fs.readFileSync(path.join(dir, `concurso-${number}.mdx`), 'utf-8');
+        assert.equal(field(content, 'status'), 'aguardando');
+        if (number === 1001 && game !== 'federal') {
+          assert.equal(field(content, 'schedule_status'), 'confirmed');
+          assert.equal(field(content, 'draw_date'), '2026-11-04');
+        } else {
+          assert.equal(field(content, 'schedule_status'), 'unconfirmed');
+          assert.equal(field(content, 'draw_date'), undefined);
+          assert.equal(field(content, 'date'), undefined);
+          assert.equal(field(content, 'premio_principal'), 0);
+          assert.doesNotMatch(content, /\b\d{2}\/\d{2}\/20\d{2}\b|R\$|ao vivo|\b\d{1,2}h\b/i);
+        }
+      }
+    }
+    const federal = fs.readFileSync(path.join(contentDir, 'federal', 'concurso-1000.mdx'), 'utf-8');
+    assert.deepEqual(field(federal, 'numeros'), ['056338', '001871', '024389', '062267', '030022']);
+    assert.equal(field(federal, 'rateio').length, 5);
+    const superSete = fs.readFileSync(path.join(contentDir, 'super-sete', 'concurso-1000.mdx'), 'utf-8');
+    assert.deepEqual(field(superSete, 'numeros'), ['1', '9', '2', '9', '4', '6', '5']);
+    const milionaria = fs.readFileSync(path.join(contentDir, 'maismilionaria', 'concurso-1000.mdx'), 'utf-8');
+    assert.deepEqual(field(milionaria, 'trevos_sorteados'), ['1', '6']);
+    assert.equal(normalizeLotteryContent({ root: f.root }).changes, 0, 'the live generator and editorial normalizer use the same stable templates');
+
+    const outside = path.join(contentDir, 'mega-sena', 'concurso-9000.mdx');
+    fs.writeFileSync(outside, 'status: aguardando\nschedule_status: unconfirmed\n');
+    opts.now = '2026-11-03T23:15:00.000Z';
+    const repeated = await updateLoterias(opts);
+    assert.equal(repeated.changes, 0);
+    assert.equal(fs.readFileSync(outside, 'utf-8'), 'status: aguardando\nschedule_status: unconfirmed\n');
+
+    quinaLatest = 1001;
+    const advanced = await updateLoterias(opts);
+    assert.deepEqual(advanced.errors, []);
+    assert.equal(advanced.futureCreated, 1);
+    const quinaDir = path.join(contentDir, 'quina');
+    assert.equal(field(fs.readFileSync(path.join(quinaDir, 'concurso-1001.mdx'), 'utf-8'), 'status'), 'publicado');
+    assert.equal(field(fs.readFileSync(path.join(quinaDir, 'concurso-1121.mdx'), 'utf-8'), 'status'), 'aguardando');
+    assert.equal(fs.readdirSync(quinaDir).filter(file => field(fs.readFileSync(path.join(quinaDir, file), 'utf-8'), 'status') === 'aguardando').length, 120);
+  } finally { f.cleanup(); }
+});
+
+test('rejects an invalid Super Sete payload without inventing its result or future numbering', async () => {
+  const f = fixture({}, 'super-sete');
+  try {
+    const result = await updateLoterias(options(f.root, official({ numero: 917, tipoJogo: 'MEGA_SENA', listaDezenas: ['1', '9', '2', '9', '4', '6', '5'] })));
+    assert.equal(result.errors.length, 1);
+    assert.equal(fs.readdirSync(f.dir).length, 0);
+  } finally { f.cleanup(); }
+});
+
+test('uses the official alternate API when the primary source fails and records the responding source', async () => {
+  const f = fixture();
+  try {
+    const opts = options(f.root, null);
+    const calls = [];
+    opts.fetchImpl = async url => {
+      calls.push(url);
+      return url.includes('servicebus3') ? new Response('', { status: 500 }) : new Response(JSON.stringify(official()), { status: 200 });
+    };
+    const result = await updateLoterias(opts);
+    assert.deepEqual(result.errors, []);
+    assert.equal(calls.filter(url => url.includes('servicebus3')).length, 3);
+    assert.equal(field(fs.readFileSync(path.join(f.dir, 'concurso-3058.mdx'), 'utf-8'), 'source_url'), 'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/3058');
+  } finally { f.cleanup(); }
+});
+
+test('normalizes legacy editorial text while preserving every factual frontmatter field', () => {
+  const factual = `loteria: mega-sena\nconcurso: 3058\nstatus: publicado\ndraw_date: "2026-01-02"\nnumeros: ["01","02","03","04","05","06"]\npremio_principal: 12345.67\nganhadores: 2\nrateio: [{"faixa":1,"descricao":"6 acertos","ganhadores":2,"premio":12345.67}]\npublished_at: "2026-01-02T23:00:00.000Z"\nupdated_at: "2026-01-03T00:00:00.000Z"\nsource_checked_at: "2026-01-03T00:00:00.000Z"\nsource_url: "https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/3058"\ncustom_attribute: "preserve me"`;
+  const pendingFacts = 'loteria: mega-sena\nconcurso: 3059\nstatus: aguardando\nschedule_status: unconfirmed\ndraw_date: "2026-12-31"\npremio_principal: 999999999\nnumeros: []';
+  const f = fixture({
+    'concurso-3058.mdx': `---\ntitle: "Título longo com resultado HOJE"\ndescription: "Descrição antiga"\n${factual}\nkeywords: "resultado hoje"\n---\n\nO próximo sorteio acontece amanhã.`,
+    'concurso-3059.mdx': `---\ntitle: "Sorteio em dezembro"\ndescription: "Prêmio estimado antigo"\n${pendingFacts}\nkeywords: "resultado hoje"\n---\n\nSorteio hoje às 20h.`,
+  });
+  try {
+    const migrated = normalizeLotteryContent({ root: f.root });
+    assert.deepEqual(migrated.errors, []);
+    assert.equal(migrated.changes, 2);
+    assert.equal(migrated.factualRecordsVerified, 2);
+    for (const [file, facts] of [['concurso-3058.mdx', factual], ['concurso-3059.mdx', pendingFacts]]) {
+      const content = fs.readFileSync(path.join(f.dir, file), 'utf-8');
+      const metadata = content.match(/^---\n([\s\S]*?)\n---/)?.[1];
+      assert.equal(metadata.split('\n').filter(line => !/^(title|description|keywords):/.test(line)).join('\n'), facts);
+      assert.doesNotMatch(content, /resultado hoje|próximo sorteio acontece|20h/i);
+      if (file === 'concurso-3058.mdx') assert.equal(field(content, 'title'), 'Resultado Mega-Sena concurso 3058 — 02/01/2026');
+      else assert.doesNotMatch(content.split('\n---\n')[1], /31\/12\/2026|999999999|R\$/);
+    }
+    assert.equal(normalizeLotteryContent({ root: f.root }).changes, 0);
   } finally { f.cleanup(); }
 });

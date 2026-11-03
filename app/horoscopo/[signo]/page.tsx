@@ -18,11 +18,12 @@ export async function generateMetadata({ params }: { params: Promise<{ signo: st
   const s = SIGNOS_LIST.find(x => x.slug === signo);
   if (!s) return {};
   const data = getHoroscopoLatest();
-  const dataDia = data ? formatDateBR(data.date) : "hoje";
+  const dataDia = data ? formatDateBR(data.date) : "";
   return {
-    title: `Horóscopo ${s.name} — ${dataDia} | Hoje Notícia`,
-    description: `Horóscopo de ${s.name} para ${dataDia}: amor, trabalho, dinheiro e saúde. Número e cor da sorte do dia.`,
-    keywords: `horoscopo ${s.slug}, ${s.slug} hoje, ${s.name.toLowerCase()} amor, ${s.name.toLowerCase()} trabalho`,
+    title: `Horóscopo de ${s.name}${dataDia ? ` — ${dataDia}` : ""}`,
+    description: dataDia
+      ? `Consulte a edição do horóscopo de ${s.name} de ${dataDia}, com temas do cotidiano, número e cor da sorte. Conteúdo de entretenimento.`
+      : `Consulte as edições disponíveis do horóscopo de ${s.name}. Conteúdo de entretenimento com a data da previsão identificada.`,
     alternates: { canonical: `${BASE}/horoscopo/${signo}` },
   };
 }
@@ -37,13 +38,14 @@ export default async function SignoPage({ params }: { params: Promise<{ signo: s
   if (!data || !previsao) {
     return (
       <div style={{ maxWidth: 800, margin: "0 auto", padding: "2rem 1.25rem" }}>
-        <h1>{meta.name}</h1>
-        <p>Previsão do dia ainda não disponível.</p>
+        <h1>Horóscopo de {meta.name}</h1>
+        <p>Previsão ainda não disponível para consulta.</p>
       </div>
     );
   }
 
   const dataDia = formatDateBR(data.date);
+  const todayISO = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -58,8 +60,7 @@ export default async function SignoPage({ params }: { params: Promise<{ signo: s
   const articleLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: `Horóscopo ${meta.name} — ${dataDia}`,
-    datePublished: data.date,
+    headline: `Horóscopo de ${meta.name} — ${dataDia}`,
     dateModified: data.updated_at,
     author: { "@type": "Organization", name: "Hoje Notícia" },
     publisher: { "@type": "Organization", name: "Hoje Notícia" },
@@ -91,11 +92,14 @@ export default async function SignoPage({ params }: { params: Promise<{ signo: s
       <div style={{ marginBottom: "1.5rem", paddingBottom: "1rem", borderBottom: `4px solid ${meta.cor}` }}>
         <h1 style={{ fontSize: "2rem", fontWeight: 900, color: "#0f172a", display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <span style={{ fontSize: "2.4rem" }}>{meta.emoji}</span>
-          Horóscopo {meta.name}
+          Horóscopo de {meta.name}
         </h1>
         <p style={{ color: "#64748b", marginTop: "0.4rem" }}>
           {dataDia} · {meta.periodo}
         </p>
+        {data.date < todayISO && <p style={{ color: "#92400e", marginTop: "0.6rem" }}>Esta edição é anterior a hoje; ela não representa uma previsão para a data atual.</p>}
+        {data.date > todayISO && <p style={{ color: "#64748b", marginTop: "0.6rem" }}>Esta edição se refere à data futura indicada acima.</p>}
+        <p style={{ color: "#64748b", fontSize: "0.85rem", marginTop: "0.6rem" }}>Conteúdo de entretenimento produzido com automação.</p>
       </div>
 
       <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1.5rem", flexWrap: "wrap" }}>

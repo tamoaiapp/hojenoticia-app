@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Política de Privacidade — Hoje Notícia",
+  title: "Política de privacidade",
   description: "Informações sobre dados e publicidade no Hoje Notícia e contato do responsável pelo site.",
   alternates: { canonical: "https://www.hojenoticia.com/privacidade" },
 };
