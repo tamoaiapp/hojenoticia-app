@@ -68,9 +68,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: draw.description,
     alternates: { canonical: url },
     robots: {
-      index: published,
+      index: true,
       follow: true,
-      googleBot: { index: published, follow: true, "max-image-preview": "large" },
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
     },
     openGraph: {
       type: published ? "article" : "website",
@@ -109,14 +109,16 @@ export default async function DrawPage({ params }: Props) {
   const { publishedAt, updatedAt } = publicationDates(draw);
   const sourceUrl = isOfficialCaixaSource(draw.source_url)
     ? draw.source_url!
-    : `https://servicebus2.caixa.gov.br/portaldeloterias/api/${encodeURIComponent(cfg.apiKey)}/${draw.concurso}`;
+    : published ? `https://servicebus2.caixa.gov.br/portaldeloterias/api/${encodeURIComponent(cfg.apiKey)}/${draw.concurso}` : "https://loterias.caixa.gov.br/";
   const sourceCheckedAt = knownTimestamp(draw.source_checked_at);
   const nextDate = currentNextDate(draw.proxima_data);
   // A seção gerada de próximo sorteio é apresentada abaixo apenas enquanto vigente.
   const articleContent = draw.content.replace(/(^|\r?\n)## Próximo Sorteio[^\r\n]*\r?\n[\s\S]*?(?=\r?\n## |$)/gi, "\n");
-  const publishedDraws = getDrawsByLoteria(loteria).filter(item => item.status === "publicado");
-  const previous = publishedDraws.find(item => item.concurso < draw.concurso);
-  const next = [...publishedDraws].reverse().find(item => item.concurso > draw.concurso);
+  const navigationDraws = getDrawsByLoteria(loteria);
+  const latestPublished = navigationDraws.find(item => item.status === "publicado");
+  const scheduleConfirmed = draw.schedule_status === "confirmed" || (draw.status === "aguardando" && draw.schedule_status !== "unconfirmed" && latestPublished?.proximo_concurso === draw.concurso && latestPublished?.proxima_data === draw.draw_date);
+  const previous = navigationDraws.find(item => item.concurso < draw.concurso);
+  const next = [...navigationDraws].reverse().find(item => item.concurso > draw.concurso);
   const nextRecord = draw.proximo_concurso ? getDrawBySlug(loteria, `concurso-${draw.proximo_concurso}`) : null;
   const rateio = draw.rateio ?? [];
   const municipalities = draw.municipios_ganhadores ?? [];
@@ -166,22 +168,17 @@ export default async function DrawPage({ params }: Props) {
         <Link href={`/loterias/${loteria}`} style={{ color: cfg.ballColor, fontWeight: 700 }}>{cfg.name}</Link>
         <h1 style={{ fontSize: "clamp(1.65rem, 4vw, 2.3rem)", lineHeight: 1.25, fontWeight: 900, margin: "0.65rem 0 1rem", overflowWrap: "anywhere" }}>{draw.title}</h1>
         <p style={{ color: "#475569", fontSize: "1.08rem", marginBottom: "1rem" }}>{draw.description}</p>
-        <div style={{ color: "#475569", fontSize: "0.9rem", lineHeight: 1.8, marginBottom: "1.25rem" }}>
+        {published && <div style={{ color: "#475569", fontSize: "0.9rem", lineHeight: 1.8, marginBottom: "1.25rem" }}>
           <p>Por <Link href="/sobre" style={{ color: "#1d4ed8", textDecoration: "underline" }}>Hoje Notícia</Link>. Responsável pela publicação: <Link href="/equipe/tiago-oliveira" style={{ color: "#1d4ed8", textDecoration: "underline" }}>Tiago Oliveira</Link>.</p>
           {publishedAt && <p>Publicado em <time dateTime={publishedAt}>{formatPublicationTime(publishedAt)}</time>.</p>}
-          {published && !publishedAt && <p>Registro histórico: a data original de publicação não está disponível.</p>}
           {updatedAt && updatedAt !== publishedAt && <p>Atualizado em <time dateTime={updatedAt}>{formatPublicationTime(updatedAt)}</time>.</p>}
-          <p>{published ? "Data do sorteio:" : "Sorteio previsto para:"} <time dateTime={draw.draw_date}>{formatDate(draw.draw_date)}</time>.</p>
-        </div>
-        <p style={{ color: "#475569", fontSize: "0.85rem", borderLeft: "3px solid #cbd5e1", paddingLeft: "0.85rem", marginBottom: "1.5rem" }}>
-          Boletim produzido automaticamente a partir de dados da Caixa, com validação automática dos campos.
-          A identificação do responsável não indica revisão humana prévia de cada boletim.{" "}
+          <p>Data do sorteio: <time dateTime={draw.draw_date}>{formatDate(draw.draw_date)}</time>.</p>
+        </div>}
+        {!published && scheduleConfirmed && <p style={{ marginBottom: "1rem", color: "#475569" }}>Data informada pela Caixa: <time dateTime={draw.draw_date}>{formatDate(draw.draw_date)}</time>.</p>}
+        {published && <p style={{ color: "#475569", fontSize: "0.85rem", borderLeft: "3px solid #cbd5e1", paddingLeft: "0.85rem", marginBottom: "1.5rem" }}>
+          Boletim automatizado com dados da Caixa.{" "}
           <Link href="/politica-editorial" style={{ color: "#1d4ed8", textDecoration: "underline" }}>Conheça o processo de publicação</Link>.
-        </p>
-        <figure style={{ margin: "0 0 2rem" }}>
-          <Image src={imageUrl} alt={`Infográfico da ${cfg.name}, concurso ${draw.concurso}, com data do sorteio e resultados disponíveis`} width={1200} height={675} unoptimized priority style={{ width: "100%", height: "auto", borderRadius: 12 }} />
-          <figcaption style={{ color: "#64748b", fontSize: "0.8rem", marginTop: "0.4rem" }}>Infográfico: Hoje Notícia. Dados: Caixa.</figcaption>
-        </figure>
+        </p>}
       </header>
 
       {published ? (
@@ -208,9 +205,16 @@ export default async function DrawPage({ params }: Props) {
         <section aria-labelledby="pending-title" style={{ background: "#fff", border: "1px solid #cbd5e1", borderRadius: 14, padding: "1.25rem", marginBottom: "2rem" }}>
           <h2 id="pending-title" style={{ fontSize: "1.35rem", fontWeight: 800 }}>Resultado aguardando confirmação</h2>
           <p style={{ marginTop: "0.75rem" }}>Este concurso ainda não tem resultado confirmado nesta página. Consulte a fonte oficial para acompanhar a divulgação.</p>
-          {draw.premio_principal > 0 && <p style={{ marginTop: "0.75rem" }}>Estimativa de prêmio informada para o concurso: <strong>{currency.format(draw.premio_principal)}</strong>.</p>}
+          {scheduleConfirmed && draw.premio_principal > 0 && <p style={{ marginTop: "0.75rem" }}>Estimativa de prêmio informada para o concurso: <strong>{currency.format(draw.premio_principal)}</strong>.</p>}
+          {!scheduleConfirmed && <p style={{ marginTop: "0.75rem" }}>A data e a estimativa serão atualizadas quando forem confirmadas pela Caixa.</p>}
+          {latestPublished && <p style={{ marginTop: "1rem" }}><Link href={`/loterias/${loteria}/${latestPublished.slug}`} style={{ color: "#1d4ed8", fontWeight: 700, textDecoration: "underline" }}>Conferir o último resultado: {cfg.name} {latestPublished.concurso} →</Link></p>}
         </section>
       )}
+
+      {published && <figure style={{ margin: "0 0 2rem" }}>
+        <Image src={imageUrl} alt={`Infográfico da ${cfg.name}, concurso ${draw.concurso}, com data do sorteio e resultados disponíveis`} width={1200} height={675} unoptimized priority style={{ width: "100%", height: "auto", borderRadius: 12 }} />
+        <figcaption style={{ color: "#64748b", fontSize: "0.8rem", marginTop: "0.4rem" }}>Infográfico: Hoje Notícia. Dados: Caixa.</figcaption>
+      </figure>}
 
       {published && rateio.length > 0 && (
         <section aria-labelledby="rateio-title" style={{ marginBottom: "2rem" }}>
@@ -254,20 +258,19 @@ export default async function DrawPage({ params }: Props) {
 
       <section aria-labelledby="fonte-title" style={{ borderTop: "1px solid #cbd5e1", paddingTop: "1.25rem", marginBottom: "2rem", color: "#475569", lineHeight: 1.8 }}>
         <h2 id="fonte-title" style={{ fontSize: "1.1rem", fontWeight: 800, color: "#1e293b" }}>Fonte e correções</h2>
-        <p><a href={sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#1d4ed8", textDecoration: "underline", overflowWrap: "anywhere" }}>Dados oficiais da Caixa — concurso {draw.concurso}</a>.</p>
+        <p><a href={sourceUrl} target="_blank" rel="noopener noreferrer" style={{ color: "#1d4ed8", textDecoration: "underline", overflowWrap: "anywhere" }}>{published ? `Dados oficiais da Caixa — concurso ${draw.concurso}` : "Calendário e informações oficiais da Caixa"}</a>.</p>
         {sourceCheckedAt && <p>Consulta à fonte em <time dateTime={sourceCheckedAt}>{formatPublicationTime(sourceCheckedAt)}</time>.</p>}
         <p>O Hoje Notícia é independente da Caixa. A conferência definitiva do bilhete e das regras deve ser feita nos <a href="https://loterias.caixa.gov.br/" target="_blank" rel="noopener noreferrer" style={{ color: "#1d4ed8", textDecoration: "underline" }}>canais oficiais das Loterias Caixa</a>.</p>
         <p>Encontrou um erro? <Link href="/correcoes" style={{ color: "#1d4ed8", textDecoration: "underline" }}>Veja como pedir uma correção</Link>.</p>
       </section>
 
       <aside aria-label="Publicidade" style={{ margin: "2rem 0", textAlign: "center" }}>
-        <p style={{ color: "#64748b", fontSize: "0.75rem" }}>Publicidade</p>
         <AdsterraBanner size="300x250" />
       </aside>
 
       <nav aria-label="Arquivo de concursos" style={{ display: "flex", flexWrap: "wrap", gap: "1rem", justifyContent: "space-between", borderTop: "1px solid #cbd5e1", paddingTop: "1.25rem", lineHeight: 1.8 }}>
-        {previous && <Link href={`/loterias/${loteria}/${previous.slug}`} style={{ color: "#1d4ed8" }}>← Concurso {previous.concurso} ({formatDateShort(previous.draw_date)})</Link>}
-        {next && <Link href={`/loterias/${loteria}/${next.slug}`} style={{ color: "#1d4ed8" }}>Concurso {next.concurso} ({formatDateShort(next.draw_date)}) →</Link>}
+        {previous && <Link href={`/loterias/${loteria}/${previous.slug}`} style={{ color: "#1d4ed8" }}>← Concurso {previous.concurso}{previous.status === "publicado" ? ` (${formatDateShort(previous.draw_date)})` : ""}</Link>}
+        {next && <Link href={`/loterias/${loteria}/${next.slug}`} style={{ color: "#1d4ed8" }}>Concurso {next.concurso}{next.status === "publicado" ? ` (${formatDateShort(next.draw_date)})` : ""} →</Link>}
       </nav>
       <p style={{ marginTop: "1.25rem" }}><Link href={`/loterias/${loteria}`} style={{ color: "#1d4ed8", textDecoration: "underline" }}>Ver o histórico de resultados da {cfg.name}</Link>.</p>
     </article>

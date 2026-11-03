@@ -1,7 +1,5 @@
 import { MetadataRoute } from "next";
 import { LOTERIAS_CONFIG, getAllDraws, getDrawsByLoteria } from "@/lib/loterias";
-import { UFS } from "@/lib/eleicoes-config";
-import { getJogos } from "@/lib/copa-jogos";
 import { MOEDA_INFO } from "@/lib/cambio";
 import { SIGNOS_LIST } from "@/lib/horoscopo";
 import { getAnosDisponiveis } from "@/lib/feriados";
@@ -53,41 +51,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Concursos individuais
   for (const d of draws) {
-    if (d.status !== "publicado") continue;
     entries.push({
       url: `${BASE}/loterias/${d.loteria}/${d.slug}`,
       lastModified: (d.updated_at || d.published_at) && publicationTime(d.updated_at || d.published_at) !== null && Date.parse((d.updated_at || d.published_at)!) <= Date.now() ? new Date((d.updated_at || d.published_at)!) : undefined,
-      changeFrequency: "yearly",
-      priority: 0.7,
-    });
-  }
-
-  // Copa do Mundo 2026
-  entries.push(
-    { url: `${BASE}/copa`,                 changeFrequency: "daily",  priority: 0.95 },
-    { url: `${BASE}/copa/grupos`,          changeFrequency: "weekly", priority: 0.85 },
-    { url: `${BASE}/copa/jogos`,           changeFrequency: "daily",  priority: 0.92 },
-    { url: `${BASE}/copa/onde-assistir`,   changeFrequency: "weekly", priority: 0.8 },
-  );
-  // 104 jogos individuais
-  for (const j of getJogos().jogos) {
-    entries.push({
-      url: `${BASE}/copa/jogos/${j.id}`,
-      changeFrequency: "weekly",
-      priority: 0.75,
-    });
-  }
-
-  // Eleições 2026
-  entries.push(
-    { url: `${BASE}/eleicoes-2026`,             changeFrequency: "daily",  priority: 0.95 },
-    { url: `${BASE}/eleicoes-2026/presidente`,  changeFrequency: "daily",  priority: 0.9 },
-  );
-  for (const u of UFS) {
-    entries.push({
-      url: `${BASE}/eleicoes-2026/${u.sigla.toLowerCase()}`,
-      changeFrequency: "weekly",
-      priority: 0.7,
+      changeFrequency: d.status === "publicado" ? "yearly" : "daily",
+      priority: d.status === "publicado" ? 0.7 : 0.6,
     });
   }
 

@@ -22,6 +22,8 @@ Novos boletins recentes com fonte oficial e publicação registrada podem usar `
 - `/robots.txt`: divulga os dois sitemaps e permite rastreamento.
 - URLs de concurso permanecem estáveis. Não criar cópias para parecerem notícias novas.
 
+As páginas de concursos futuros fazem parte da estratégia de SEO do site e são mantidas indexáveis, no sitemap comum e na navegação entre concursos. Elas ficam fora do news sitemap e de `NewsArticle` enquanto não houver resultado. O campo `schedule_status: unconfirmed` impede apresentar uma estimativa antiga de calendário como data confirmada; somente a programação informada pela Caixa passa a `confirmed`.
+
 ## Atualização
 
 Os workflows consultam a Caixa às 21h20, 22h20 e 23h20 de Brasília; aos domingos há janelas extras às 11h20 e 12h20. São horários de melhores esforços do GitHub Actions, sujeitos a atraso. Só dados confirmados são publicados; falhas são registradas e podem ser rechecadas nas janelas seguintes.

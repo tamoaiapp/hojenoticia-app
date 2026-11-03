@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import AdsterraBanner from "@/components/AdsterraBanner";
 import AdsterraNative from "@/components/AdsterraNative";
+import FutureContests from "@/components/FutureContests";
 import {
   LOTERIAS_CONFIG, getDrawsByLoteria,
   formatBRL, formatDate, formatDateShort,
@@ -336,6 +337,7 @@ export default async function LoteriasPage({ params }: Props) {
             </div>
           )}
 
+          <FutureContests lottery={loteria} name={cfg.name} draws={draws.filter(draw => draw.status === "aguardando" && draw.concurso > (latest?.concurso || 0))} />
           <AdsterraNative />
         </div>
 

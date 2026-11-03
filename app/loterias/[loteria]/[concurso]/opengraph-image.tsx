@@ -99,7 +99,7 @@ export default async function Image({ params }: Props) {
         >
           {isPublished
             ? `Resultado ${cfg.name} — ${formatDateShort(draw.draw_date)}`
-            : `Próximo Sorteio ${cfg.name} — ${formatDateShort(draw.draw_date)}`}
+            : draw.schedule_status === "confirmed" ? `Próximo Sorteio ${cfg.name} — ${formatDateShort(draw.draw_date)}` : `${cfg.name} — calendário em confirmação`}
         </div>
 
         {/* Numbers */}

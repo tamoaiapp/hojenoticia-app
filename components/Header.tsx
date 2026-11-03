@@ -1,158 +1,88 @@
 "use client";
+
 import Link from "next/link";
-import { useState } from "react";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { LOTERIAS_CONFIG } from "@/lib/loterias-config";
 
+const featured = ["quina", "lotofacil", "mega-sena"];
+const tools = [{ href: "/cotacao", label: "Cotação" }, { href: "/horoscopo", label: "Horóscopo" }, { href: "/feriados", label: "Feriados" }];
+
 export default function Header() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+  const [today, setToday] = useState<{ text: string; iso: string } | null>(null);
+  const moreRef = useRef<HTMLDetailsElement>(null);
+
+  useEffect(() => {
+    const update = () => {
+      const now = new Date();
+      setToday({
+        text: new Intl.DateTimeFormat("pt-BR", { timeZone: "America/Sao_Paulo", weekday: "long", day: "numeric", month: "long", year: "numeric" }).format(now),
+        iso: new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(now),
+      });
+    };
+    update();
+    const interval = window.setInterval(update, 60000);
+    return () => window.clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpen(false);
+        if (moreRef.current) moreRef.current.open = false;
+      }
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, []);
+
+  function closeMenu() {
+    setOpen(false);
+    if (moreRef.current) moreRef.current.open = false;
+  }
+
+  function active(href: string) {
+    return pathname === href || (href !== "/" && pathname.startsWith(`${href}/`));
+  }
 
   return (
-    <header style={{ background: "#fff", borderBottom: "1px solid #e2e8f0", boxShadow: "0 1px 3px rgba(0,0,0,0.06)", position: "relative" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 1.25rem" }}>
-
-        {/* Top bar */}
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0.85rem 0", borderBottom: "1px solid #f1f5f9" }}>
-
-          {/* Hamburguer — só mobile */}
-          <button
-            className="header-menu-btn"
-            onClick={() => setOpen((o) => !o)}
-            aria-label="Menu"
-            style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", flexDirection: "column", gap: 5 }}
-          >
-            <span style={{ display: "block", width: 22, height: 2, background: "#374151" }} />
-            <span style={{ display: "block", width: 22, height: 2, background: "#374151" }} />
-            <span style={{ display: "block", width: 22, height: 2, background: "#374151" }} />
-          </button>
-
-          <Link href="/" style={{ textDecoration: "none", display: "flex", alignItems: "center", gap: "0.55rem" }}>
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="38" height="38" style={{ flexShrink: 0 }}>
-              <rect width="48" height="48" rx="8" fill="#dc2626"/>
-              <text x="24" y="20" fontFamily="Arial Black, Impact, sans-serif" fontSize="11" fontWeight="900" fill="white" textAnchor="middle" letterSpacing="0.5">HOJE</text>
-              <rect x="6" y="23" width="36" height="1.5" fill="rgba(255,255,255,0.4)"/>
-              <text x="24" y="38" fontFamily="Arial Black, Impact, sans-serif" fontSize="10" fontWeight="900" fill="white" textAnchor="middle" letterSpacing="0.3">NOTÍCIA</text>
+    <header className="site-header">
+      <div className="site-header-inner">
+        <div className="header-topbar">
+          <Link className="site-brand" href="/" onClick={closeMenu} aria-label="Hoje Notícia — página inicial">
+            <svg viewBox="0 0 36 36" width="36" height="36" aria-hidden="true" focusable="false">
+              <rect width="36" height="36" rx="8" fill="#dc2626" />
+              <rect x="8" y="8" width="8" height="9" rx="1" fill="#fff" />
+              <path d="M20 9h8M20 14h8M8 22h20M8 27h20" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
             </svg>
-            <span style={{ fontSize: "1.7rem", fontWeight: 900, color: "#0f172a", letterSpacing: "-1.5px" }}>
-              Hoje<span style={{ color: "#dc2626" }}>Notícia</span>
-            </span>
+            <span>Hoje<span className="brand-accent">Notícia</span></span>
           </Link>
-
-          <div style={{ fontSize: "0.75rem", color: "#94a3b8", fontStyle: "italic" }} className="header-date">
-            {new Date().toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo", weekday: "long", day: "numeric", month: "long", year: "numeric" })}
-          </div>
+          <time className="site-date" dateTime={today?.iso}>{today?.text ?? "Horário de Brasília"}</time>
+          <button type="button" className="site-menu-toggle" aria-expanded={open} aria-controls="site-navigation" aria-label={open ? "Fechar menu" : "Abrir menu"} onClick={() => setOpen(value => !value)}>
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true" focusable="false">
+              {open ? <path d="m6 6 12 12M18 6 6 18" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
+            </svg>
+            <span>Menu</span>
+          </button>
         </div>
-
-        {/* Nav principal */}
-        <nav aria-label="Navegação principal" className={`header-nav${open ? " open" : ""}`}>
-          <Link href="/noticias" onClick={() => setOpen(false)} style={{ padding: ".55rem 1rem", fontSize: ".78rem", fontWeight: 800, color: "#dc2626", textTransform: "uppercase" }}>Notícias</Link>
-          <Link
-            href="/copa"
-            onClick={() => setOpen(false)}
-            style={{
-              padding: "0.55rem 1rem",
-              fontSize: "0.78rem",
-              fontWeight: 800,
-              color: "#009739",
-              whiteSpace: "nowrap",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-              borderBottom: "3px solid transparent",
-              textDecoration: "none",
-            }}
-          >
-            🏆 Copa 2026
-          </Link>
-          <Link
-            href="/eleicoes-2026"
-            onClick={() => setOpen(false)}
-            style={{
-              padding: "0.55rem 1rem",
-              fontSize: "0.78rem",
-              fontWeight: 800,
-              color: "#dc2626",
-              whiteSpace: "nowrap",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-              borderBottom: "3px solid transparent",
-              textDecoration: "none",
-            }}
-          >
-            🗳️ Eleições 2026
-          </Link>
-          <Link
-            href="/cotacao"
-            onClick={() => setOpen(false)}
-            style={{
-              padding: "0.55rem 1rem",
-              fontSize: "0.78rem",
-              fontWeight: 800,
-              color: "#16a34a",
-              whiteSpace: "nowrap",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-              borderBottom: "3px solid transparent",
-              textDecoration: "none",
-            }}
-          >
-            💰 Cotação
-          </Link>
-          <Link
-            href="/horoscopo"
-            onClick={() => setOpen(false)}
-            style={{
-              padding: "0.55rem 1rem",
-              fontSize: "0.78rem",
-              fontWeight: 800,
-              color: "#7c3aed",
-              whiteSpace: "nowrap",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-              borderBottom: "3px solid transparent",
-              textDecoration: "none",
-            }}
-          >
-            ✨ Horóscopo
-          </Link>
-          <Link
-            href="/feriados"
-            onClick={() => setOpen(false)}
-            style={{
-              padding: "0.55rem 1rem",
-              fontSize: "0.78rem",
-              fontWeight: 800,
-              color: "#0ea5e9",
-              whiteSpace: "nowrap",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-              borderBottom: "3px solid transparent",
-              textDecoration: "none",
-            }}
-          >
-            📅 Feriados
-          </Link>
-          {Object.entries(LOTERIAS_CONFIG).map(([slug, { name, color }]) => (
-            <Link
-              key={slug}
-              href={`/loterias/${slug}`}
-              onClick={() => setOpen(false)}
-              style={{
-                padding: "0.55rem 1rem",
-                fontSize: "0.78rem",
-                fontWeight: 700,
-                color: "#374151",
-                whiteSpace: "nowrap",
-                textTransform: "uppercase",
-                letterSpacing: "0.5px",
-                borderBottom: "3px solid transparent",
-                textDecoration: "none",
-                transition: "color 0.15s, border-color 0.15s",
-              }}
-              onMouseEnter={(e) => { const el = e.currentTarget; el.style.color = color; el.style.borderBottomColor = color; }}
-              onMouseLeave={(e) => { const el = e.currentTarget; el.style.color = "#374151"; el.style.borderBottomColor = "transparent"; }}
-            >
-              {name}
-            </Link>
-          ))}
+        <nav id="site-navigation" className={`site-nav${open ? " is-open" : ""}`} aria-label="Navegação principal">
+          <div className="site-nav-main">
+            <Link href="/" onClick={closeMenu} aria-current={active("/") ? "page" : undefined}>Resultados</Link>
+            {featured.map(slug => <Link key={slug} href={`/loterias/${slug}`} onClick={closeMenu} aria-current={active(`/loterias/${slug}`) ? "page" : undefined}>{LOTERIAS_CONFIG[slug].name}</Link>)}
+            <details className="nav-more" ref={moreRef}>
+              <summary>Mais loterias <span aria-hidden="true">⌄</span></summary>
+              <div className="nav-more-links">
+                {Object.entries(LOTERIAS_CONFIG).filter(([slug]) => !featured.includes(slug)).map(([slug, cfg]) => <Link key={slug} href={`/loterias/${slug}`} onClick={closeMenu} aria-current={active(`/loterias/${slug}`) ? "page" : undefined}>{cfg.name}</Link>)}
+                <Link href="/loterias" onClick={closeMenu}>Todas as loterias</Link>
+              </div>
+            </details>
+            <Link href="/noticias" onClick={closeMenu} aria-current={active("/noticias") ? "page" : undefined}>Notícias</Link>
+          </div>
+          <div className="header-tools" aria-label="Outras consultas">
+            {tools.map(tool => <Link key={tool.href} href={tool.href} onClick={closeMenu} aria-current={active(tool.href) ? "page" : undefined}>{tool.label}</Link>)}
+          </div>
         </nav>
       </div>
     </header>

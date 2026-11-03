@@ -86,10 +86,12 @@ description: "Concurso ${concurso} da ${nome} previsto para ${formatDDMMYYYY(dra
 loteria: ${loteriaKey}
 concurso: ${concurso}
 status: aguardando
+schedule_status: confirmed
 draw_date: "${drawDate}"
 numeros: []
 premio_principal: ${Math.round(premio)}
 ganhadores: 0
+source_url: "https://servicebus2.caixa.gov.br/portaldeloterias/api/${API_KEYS[loteriaKey]}/${data.numero}"
 keywords: "${nome} concurso ${concurso}"
 date: "${drawDate}"
 ---
@@ -110,28 +112,38 @@ function sourceNumbers(data, loteriaKey) {
   return loteriaKey === 'dupla-sena' && values.length !== 6 ? [] : values;
 }
 
+function cleanText(value) {
+  return String(value ?? '').replace(/[\u0000-\u001F\u007F-\u009F]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
 function extractDrawData(loteriaKey, data) {
-  const numeros = sourceNumbers(data, loteriaKey).map(n => String(n).padStart(2, '0'));
+  const numeros = sourceNumbers(data, loteriaKey).map(n => cleanText(n).padStart(2, '0'));
   if (loteriaKey !== 'super-sete') numeros.sort((a, b) => Number(a) - Number(b));
 
   const rateio = (Array.isArray(data.listaRateioPremio) ? data.listaRateioPremio : []).map((r, index) => ({
     faixa: Number(r.faixa) || index + 1,
-    descricao: String(r.descricaoFaixa || `Faixa ${index + 1}`).trim(),
+    descricao: cleanText(r.descricaoFaixa) || `Faixa ${index + 1}`,
     ganhadores: Math.max(0, Number(r.numeroDeGanhadores) || 0),
     premio: Math.max(0, Number(r.valorPremio) || 0),
   }));
   const municipios = (Array.isArray(data.listaMunicipioUFGanhadores) ? data.listaMunicipioUFGanhadores : [])
-    .filter(g => Number(g.ganhadores) > 0 && g.municipio)
-    .map(g => ({ municipio: String(g.municipio).trim(), uf: String(g.uf || '').trim(), ganhadores: Number(g.ganhadores) }));
+    .filter(g => Number(g.ganhadores) > 0 && cleanText(g.municipio))
+    .map(g => ({ municipio: cleanText(g.municipio), uf: cleanText(g.uf), ganhadores: Number(g.ganhadores) }));
   // Municípios podem ser uma lista parcial; o rateio define a faixa principal.
   const ganhadores = rateio.length > 0 ? rateio[0].ganhadores : municipios.reduce((sum, g) => sum + g.ganhadores, 0);
   const premioPrincipal = ganhadores > 0 ? rateio[0]?.premio || 0 : 0;
   const cidade = municipios.length === 1 ? `${municipios[0].municipio}, ${municipios[0].uf}` : undefined;
   const acumulou = typeof data.acumulado === 'boolean' ? data.acumulado : rateio.length > 0 ? ganhadores === 0 : undefined;
-  const numerosSegundoSorteio = (Array.isArray(data.listaDezenasSegundoSorteio) ? data.listaDezenasSegundoSorteio : [])
-    .map(n => String(n).padStart(2, '0')).sort((a, b) => Number(a) - Number(b));
-  const mesSorte = data.nomeMesSorte ? String(data.nomeMesSorte).trim() : undefined;
-  const timeCoracao = data.nomeTimeCoracaoMesSorte ? String(data.nomeTimeCoracaoMesSorte).trim() : undefined;
+  const numerosSegundoSorteio = (loteriaKey === 'dupla-sena' && Array.isArray(data.listaDezenasSegundoSorteio) ? data.listaDezenasSegundoSorteio : [])
+    .map(n => cleanText(n).padStart(2, '0')).sort((a, b) => Number(a) - Number(b));
+  // A API compartilha este campo entre o mês do Dia de Sorte e o time da
+  // Timemania; nas outras modalidades ele pode conter preenchimento NUL.
+  const mesSorte = loteriaKey === 'diadesorte'
+    ? cleanText(data.nomeMesSorte) || cleanText(data.nomeTimeCoracaoMesSorte) || undefined
+    : undefined;
+  const timeCoracao = loteriaKey === 'timemania'
+    ? cleanText(data.nomeTimeCoracaoMesSorte) || undefined
+    : undefined;
 
   return { numeros, ganhadores, cidade, premioPrincipal, acumulou, rateio, municipios, numerosSegundoSorteio, mesSorte, timeCoracao };
 }
@@ -240,7 +252,7 @@ ${proxPremio > 0 ? `Estimativa de prêmio: **${proxPremioStr}**.` : 'A estimativ
   return front;
 }
 
-export async function updateLoterias({ root, today, now = () => new Date().toISOString(), fetchImpl = fetch, wait = sleep }) {
+export async function updateLoterias({ root, today, now = () => new Date().toISOString(), fetchImpl = fetch, wait = sleep, refresh = {} }) {
   const CONTENT_DIR = path.join(root, 'content', 'loterias');
   let totalUpdated = 0;
   let totalChecked = 0;
@@ -292,6 +304,16 @@ export async function updateLoterias({ root, today, now = () => new Date().toISO
       if (numero > latestNumber) continue;
       if (fs.readFileSync(path.join(dir, file), 'utf-8').includes('status: aguardando')) candidates.add(numero);
     }
+    // Enriquecer arquivos históricos selecionados sem criar um novo artigo
+    // retroativo ou aceitar números que a fonte ainda não publicou.
+    const requestedRefresh = refresh?.[loteriaKey];
+    if (Array.isArray(requestedRefresh)) {
+      for (const numero of requestedRefresh) {
+        if (!Number.isInteger(numero) || numero <= 0 || numero > latestNumber) continue;
+        const fp = path.join(dir, `concurso-${numero}.mdx`);
+        if (fs.existsSync(fp) && scalar(fs.readFileSync(fp, 'utf-8'), 'status') === 'publicado') candidates.add(numero);
+      }
+    }
 
     console.log(`  ${NAMES[loteriaKey]}: conferindo ${candidates.size} concursos pela numeração oficial`);
     for (const concurso of [...candidates].sort((a, b) => a - b)) {
@@ -328,22 +350,12 @@ export async function updateLoterias({ root, today, now = () => new Date().toISO
       }
     }
 
-    // Datas futuras foram estimadas no passado e podem apontar para concursos
-    // que já ocorreram. Mantenha apenas o próximo concurso informado pela Caixa.
+    // As páginas de concursos futuros são permanentes. Confirmar somente o
+    // próximo calendário fornecido pela Caixa; preservar as demais pendências.
     const nextNumber = Number(latest.numeroConcursoProximo);
     const nextDate = parseBRDate(latest.dataProximoConcurso);
     const hasNext = Number.isInteger(nextNumber) && nextNumber > latestNumber && nextDate && nextDate >= today;
     const nextFile = hasNext ? `concurso-${nextNumber}.mdx` : null;
-    for (const file of files) {
-      const fp = path.join(dir, file);
-      if (!fs.readFileSync(fp, 'utf-8').includes('status: aguardando')) continue;
-      // Guardar pendências antigas que falharam: a próxima execução precisa
-      // poder tentar novamente. Só apagar previsões futuras não confirmadas.
-      if (file !== nextFile && Number(file.match(/\d+/)[0]) > latestNumber) {
-        fs.unlinkSync(fp);
-        totalUpdated++;
-      }
-    }
     if (nextFile) {
       const fp = path.join(dir, nextFile);
       const nextContent = buildAguardandoMDX(loteriaKey, latest);
