@@ -8,9 +8,8 @@ export const revalidate = 86400;
 const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
-  title: "Cotação do Dólar, Euro e Bitcoin Hoje | Hoje Notícia",
-  description: "Cotação atualizada do dólar, euro, libra, bitcoin e ethereum em reais. Variação diária e histórico de 30 dias.",
-  keywords: "cotação dólar hoje, cotação euro, bitcoin real, dólar comercial, euro hoje",
+  title: "Cotações de dólar, euro e criptomoedas em reais",
+  description: "Consulte as cotações registradas de dólar, euro, libra, bitcoin e ethereum em reais, com a data dos dados e o histórico disponível.",
   alternates: { canonical: `${BASE}/cotacao` },
 };
 
@@ -21,12 +20,14 @@ export default function CotacaoPage() {
     return (
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "2rem 1.25rem" }}>
         <h1>Cotações</h1>
-        <p>Cotações ainda não disponíveis. Volte em instantes.</p>
+        <p>Ainda não há cotações disponíveis para consulta.</p>
       </div>
     );
   }
 
   const updatedAt = new Date(data.updated_at).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+  const todayISO = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
+  const recordDay = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date(data.updated_at));
 
   const pares = Object.values(data.pares);
 
@@ -52,14 +53,19 @@ export default function CotacaoPage() {
 
       <div style={{ marginBottom: "2rem", borderBottom: "4px solid #16a34a", paddingBottom: "1rem" }}>
         <h1 style={{ fontSize: "2rem", fontWeight: 900, color: "#0f172a" }}>
-          💰 Cotações de Hoje
+          💰 Cotações em reais
         </h1>
         <p style={{ color: "#64748b", marginTop: "0.4rem", fontSize: "1.05rem" }}>
-          Dólar, Euro, Bitcoin e mais — em reais, atualizados diariamente.
+          Valores registrados para dólar, euro, outras moedas e criptoativos.
         </p>
         <p style={{ color: "#94a3b8", fontSize: "0.82rem", marginTop: "0.3rem" }}>
-          Última atualização: {updatedAt}
+          Dados consultados em: {updatedAt} (horário de Brasília). Os horários de cada par podem variar.
         </p>
+        {recordDay < todayISO && (
+          <p style={{ color: "#92400e", fontSize: "0.9rem", marginTop: "0.6rem" }}>
+            O registro disponível é de uma data anterior a hoje e pode não refletir os valores neste momento.
+          </p>
+        )}
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
@@ -97,11 +103,13 @@ export default function CotacaoPage() {
           Sobre as cotações
         </h2>
         <p style={{ color: "#475569", lineHeight: 1.7, marginBottom: "0.5rem" }}>
-          As cotações exibidas aqui são <strong>comerciais</strong>, usadas como referência por bancos e instituições financeiras.
-          Para compra efetiva (PTAX turismo) há acréscimo de IOF e spread bancário.
+          Os valores são referências informativas fornecidas pela AwesomeAPI. Eles não constituem uma oferta
+          de compra ou venda e podem diferir do preço final de uma operação. Consulte o valor e as condições
+          oferecidos pela instituição que realizará a transação.
         </p>
         <p style={{ color: "#475569", lineHeight: 1.7 }}>
-          Fonte: <a href="https://docs.awesomeapi.com.br/api-de-moedas" rel="nofollow" target="_blank">AwesomeAPI</a>, com base em dados do mercado.
+          Fonte dos valores: <a href="https://docs.awesomeapi.com.br/api-de-moedas" rel="noopener noreferrer" target="_blank" style={{ textDecoration: "underline" }}>AwesomeAPI</a>.
+          Os dados podem apresentar atraso; confira a data antes de usar uma cotação como referência.
         </p>
       </section>
     </div>

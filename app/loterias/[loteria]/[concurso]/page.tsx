@@ -4,6 +4,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import AdsterraBanner from "@/components/AdsterraBanner";
+import DrawNumbers from "@/components/DrawNumbers";
 import {
   LOTERIAS_CONFIG, getDrawBySlug, getDrawsByLoteria, formatDate, formatDateShort,
   type DrawMeta,
@@ -83,18 +84,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     },
     twitter: { card: "summary_large_image", title: draw.title, description: draw.description, images: [image] },
   };
-}
-
-function DrawNumbers({ numbers, color }: { numbers: string[]; color: string }) {
-  return (
-    <ol aria-label="Números sorteados" style={{ display: "flex", flexWrap: "wrap", gap: "0.6rem", padding: 0, margin: "1rem 0 1.5rem", listStyle: "none" }}>
-      {numbers.map((number, index) => (
-        <li key={`${index}-${number}`} style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", minWidth: 48, height: 48, padding: "0 0.65rem", borderRadius: 999, background: color, color: "#fff", fontWeight: 800, fontSize: "1rem", fontVariantNumeric: "tabular-nums" }}>
-          {String(number).padStart(2, "0")}
-        </li>
-      ))}
-    </ol>
-  );
 }
 
 export default async function DrawPage({ params }: Props) {
@@ -182,23 +171,24 @@ export default async function DrawPage({ params }: Props) {
       </header>
 
       {published ? (
-        <section aria-labelledby="resultado-title" style={{ background: "#fff", border: `1px solid ${cfg.color}`, borderRadius: 14, padding: "1.25rem", marginBottom: "2rem" }}>
+        <section className="draw-result" aria-labelledby="resultado-title" style={{ background: "#fff", border: `1px solid ${cfg.color}`, borderRadius: 14, padding: "1.25rem", marginBottom: "2rem" }}>
           <h2 id="resultado-title" style={{ fontSize: "1.35rem", fontWeight: 800 }}>Resultado do concurso {draw.concurso}</h2>
           <p style={{ color: "#475569", marginTop: "0.5rem" }}>Sorteio realizado em {formatDate(draw.draw_date)}.</p>
           {draw.numeros.length > 0 && <>
-            <h3 style={{ fontSize: "1rem", fontWeight: 700, marginTop: "1rem" }}>{draw.numeros_segundo_sorteio?.length ? "Primeiro sorteio" : "Números sorteados"}</h3>
-            <DrawNumbers numbers={draw.numeros} color={cfg.ballColor} />
+            <h3 style={{ fontSize: "1rem", fontWeight: 700, marginTop: "1rem" }}>{loteria === "federal" ? "Bilhetes do primeiro ao quinto prêmio" : loteria === "super-sete" ? "Dígitos por coluna" : draw.numeros_segundo_sorteio?.length ? "Primeiro sorteio" : "Números sorteados"}</h3>
+            <DrawNumbers values={draw.numeros} color={cfg.ballColor} loteria={loteria} />
           </>}
           {!!draw.numeros_segundo_sorteio?.length && <>
             <h3 style={{ fontSize: "1rem", fontWeight: 700 }}>Segundo sorteio</h3>
-            <DrawNumbers numbers={draw.numeros_segundo_sorteio} color={cfg.ballColor} />
+            <DrawNumbers values={draw.numeros_segundo_sorteio} color={cfg.ballColor} label="Números do segundo sorteio" />
           </>}
+          {!!draw.trevos_sorteados?.length && <><h3 style={{ fontSize: "1rem", fontWeight: 700 }}>Trevos sorteados</h3><DrawNumbers values={draw.trevos_sorteados} color={cfg.ballColor} label="Trevos sorteados" /></>}
           {draw.mes_sorte && <p><strong>Mês da sorte:</strong> {draw.mes_sorte}.</p>}
           {draw.time_coracao && <p><strong>Time do coração:</strong> {draw.time_coracao}.</p>}
-          {rateio.length > 0 || draw.ganhadores > 0
+          {loteria !== "federal" && (rateio.length > 0 || draw.ganhadores > 0
             ? <p style={{ marginTop: "0.75rem" }}><strong>Ganhadores na faixa principal:</strong> {integer.format(draw.ganhadores)}.</p>
-            : <p style={{ marginTop: "0.75rem" }}>Confira a premiação por faixa na fonte oficial.</p>}
-          {draw.premio_principal > 0 && <p><strong>Prêmio por aposta na faixa principal:</strong> {currency.format(draw.premio_principal)}.</p>}
+            : <p style={{ marginTop: "0.75rem" }}>Confira a premiação por faixa na fonte oficial.</p>)}
+          {draw.premio_principal > 0 && <p><strong>{loteria === "federal" ? "Valor do primeiro prêmio:" : "Prêmio por aposta na faixa principal:"}</strong> {currency.format(draw.premio_principal)}.</p>}
           {draw.cidade && municipalities.length === 0 && <p><strong>Local informado:</strong> {draw.cidade}.</p>}
         </section>
       ) : (
@@ -222,11 +212,11 @@ export default async function DrawPage({ params }: Props) {
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", fontSize: "0.92rem" }}>
               <thead><tr style={{ background: "#e2e8f0", textAlign: "left" }}>
-                <th scope="col" style={{ padding: "0.75rem" }}>Faixa</th><th scope="col" style={{ padding: "0.75rem" }}>Acertos</th>
-                <th scope="col" style={{ padding: "0.75rem" }}>Apostas ganhadoras</th><th scope="col" style={{ padding: "0.75rem" }}>Prêmio por aposta</th>
+                <th scope="col" style={{ padding: "0.75rem" }}>Faixa</th><th scope="col" style={{ padding: "0.75rem" }}>{loteria === "federal" ? "Bilhete" : "Acertos"}</th>
+                <th scope="col" style={{ padding: "0.75rem" }}>{loteria === "federal" ? "Contemplados" : "Apostas ganhadoras"}</th><th scope="col" style={{ padding: "0.75rem" }}>{loteria === "federal" ? "Valor do prêmio" : "Prêmio por aposta"}</th>
               </tr></thead>
               <tbody>{rateio.map((item, index) => <tr key={`${item.faixa}-${index}`} style={{ borderBottom: "1px solid #e2e8f0" }}>
-                <td style={{ padding: "0.75rem" }}>{item.faixa}</td><td style={{ padding: "0.75rem" }}>{item.descricao || `Faixa ${item.faixa}`}</td>
+                <td style={{ padding: "0.75rem" }}>{loteria === "federal" ? `${item.faixa}º prêmio` : item.faixa}</td><td style={{ padding: "0.75rem" }}>{loteria === "federal" ? draw.numeros[index] ?? "Consulte a fonte" : item.descricao || `Faixa ${item.faixa}`}</td>
                 <td style={{ padding: "0.75rem" }}>{integer.format(item.ganhadores)}</td><td style={{ padding: "0.75rem", whiteSpace: "nowrap" }}>{currency.format(item.premio)}</td>
               </tr>)}</tbody>
             </table>

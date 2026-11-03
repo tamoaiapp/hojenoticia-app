@@ -22,9 +22,8 @@ export async function generateMetadata({ params }: { params: Promise<{ moeda: st
   const par = data?.pares[code];
   const valor = par ? formatBRL(par.bid) : "";
   return {
-    title: `Cotação ${info.nome} Hoje — ${valor} | Hoje Notícia`,
-    description: `Cotação atual do ${info.nome} em reais: ${valor}. Variação, máxima, mínima e histórico de 30 dias.`,
-    keywords: `cotação ${info.nome.toLowerCase()}, ${info.nome.toLowerCase()} hoje, ${moeda} real, ${moeda} brl`,
+    title: `Cotação: ${info.nome} em reais`,
+    description: `Consulte a cotação registrada de ${info.nome} em reais${valor ? `: ${valor}` : ""}, a data dos dados, a variação informada e o histórico disponível.`,
     alternates: { canonical: `${BASE}/cotacao/${moeda}` },
   };
 }
@@ -49,6 +48,9 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
   const historico = data.historico?.[code] ?? [];
   const subiu = par.pctChange >= 0;
   const updatedAt = new Date(data.updated_at).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
+  const observedAt = Number.isFinite(par.timestamp) && par.timestamp > 0
+    ? new Date(par.timestamp * 1000).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
+    : null;
 
   // Estatísticas do histórico
   const valores = historico.map(h => h.bid).filter(v => v > 0);
@@ -82,16 +84,17 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
       <div style={{ marginBottom: "1.5rem", paddingBottom: "1rem", borderBottom: `4px solid ${info.cor}` }}>
         <h1 style={{ fontSize: "2rem", fontWeight: 900, color: "#0f172a", display: "flex", alignItems: "center", gap: "0.6rem" }}>
           <span style={{ fontSize: "2.2rem" }}>{info.emoji}</span>
-          Cotação {info.nome}
+          Cotação: {info.nome}
         </h1>
         <p style={{ color: "#94a3b8", fontSize: "0.82rem", marginTop: "0.4rem" }}>
-          Atualizado em: {updatedAt}
+          Dados consultados em: {updatedAt} (horário de Brasília).
         </p>
+        {observedAt && <p style={{ color: "#64748b", fontSize: "0.85rem", marginTop: "0.3rem" }}>Registro da fonte em: {observedAt} (horário de Brasília).</p>}
       </div>
 
       <div style={{ background: "#fff", borderRadius: 14, padding: "1.75rem", border: "1px solid #e2e8f0", marginBottom: "1.5rem" }}>
         <div style={{ fontSize: "0.85rem", color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", marginBottom: "0.4rem" }}>
-          Valor atual
+          Cotação registrada
         </div>
         <div style={{ fontSize: "2.8rem", fontWeight: 900, color: info.cor, lineHeight: 1 }}>
           {formatBRL(par.bid)}
@@ -102,22 +105,23 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem", marginBottom: "2rem" }}>
-        <Stat label="Compra" value={formatBRL(par.bid)} />
-        <Stat label="Venda" value={formatBRL(par.ask)} />
-        <Stat label="Máxima do dia" value={formatBRL(par.high)} />
-        <Stat label="Mínima do dia" value={formatBRL(par.low)} />
+        <Stat label="Compra informada pela fonte" value={formatBRL(par.bid)} />
+        <Stat label="Venda informada pela fonte" value={formatBRL(par.ask)} />
+        <Stat label="Máxima do dia registrado" value={formatBRL(par.high)} />
+        <Stat label="Mínima do dia registrado" value={formatBRL(par.low)} />
       </div>
 
       {historico.length > 0 && (
         <section style={{ marginBottom: "2rem" }}>
           <h2 style={{ fontSize: "1.25rem", fontWeight: 800, marginBottom: "0.75rem", color: "#0f172a" }}>
-            Histórico de 30 dias
+            Histórico disponível
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
-            <Stat label="Máx (30d)" value={formatBRL(max30)} />
-            <Stat label="Mín (30d)" value={formatBRL(min30)} />
-            <Stat label="Média (30d)" value={formatBRL(media30)} />
+            <Stat label="Máxima no histórico" value={formatBRL(max30)} />
+            <Stat label="Mínima no histórico" value={formatBRL(min30)} />
+            <Stat label="Média no histórico" value={formatBRL(media30)} />
           </div>
+          <p style={{ color: "#64748b", fontSize: "0.85rem", marginBottom: "0.75rem" }}>A tabela mostra até 15 registros do histórico fornecido pela fonte.</p>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.88rem" }}>
               <thead>
@@ -142,6 +146,15 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
           </div>
         </section>
       )}
+
+      <section style={{ color: "#475569", lineHeight: 1.7, marginBottom: "1.5rem" }}>
+        <h2 style={{ fontSize: "1.15rem", color: "#0f172a", marginBottom: "0.5rem" }}>Fonte e uso dos valores</h2>
+        <p>
+          Fonte: <a href="https://docs.awesomeapi.com.br/api-de-moedas" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>AwesomeAPI</a>.
+          As referências de compra e venda são campos da fonte, não preços oferecidos ao visitante.
+          Os dados podem apresentar atraso e não constituem uma oferta de negociação.
+        </p>
+      </section>
 
       <AdsterraNative />
 

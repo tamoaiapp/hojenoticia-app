@@ -78,6 +78,10 @@ button:disabled { cursor: default; }
 .result-numbers { display: flex; min-width: 0; flex-wrap: wrap; gap: 6px; padding: 0; margin: 16px 0; list-style: none; }
 .result-numbers li { display: inline-flex; min-width: 34px; height: 34px; align-items: center; justify-content: center; padding: 0 7px; border-radius: 50%; color: #fff; font-size: 0.82rem; font-weight: 750; font-variant-numeric: tabular-nums; line-height: 1; }
 .result-numbers .number-ticket { border-radius: 6px; font-size: 0.73rem; }
+.ordered-numbers li { height: auto; min-height: 50px; flex-direction: column; gap: 5px; padding: 8px; border-radius: 8px; }
+.number-position { font-size: 0.62rem; font-weight: 500; }
+.draw-result .result-numbers li { min-width: 44px; min-height: 44px; font-size: 1rem; }
+.draw-result .ordered-numbers li { min-height: 60px; }
 .numbers-label { margin-top: 12px; color: #64748b; font-size: 0.74rem; font-weight: 650; }
 .numbers-label + .result-numbers { margin-top: 8px; }
 .result-extra { margin-bottom: 8px; color: #475569; font-size: 0.78rem; }

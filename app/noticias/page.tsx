@@ -6,14 +6,15 @@ import { formatPublicationTime, getNewsDraws, newsArticleUrl, NEWS_SITE_URL } fr
 export const revalidate = 300;
 
 export const metadata: Metadata = {
-  title: "Notícias das loterias",
-  description: "Boletins das loterias publicados pelo Hoje Notícia, com fonte oficial e datas de publicação identificadas.",
+  title: "Notícias das loterias: resultados e premiação",
+  description: "Acompanhe notícias de Quina, Lotofácil, Mega-Sena e outras loterias no Hoje Notícia, com resultados, premiação disponível, fonte oficial e datas de publicação.",
   alternates: {
     canonical: `${NEWS_SITE_URL}/noticias`,
     types: { "application/rss+xml": `${NEWS_SITE_URL}/rss.xml` },
   },
   openGraph: {
-    title: "Notícias das loterias | Hoje Notícia",
+    title: "Notícias das loterias: resultados e premiação | Hoje Notícia",
+    description: "Boletins de resultados com dados da Caixa e datas de publicação identificadas.",
     url: `${NEWS_SITE_URL}/noticias`,
     type: "website",
   },
@@ -31,14 +32,20 @@ export default function NoticiasPage() {
       <header style={{ marginBottom: "2rem" }}>
         <h1 style={{ fontSize: "2rem", lineHeight: 1.2, marginBottom: "0.75rem" }}>Notícias das loterias</h1>
         <p style={{ maxWidth: 760, color: "#475569" }}>
-          Boletins publicados pelo Hoje Notícia com dados confirmados na Caixa. A data do sorteio aparece separada do horário de publicação.
+          Acompanhe os boletins de Quina, Lotofácil, Mega-Sena e outras loterias publicados pelo Hoje Notícia, com dados confirmados na Caixa. Cada publicação identifica a data do sorteio e o horário de publicação.
         </p>
         <p style={{ marginTop: "0.75rem", fontSize: "0.9rem", color: "#475569" }}>
-          Publicação: <Link href="/sobre" style={{ color: "#166534", textDecoration: "underline" }}>Hoje Notícia</Link>.
+          Publicado por <Link href="/sobre" style={{ color: "#166534", textDecoration: "underline" }}>Hoje Notícia</Link>.
           {" "}Responsável pelo site: <Link href="/equipe/tiago-oliveira" style={{ color: "#166534", textDecoration: "underline" }}>Tiago Oliveira</Link>.
           {" "}<a href="/rss.xml" style={{ color: "#166534", textDecoration: "underline" }}>Acompanhar por RSS</a>.
         </p>
       </header>
+      <nav aria-label="Consultar resultados de loterias" style={{ display: "flex", flexWrap: "wrap", gap: ".6rem 1.25rem", marginBottom: "1.5rem", fontSize: ".9rem", textDecoration: "underline" }}>
+        <Link href="/loterias">Arquivo de resultados</Link>
+        <Link href="/loterias/quina">Resultados da Quina</Link>
+        <Link href="/loterias/lotofacil">Resultados da Lotofácil</Link>
+        <Link href="/loterias/mega-sena">Resultados da Mega-Sena</Link>
+      </nav>
 
       {draws.length === 0 ? (
         <section style={{ background: "#fff", border: "1px solid #e2e8f0", borderRadius: 16, padding: "1.5rem" }}>

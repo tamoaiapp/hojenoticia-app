@@ -4,6 +4,7 @@ import Link from "next/link";
 import AdsterraBanner from "@/components/AdsterraBanner";
 import AdsterraNative from "@/components/AdsterraNative";
 import FutureContests from "@/components/FutureContests";
+import DrawNumbers from "@/components/DrawNumbers";
 import {
   LOTERIAS_CONFIG, getDrawsByLoteria,
   formatBRL, formatDate, formatDateShort,
@@ -26,33 +27,21 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!cfg) return {};
   const draws = getDrawsByLoteria(loteria).filter(d => d.status === "publicado");
   const latest = draws[0];
-  const prize = latest?.proximo_premio ? ` — próximo prêmio ${formatBRL(latest.proximo_premio)}` : "";
+  const title = `Resultado da ${cfg.name}: ${latest ? `concurso ${latest.concurso} e ` : ""}histórico`;
+  const description = latest
+    ? `Resultado da ${cfg.name} ${latest.concurso}, sorteado em ${formatDateShort(latest.draw_date)}. Consulte ${loteria === "federal" ? "os bilhetes" : "os números"}, a premiação disponível e os concursos anteriores e futuros.`
+    : `Acompanhe o resultado da ${cfg.name}, o histórico de concursos e a programação confirmada disponível para os próximos sorteios.`;
   return {
-    title: `Resultado ${cfg.name} – Último Concurso e Histórico${prize}`,
-    description: `Confira o resultado da ${cfg.name}, o último concurso sorteado e o histórico completo de resultados. ${cfg.description}`,
-    keywords: `resultado ${loteria}, ${loteria} resultado hoje, concurso ${loteria}, dezenas ${loteria}`,
+    title,
+    description,
     alternates: { canonical: `${BASE}/loterias/${loteria}` },
     openGraph: {
-      title: `Resultado ${cfg.name}`,
-      description: `Último resultado e histórico completo da ${cfg.name}.`,
+      title,
+      description,
       url: `${BASE}/loterias/${loteria}`,
       type: "website",
     },
   };
-}
-
-function NumberBall({ num, color, size = 44 }: { num: string; color: string; size?: number }) {
-  return (
-    <span style={{
-      display: "inline-flex", alignItems: "center", justifyContent: "center",
-      width: size, height: size, borderRadius: "50%",
-      background: color, color: "#fff",
-      fontWeight: 800, fontSize: size > 40 ? "1.05rem" : "0.82rem", flexShrink: 0,
-      boxShadow: `0 3px 8px ${color}55`,
-    }}>
-      {num.padStart(2, "0")}
-    </span>
-  );
 }
 
 export default async function LoteriasPage({ params }: Props) {
@@ -64,9 +53,10 @@ export default async function LoteriasPage({ params }: Props) {
   const published  = draws.filter(d => d.status === "publicado");
   const latest     = published[0];
   const todayISO = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date());
-  const upcoming   = draws.filter(d => d.status === "aguardando" && latest &&
+  const upcoming   = draws.filter(d => d.status === "aguardando" && d.schedule_status === "confirmed" && latest &&
     d.concurso === latest.proximo_concurso && d.draw_date === latest.proxima_data && d.draw_date >= todayISO);
   const recent     = published.slice(1, 10);
+  const archive = published.slice(10);
 
   const pageUrl = `${BASE}/loterias/${loteria}`;
 
@@ -78,7 +68,7 @@ export default async function LoteriasPage({ params }: Props) {
     itemListElement: published.slice(0, 20).map((d, i) => ({
       "@type": "ListItem",
       position: i + 1,
-      name: d.title,
+      name: `Resultado da ${cfg.name} ${d.concurso}: ${formatDateShort(d.draw_date)}`,
       url: `${BASE}/loterias/${loteria}/${d.slug}`,
     })),
   };
@@ -88,36 +78,25 @@ export default async function LoteriasPage({ params }: Props) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "Início", item: BASE },
-      { "@type": "ListItem", position: 2, name: cfg.name, item: pageUrl },
+      { "@type": "ListItem", position: 2, name: "Loterias", item: `${BASE}/loterias` },
+      { "@type": "ListItem", position: 3, name: cfg.name, item: pageUrl },
     ],
   };
-
-  // Maior prêmio histórico (entre os publicados) — útil pro FAQ
-  const biggestPrize = published.reduce(
-    (max, d) => (d.premio_principal > max.premio_principal ? d : max),
-    published[0] ?? { premio_principal: 0, concurso: 0, draw_date: "" },
-  );
 
   const faqMain: { q: string; a: string }[] = [
     {
       q: `Como funciona a ${cfg.name}?`,
-      a: `${cfg.description} Os sorteios acontecem ${cfg.freq.toLowerCase()} e são realizados pela Caixa Econômica Federal.`,
+      a: `${cfg.description} Os sorteios são realizados pela Caixa Econômica Federal.`,
     },
     {
       q: `Quando são os sorteios da ${cfg.name}?`,
-      a: `Os sorteios da ${cfg.name} acontecem ${cfg.freq.toLowerCase()}, geralmente por volta das 20h (horário de Brasília).`,
+      a: `Consulte a programação oficial da Caixa para confirmar o dia e o horário de cada concurso da ${cfg.name}. As datas podem mudar em feriados e concursos especiais. As páginas futuras indicam quando a data ainda não foi confirmada.`,
     },
   ];
   if (latest) {
     faqMain.push({
       q: `Qual foi o último resultado da ${cfg.name}?`,
-      a: `O último resultado da ${cfg.name} foi o concurso ${latest.concurso}, sorteado em ${formatDate(latest.draw_date)}. As dezenas foram: ${latest.numeros.map((n) => n.padStart(2, "0")).join(", ")}.`,
-    });
-  }
-  if (biggestPrize && biggestPrize.concurso > 0 && biggestPrize.premio_principal > 0) {
-    faqMain.push({
-      q: `Qual o maior prêmio já pago pela ${cfg.name}?`,
-      a: `Entre os concursos registrados aqui, o maior prêmio principal pago pela ${cfg.name} foi de ${formatBRL(biggestPrize.premio_principal)} no concurso ${biggestPrize.concurso}, em ${formatDate(biggestPrize.draw_date)}.`,
+      a: `O último resultado da ${cfg.name} publicado neste arquivo é o concurso ${latest.concurso}, sorteado em ${formatDate(latest.draw_date)}. Consulte os números e a premiação disponível no link desse concurso.`,
     });
   }
   const faqLd = {
@@ -140,29 +119,10 @@ export default async function LoteriasPage({ params }: Props) {
       <nav aria-label="Breadcrumb" style={{ fontSize: "0.82rem", color: "#94a3b8", marginBottom: "1.25rem", display: "flex", gap: "0.4rem", flexWrap: "wrap" }}>
         <Link href="/" style={{ color: "#2563eb" }}>Início</Link>
         <span>/</span>
+        <Link href="/loterias" style={{ color: "#2563eb" }}>Loterias</Link>
+        <span>/</span>
         <span>{cfg.name}</span>
       </nav>
-
-      {/* CTA Estatísticas no topo */}
-      <Link href={`/loterias/${loteria}/estatisticas`} style={{ textDecoration: "none", display: "block" }}>
-        <div style={{
-          background: "#fff", border: `2px solid ${cfg.color}`,
-          borderRadius: 12, padding: "0.85rem 1.25rem",
-          marginBottom: "1.5rem",
-          display: "flex", alignItems: "center", gap: "0.75rem",
-        }}>
-          <span style={{ fontSize: "1.4rem" }}>🔮</span>
-          <div style={{ flex: 1 }}>
-            <div style={{ fontSize: "0.95rem", fontWeight: 800, color: "#0f172a" }}>
-              Quais números saem mais na {cfg.name}?
-            </div>
-            <div style={{ fontSize: "0.8rem", color: "#64748b" }}>
-              Veja estatística completa + sugestão pro próximo sorteio
-            </div>
-          </div>
-          <span style={{ color: cfg.color, fontWeight: 800, fontSize: "0.85rem" }}>Ver →</span>
-        </div>
-      </Link>
 
       {/* Hero com último resultado */}
       <div style={{
@@ -173,70 +133,66 @@ export default async function LoteriasPage({ params }: Props) {
           <span style={{ fontSize: "2.5rem" }}>{cfg.emoji}</span>
           <div>
             <h1 style={{ fontSize: "1.8rem", fontWeight: 900, lineHeight: 1.2 }}>
-              Resultado {cfg.name}
+              Resultado da {cfg.name}
             </h1>
-            <p style={{ opacity: 0.8, fontSize: "0.88rem" }}>{cfg.freq} · {cfg.description}</p>
+            <p style={{ opacity: 0.95, fontSize: "0.88rem", marginTop: ".5rem" }}>{cfg.description}</p>
           </div>
         </div>
 
         {latest ? (
           <>
             <div style={{ fontSize: "0.78rem", opacity: 0.75, marginBottom: "0.5rem", textTransform: "uppercase", letterSpacing: 1 }}>
-              Último resultado — Concurso {latest.concurso} · {formatDate(latest.draw_date)}
+              Último resultado publicado — Concurso {latest.concurso} · {formatDate(latest.draw_date)}
             </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem", marginBottom: "1rem" }}>
-              {latest.numeros.map((n) => (
-                <span key={n} style={{
-                  display: "inline-flex", alignItems: "center", justifyContent: "center",
-                  width: 50, height: 50, borderRadius: "50%",
-                  background: "rgba(255,255,255,0.25)", color: "#fff",
-                  fontWeight: 900, fontSize: "1.1rem", border: "2px solid rgba(255,255,255,0.4)",
-                }}>
-                  {n.padStart(2, "0")}
-                </span>
-              ))}
-            </div>
+            <DrawNumbers values={latest.numeros} color={cfg.ballColor} loteria={loteria} />
+            {!!latest.numeros_segundo_sorteio?.length && <div style={{ margin: ".75rem 0" }}><p style={{ marginBottom: ".5rem" }}>Segundo sorteio</p><DrawNumbers values={latest.numeros_segundo_sorteio} color={cfg.ballColor} loteria={loteria} label="Números do segundo sorteio" /></div>}
+            {!!latest.trevos_sorteados?.length && <p style={{ margin: ".75rem 0" }}><strong>Trevos:</strong> {latest.trevos_sorteados.join(" · ")}</p>}
+            {latest.mes_sorte && <p style={{ margin: ".75rem 0" }}><strong>Mês da sorte:</strong> {latest.mes_sorte}</p>}
+            {latest.time_coracao && <p style={{ margin: ".75rem 0" }}><strong>Time do coração:</strong> {latest.time_coracao}</p>}
             <div style={{ display: "flex", gap: "1.5rem", flexWrap: "wrap", fontSize: "0.9rem" }}>
-              {latest.ganhadores > 0 ? (
-                <span>🏆 <strong>{latest.ganhadores} ganhador{latest.ganhadores > 1 ? "es"  : ""}</strong> — {formatBRL(latest.premio_principal)}</span>
-              ) : (
+              {loteria === "federal" ? <span>Confira a premiação de cada bilhete nos detalhes da extração.</span> : latest.ganhadores > 0 ? (
+                <span>🏆 <strong>{latest.ganhadores} aposta{latest.ganhadores > 1 ? "s" : ""} ganhadora{latest.ganhadores > 1 ? "s" : ""} na faixa principal</strong>{latest.premio_principal > 0 ? ` — ${latest.premio_principal.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} por aposta` : ""}</span>
+              ) : latest.acumulou === true ? (
                 <span>🔄 <strong>Acumulou!</strong> Nenhum ganhador do prêmio principal</span>
-              )}
-              {latest.proxima_data && latest.proxima_data >= todayISO && (
-                <span>📅 Próximo sorteio: <strong>{formatDateShort(latest.proxima_data)}</strong>
-                  {latest.proximo_premio ? ` — ${formatBRL(latest.proximo_premio)}` : ""}</span>
-              )}
+              ) : <span>Consulte a premiação disponível nos detalhes do concurso.</span>}
             </div>
+            <Link href={`/loterias/${loteria}/${latest.slug}`} style={{ display: "inline-block", color: "#fff", fontWeight: 800, textDecoration: "underline", marginTop: "1rem" }}>Ver resultado e premiação da {cfg.name} {latest.concurso} →</Link>
           </>
         ) : (
-          <p style={{ opacity: 0.8 }}>Resultados em breve. Acompanhe aqui!</p>
+          <p style={{ opacity: 0.95 }}>Ainda não há resultado publicado neste arquivo. Consulte a fonte oficial da Caixa.</p>
         )}
       </div>
 
+      <nav aria-label={`Consultar ${cfg.name}`} style={{ display: "flex", flexWrap: "wrap", gap: ".75rem 1.25rem", marginBottom: "1.5rem", fontSize: ".9rem", textDecoration: "underline" }}>
+        <a href="#historico">Histórico de resultados</a>
+        {draws.some(draw => draw.status === "aguardando" && draw.concurso > (latest?.concurso || 0)) && <a href="#future-contests-title">Próximos concursos</a>}
+        <Link href={`/loterias/${loteria}/estatisticas`}>Estatísticas da {cfg.name}</Link>
+        <a href={cfg.sourceUrl} target="_blank" rel="noopener noreferrer">Programação e regras na Caixa</a>
+      </nav>
       <AdsterraBanner size="728x90" showOn="desktop" />
       <AdsterraBanner size="320x50" showOn="mobile" />
 
       <div className="lottery-page-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 300px", gap: "2rem", alignItems: "start" }}>
 
         {/* Coluna principal */}
-        <div>
+        <div style={{ minWidth: 0 }}>
           {/* Próximos sorteios */}
           {upcoming.length > 0 && (
             <section style={{ marginBottom: "2rem" }}>
               <h2 style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", textTransform: "uppercase", letterSpacing: 1, marginBottom: "1rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
                 <span style={{ background: "#ef4444", color: "#fff", borderRadius: 4, padding: "0.1rem 0.4rem", fontSize: "0.7rem" }}>PRÓXIMOS</span>
-                Sorteios Previstos
+                Próximo concurso informado pela Caixa
               </h2>
               <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
                 {upcoming.map(d => (
                   <Link key={d.slug} href={`/loterias/${loteria}/${d.slug}`} style={{ textDecoration: "none" }}>
                     <div style={{
-                      display: "flex", alignItems: "center", gap: "1rem",
+                      display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap",
                       background: "#fff", borderRadius: 10, padding: "0.75rem 1rem",
                       border: "1px solid #e2e8f0", justifyContent: "space-between",
                     }}>
                       <div>
-                        <span style={{ fontWeight: 700, color: "#1e293b", fontSize: "0.9rem" }}>Concurso {d.concurso}</span>
+                        <span style={{ fontWeight: 700, color: "#1e293b", fontSize: "0.9rem" }}>{cfg.name} {d.concurso}</span>
                         <span style={{ color: "#94a3b8", fontSize: "0.82rem", marginLeft: "0.5rem" }}>— {formatDate(d.draw_date)}</span>
                       </div>
                       <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
@@ -257,46 +213,23 @@ export default async function LoteriasPage({ params }: Props) {
           )}
 
           {/* Histórico */}
-          {published.length > 0 && (
-            <section>
+          <section id="historico" style={{ scrollMarginTop: "1rem" }}>
               <h2 style={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", textTransform: "uppercase", letterSpacing: 1, marginBottom: "1rem" }}>
-                Histórico de Resultados
+                Histórico de resultados da {cfg.name}
               </h2>
+              <p style={{ color: "#64748b", fontSize: ".9rem", marginBottom: "1rem" }}>{published.length} concurso{published.length === 1 ? "" : "s"} publicado{published.length === 1 ? "" : "s"} neste arquivo. Abra um concurso para consultar o resultado e a premiação disponível.</p>
 
-              {/* Último resultado (card grande) */}
-              {latest && (
-                <Link href={`/loterias/${loteria}/${latest.slug}`} style={{ textDecoration: "none" }}>
-                  <div style={{
-                    background: "#fff", borderRadius: 14, padding: "1.25rem",
-                    border: `2px solid ${cfg.color}`, marginBottom: "0.75rem",
-                  }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.75rem", flexWrap: "wrap", gap: "0.5rem" }}>
-                      <span style={{ fontWeight: 800, color: "#0f172a" }}>Concurso {latest.concurso}</span>
-                      <span style={{ color: "#64748b", fontSize: "0.82rem" }}>{formatDate(latest.draw_date)}</span>
-                    </div>
-                    <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "0.75rem" }}>
-                      {latest.numeros.map(n => <NumberBall key={n} num={n} color={cfg.ballColor} />)}
-                    </div>
-                    {latest.ganhadores > 0 ? (
-                      <span style={{ fontSize: "0.85rem", color: "#16a34a", fontWeight: 700 }}>
-                        🏆 {latest.ganhadores} ganhador{latest.ganhadores > 1 ? "es" : ""} — {formatBRL(latest.premio_principal)}
-                      </span>
-                    ) : (
-                      <span style={{ fontSize: "0.85rem", color: "#64748b" }}>Acumulou</span>
-                    )}
-                  </div>
-                </Link>
-              )}
+              {latest && <p style={{ marginBottom: "1rem", fontSize: ".9rem" }}><Link href={`/loterias/${loteria}/${latest.slug}`} style={{ color: cfg.ballColor, fontWeight: 700, textDecoration: "underline" }}>Último publicado: {cfg.name} {latest.concurso}, de {formatDateShort(latest.draw_date)}</Link></p>}
 
               {/* Tabela dos outros */}
               {recent.length > 0 && (
-                <div style={{ background: "#fff", borderRadius: 14, overflow: "hidden", border: "1px solid #e2e8f0" }}>
+                <div style={{ background: "#fff", borderRadius: 14, overflowX: "auto", border: "1px solid #e2e8f0" }}>
                   <table style={{ width: "100%", borderCollapse: "collapse" }}>
                     <thead>
                       <tr style={{ background: "#f8fafc" }}>
                         <th style={{ padding: "0.65rem 1rem", textAlign: "left", fontSize: "0.78rem", color: "#64748b", fontWeight: 700, textTransform: "uppercase" }}>Concurso</th>
                         <th style={{ padding: "0.65rem 1rem", textAlign: "left", fontSize: "0.78rem", color: "#64748b", fontWeight: 700, textTransform: "uppercase" }}>Data</th>
-                        <th style={{ padding: "0.65rem 1rem", textAlign: "left", fontSize: "0.78rem", color: "#64748b", fontWeight: 700, textTransform: "uppercase" }}>Dezenas</th>
+                        <th style={{ padding: "0.65rem 1rem", textAlign: "left", fontSize: "0.78rem", color: "#64748b", fontWeight: 700, textTransform: "uppercase" }}>{loteria === "federal" ? "Bilhetes por prêmio" : loteria === "super-sete" ? "Colunas de 1 a 7" : loteria === "dupla-sena" ? "Primeiro e segundo sorteios" : "Números"}</th>
                         <th style={{ padding: "0.65rem 1rem", textAlign: "right", fontSize: "0.78rem", color: "#64748b", fontWeight: 700, textTransform: "uppercase" }}>Resultado</th>
                       </tr>
                     </thead>
@@ -305,22 +238,19 @@ export default async function LoteriasPage({ params }: Props) {
                         <tr key={d.slug} style={{ borderTop: "1px solid #f1f5f9", background: i % 2 === 0 ? "#fff" : "#fafafa" }}>
                           <td style={{ padding: "0.65rem 1rem" }}>
                             <Link href={`/loterias/${loteria}/${d.slug}`} style={{ color: cfg.color, fontWeight: 700, fontSize: "0.88rem" }}>
-                              {d.concurso}
+                              {cfg.name} {d.concurso}
                             </Link>
                           </td>
                           <td style={{ padding: "0.65rem 1rem", fontSize: "0.85rem", color: "#64748b" }}>{formatDateShort(d.draw_date)}</td>
                           <td style={{ padding: "0.65rem 1rem" }}>
-                            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.2rem" }}>
-                              {d.numeros.slice(0, 6).map(n => (
-                                <NumberBall key={n} num={n} color={cfg.ballColor} size={28} />
-                              ))}
-                              {d.numeros.length > 6 && <span style={{ fontSize: "0.75rem", color: "#94a3b8", alignSelf: "center" }}>+{d.numeros.length - 6}</span>}
-                            </div>
+                            <span style={{ fontSize: ".82rem", lineHeight: 1.8, overflowWrap: "anywhere" }}>{d.numeros.join(" · ")}</span>
+                            {!!d.numeros_segundo_sorteio?.length && <p style={{ fontSize: ".82rem", lineHeight: 1.8 }}>2º: {d.numeros_segundo_sorteio.join(" · ")}</p>}
+                            {!!d.trevos_sorteados?.length && <p style={{ fontSize: ".82rem", lineHeight: 1.8 }}>Trevos: {d.trevos_sorteados.join(" · ")}</p>}
                           </td>
                           <td style={{ padding: "0.65rem 1rem", textAlign: "right", fontSize: "0.82rem" }}>
-                            {d.ganhadores > 0
+                            {loteria === "federal" ? <span>Ver prêmios</span> : d.ganhadores > 0
                               ? <span style={{ color: "#16a34a", fontWeight: 700 }}>🏆 {d.ganhadores} gan.</span>
-                              : <span style={{ color: "#94a3b8" }}>Acumulou</span>}
+                              : <span style={{ color: "#64748b" }}>{d.acumulou === true ? "Acumulou" : "Ver premiação"}</span>}
                           </td>
                         </tr>
                       ))}
@@ -328,16 +258,26 @@ export default async function LoteriasPage({ params }: Props) {
                   </table>
                 </div>
               )}
+              {archive.length > 0 && <details style={{ marginTop: "1rem", padding: "1rem", border: "1px solid #e2e8f0", background: "#fff", borderRadius: 12 }}>
+                <summary style={{ cursor: "pointer", fontWeight: 800 }}>Consultar mais {archive.length} resultados anteriores da {cfg.name}</summary>
+                <ul style={{ listStyle: "none", padding: 0, marginTop: "1rem", display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))", gap: ".7rem" }}>
+                  {archive.map(draw => <li key={draw.slug}><Link href={`/loterias/${loteria}/${draw.slug}`} style={{ color: cfg.ballColor, fontSize: ".85rem", textDecoration: "underline" }}>{cfg.name} {draw.concurso} — {formatDateShort(draw.draw_date)}</Link></li>)}
+                </ul>
+              </details>}
             </section>
-          )}
 
           {draws.length === 0 && (
             <div style={{ textAlign: "center", padding: "3rem", color: "#94a3b8" }}>
-              <p>Resultados sendo publicados em breve.</p>
+              <p>Nenhum concurso disponível neste arquivo.</p>
             </div>
           )}
 
           <FutureContests lottery={loteria} name={cfg.name} draws={draws.filter(draw => draw.status === "aguardando" && draw.concurso > (latest?.concurso || 0))} />
+          <section style={{ margin: "2rem 0" }}>
+            <h2 style={{ fontSize: "1.3rem", marginBottom: "1rem" }}>Dúvidas sobre a {cfg.name}</h2>
+            {faqMain.map(item => <div key={item.q} style={{ marginBottom: "1.25rem" }}><h3 style={{ fontSize: "1rem", marginBottom: ".4rem" }}>{item.q}</h3><p style={{ color: "#475569", lineHeight: 1.7, fontSize: ".92rem" }}>{item.a}</p></div>)}
+            <p style={{ fontSize: ".88rem" }}>Fonte: <a href={cfg.sourceUrl} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>{cfg.name} no portal Loterias Caixa</a>. <Link href="/correcoes" style={{ textDecoration: "underline" }}>Informar uma correção</Link>.</p>
+          </section>
           <AdsterraNative />
         </div>
 
@@ -345,12 +285,12 @@ export default async function LoteriasPage({ params }: Props) {
         <aside style={{ position: "sticky", top: "2rem" }}>
           <AdsterraBanner size="300x250" />
           <div style={{ background: "#fff", borderRadius: 14, padding: "1.25rem", border: "1px solid #e2e8f0", marginBottom: "1.25rem" }}>
-            <div style={{ fontWeight: 800, fontSize: "0.85rem", color: "#0f172a", textTransform: "uppercase", letterSpacing: 1, borderBottom: `3px solid ${cfg.color}`, paddingBottom: "0.5rem", marginBottom: "1rem" }}>
+            <h2 style={{ fontWeight: 800, fontSize: "0.85rem", color: "#0f172a", textTransform: "uppercase", letterSpacing: 1, borderBottom: `3px solid ${cfg.color}`, paddingBottom: "0.5rem", marginBottom: "1rem" }}>
               Outras Loterias
-            </div>
+            </h2>
             {Object.entries(LOTERIAS_CONFIG).filter(([s]) => s !== loteria).map(([s, c]) => (
               <Link key={s} href={`/loterias/${s}`} style={{ display: "flex", alignItems: "center", gap: "0.5rem", padding: "0.5rem 0", borderBottom: "1px solid #f1f5f9", textDecoration: "none", fontSize: "0.88rem", fontWeight: 600, color: "#1e293b" }}>
-                <span>{c.emoji}</span> {c.name}
+                <span>{c.emoji}</span> Resultado da {c.name}
                 <span style={{ marginLeft: "auto", color: "#94a3b8", fontSize: "0.78rem" }}>Ver →</span>
               </Link>
             ))}

@@ -8,20 +8,20 @@ export const revalidate = 86400;
 const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
-  title: "Horóscopo do Dia — Previsão dos 12 Signos | Hoje Notícia",
-  description: "Horóscopo do dia para os 12 signos: amor, trabalho, dinheiro, saúde, número e cor da sorte. Atualizado diariamente.",
-  keywords: "horoscopo do dia, horoscopo hoje, previsão signos, áries hoje, touro hoje, gêmeos hoje",
+  title: "Horóscopo: previsões dos 12 signos",
+  description: "Consulte a edição disponível do horóscopo dos 12 signos, com a data da previsão, temas do cotidiano, número e cor da sorte.",
   alternates: { canonical: `${BASE}/horoscopo` },
 };
 
 export default function HoroscopoPage() {
   const data = getHoroscopoLatest();
   const dataDia = data ? formatDateBR(data.date) : "";
+  const todayISO = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
 
   const itemListLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Horóscopo do dia",
+    name: "Horóscopo dos 12 signos",
     url: `${BASE}/horoscopo`,
     itemListElement: SIGNOS_LIST.map((s, i) => ({
       "@type": "ListItem",
@@ -40,11 +40,14 @@ export default function HoroscopoPage() {
 
       <div style={{ marginBottom: "2rem", borderBottom: "4px solid #7c3aed", paddingBottom: "1rem" }}>
         <h1 style={{ fontSize: "2rem", fontWeight: 900, color: "#0f172a" }}>
-          ✨ Horóscopo do Dia
+          ✨ Horóscopo dos 12 signos
         </h1>
         <p style={{ color: "#64748b", marginTop: "0.4rem", fontSize: "1.05rem" }}>
-          Previsão dos 12 signos para {dataDia || "hoje"}.
+          {dataDia ? `Edição de ${dataDia}.` : "Escolha um signo para consultar as previsões disponíveis."}
         </p>
+        {data && data.date < todayISO && <p style={{ color: "#92400e", marginTop: "0.6rem" }}>A edição disponível é anterior a hoje. A previsão para a data atual ainda não está disponível nesta página.</p>}
+        {data && data.date > todayISO && <p style={{ color: "#64748b", marginTop: "0.6rem" }}>Esta edição se refere a uma data futura; confira a data antes de ler.</p>}
+        <p style={{ color: "#64748b", fontSize: "0.85rem", marginTop: "0.6rem" }}>Conteúdo de entretenimento produzido com automação.</p>
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1rem" }}>
@@ -69,7 +72,7 @@ export default function HoroscopoPage() {
                       {signo.geral.length > 130 ? signo.geral.slice(0, 130) + "…" : signo.geral}
                     </p>
                   ) : (
-                    <p style={{ color: "#94a3b8", fontSize: "0.88rem" }}>Previsão em instantes...</p>
+                    <p style={{ color: "#94a3b8", fontSize: "0.88rem" }}>Previsão ainda não disponível.</p>
                   )}
                   <div style={{ marginTop: "0.75rem", fontSize: "0.82rem", color: s.cor, fontWeight: 700 }}>
                     Ver previsão completa →

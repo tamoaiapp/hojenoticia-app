@@ -1,4 +1,4 @@
-import { getDrawsByLoteria, type DrawMeta } from "./loterias";
+import { getDrawsByLoteria } from "./loterias";
 import { LOTERIAS_CONFIG } from "./loterias-config";
 
 export interface NumeroFrequencia {
@@ -25,7 +25,7 @@ export interface EstatisticasLoteria {
 
 export function calcularEstatisticas(loteria: string): EstatisticasLoteria | null {
   const cfg = LOTERIAS_CONFIG[loteria];
-  if (!cfg) return null;
+  if (!cfg || loteria === "federal" || loteria === "super-sete") return null;
 
   const draws = getDrawsByLoteria(loteria)
     .filter((d) => d.status === "publicado" && d.numeros.length > 0)
@@ -33,27 +33,27 @@ export function calcularEstatisticas(loteria: string): EstatisticasLoteria | nul
 
   if (draws.length === 0) return null;
 
-  const totalNumeros = inferirTotalNumeros(cfg.apiKey, draws);
-  const freqMap = new Map<string, { vezes: number; ultimoConcurso: number }>();
+  const totalNumeros = TOTAL_NUMEROS[cfg.apiKey];
+  if (!totalNumeros) return null;
+  const freqMap = new Map<string, { vezes: number; ultimoConcurso: number; ultimoIndice: number }>();
 
   // Inicializa todos os números possíveis
   const inicio = cfg.apiKey === "lotomania" ? 0 : 1;
-  for (let i = inicio; i <= totalNumeros; i++) {
-    freqMap.set(String(i).padStart(2, "0"), { vezes: 0, ultimoConcurso: 0 });
+  for (let i = inicio; i < inicio + totalNumeros; i++) {
+    freqMap.set(String(i).padStart(2, "0"), { vezes: 0, ultimoConcurso: 0, ultimoIndice: -1 });
   }
 
   let totalNumerosSorteados = 0;
   let pares = 0;
   let impares = 0;
-  const ultimoConcurso = draws[draws.length - 1].concurso;
-
-  for (const d of draws) {
+  for (const [indice, d] of draws.entries()) {
     for (const n of d.numeros) {
       const padded = n.padStart(2, "0");
       const entry = freqMap.get(padded);
       if (entry) {
         entry.vezes++;
         entry.ultimoConcurso = d.concurso;
+        entry.ultimoIndice = indice;
       }
       totalNumerosSorteados++;
       const num = Number(n);
@@ -70,7 +70,7 @@ export function calcularEstatisticas(loteria: string): EstatisticasLoteria | nul
       vezes: info.vezes,
       percentual: totalSorteios > 0 ? (info.vezes / totalSorteios) * 100 : 0,
       ultimoConcurso: info.ultimoConcurso || undefined,
-      atrasoConcursos: info.ultimoConcurso > 0 ? ultimoConcurso - info.ultimoConcurso : undefined,
+      atrasoConcursos: info.ultimoIndice >= 0 ? draws.length - 1 - info.ultimoIndice : undefined,
     });
   }
   frequencias.sort((a, b) => b.vezes - a.vezes);
@@ -97,28 +97,10 @@ export function calcularEstatisticas(loteria: string): EstatisticasLoteria | nul
   };
 }
 
-function inferirTotalNumeros(apiKey: string, draws: DrawMeta[]): number {
-  // Pra cada loteria, o range é fixo
-  switch (apiKey) {
-    case "megasena":    return 60;
-    case "quina":       return 80;
-    case "lotofacil":   return 25;
-    case "lotomania":   return 99;
-    case "timemania":   return 80;
-    case "diadesorte":  return 31;
-    case "duplasena":   return 50;
-    default:
-      // Fallback: descobre pelo maior número já sorteado
-      let max = 0;
-      for (const d of draws) {
-        for (const n of d.numeros) {
-          const num = Number(n);
-          if (num > max) max = num;
-        }
-      }
-      return max;
-  }
-}
+const TOTAL_NUMEROS: Record<string, number> = {
+  megasena: 60, quina: 80, lotofacil: 25, lotomania: 100,
+  timemania: 80, diadesorte: 31, duplasena: 50, maismilionaria: 50,
+};
 
 /**
  * Sugestão estatística para o próximo sorteio: combina os 3 números

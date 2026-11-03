@@ -27,10 +27,24 @@ const news = await read('/news-sitemap.xml');
 assert.match(news, /xmlns:news="http:\/\/www\.google\.com\/schemas\/sitemap-news\/0.9"/);
 assert.doesNotMatch(news, /concurso-3910/);
 assert.match(await read('/rss.xml'), /<rss version="2\.0"/);
-const imageResponse = await fetch(`${base}/loterias/mega-sena/concurso-3080/imagem`);
-assert.equal(imageResponse.status, 200);
-const png = Buffer.from(await imageResponse.arrayBuffer());
-assert.equal(png.subarray(1, 4).toString(), 'PNG');
-assert.equal(png.readUInt32BE(16), 1200);
-assert.equal(png.readUInt32BE(20), 675);
+for (const path of ['/loterias/mega-sena/concurso-3080', '/loterias/federal/concurso-6114', '/loterias/maismilionaria/concurso-403', '/loterias/super-sete/concurso-917']) {
+  const html = await read(path);
+  if (path.includes('/federal/')) {
+    assert.match(html, /Bilhetes do primeiro ao quinto prêmio/);
+    const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1];
+    assert.match(description, /056338, 001871, 024389, 062267, 030022/);
+  }
+  if (path.includes('/maismilionaria/')) assert.match(html, /Trevos sorteados/);
+  if (path.includes('/super-sete/')) {
+    assert.match(html, /Coluna 7/);
+    const description = html.match(/<meta name="description" content="([^"]+)"/)?.[1];
+    assert.match(description, /1, 9, 2, 9, 4, 6, 5/);
+  }
+  const imageResponse = await fetch(`${base}${path}/imagem`);
+  assert.equal(imageResponse.status, 200, `${path} infographic status`);
+  const png = Buffer.from(await imageResponse.arrayBuffer());
+  assert.equal(png.subarray(1, 4).toString(), 'PNG');
+  assert.equal(png.readUInt32BE(16), 1200);
+  assert.equal(png.readUInt32BE(20), 675);
+}
 console.log(`SEO smoke passed: ${base}; future pages indexable, archives retired, feeds and image valid.`);

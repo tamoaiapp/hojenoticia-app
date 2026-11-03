@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Termos de Uso — Hoje Notícia",
+  title: "Termos de uso",
   description: "Termos e condições de uso do portal Hoje Notícia.",
   alternates: { canonical: "https://www.hojenoticia.com/termos" },
 };

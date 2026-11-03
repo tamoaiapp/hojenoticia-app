@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Sobre o Hoje Notícia",
+  title: { absolute: "Sobre o Hoje Notícia" },
   description: "Conheça o Hoje Notícia, seu responsável e como são produzidos os boletins de resultados de loterias.",
   alternates: { canonical: "https://www.hojenoticia.com/sobre" },
 };

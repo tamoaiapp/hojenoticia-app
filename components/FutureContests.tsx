@@ -13,8 +13,8 @@ export default function FutureContests({ lottery, name, draws }: { lottery: stri
   ))}</div>;
   return <section style={{ margin: "2rem 0" }} aria-labelledby="future-contests-title">
     <h2 id="future-contests-title" style={{ fontSize: "1.3rem", marginBottom: ".5rem" }}>Acompanhe os próximos concursos da {name}</h2>
-    <p style={{ color: "#64748b", fontSize: ".9rem" }}>Escolha o concurso para consultar a programação e acompanhar a publicação do resultado.</p>
+    <p style={{ color: "#64748b", fontSize: ".9rem" }}>Abra o concurso para acompanhar a confirmação da data, a estimativa de prêmio disponível e, após o sorteio, o resultado. Quando a Caixa ainda não informou a programação, a data fica a confirmar.</p>
     {cards(future.slice(0, 12))}
-    {future.length > 12 && <details style={{ marginTop: "1rem" }}><summary style={{ cursor: "pointer", fontWeight: 700 }}>Ver mais {future.length - 12} concursos</summary>{cards(future.slice(12))}</details>}
+    {future.length > 12 && <details style={{ marginTop: "1rem" }}><summary style={{ cursor: "pointer", fontWeight: 700 }}>Ver mais {future.length - 12} próximos concursos da {name}</summary>{cards(future.slice(12))}</details>}
   </section>;
 }

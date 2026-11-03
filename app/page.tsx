@@ -4,6 +4,7 @@ import Link from "next/link";
 import AdsterraBanner from "@/components/AdsterraBanner";
 import AdsterraNative from "@/components/AdsterraNative";
 import LotterySearch from "@/components/LotterySearch";
+import DrawNumbers from "@/components/DrawNumbers";
 import { LOTERIAS_CONFIG, getLatestDrawPerLoteria, getAllDraws, getDrawBySlug, formatDateShort, type DrawMeta } from "@/lib/loterias";
 import { formatPublicationTime, getNewsDraws, isOfficialCaixaSource, publicationTime } from "@/lib/news";
 
@@ -33,12 +34,6 @@ function isCurrentDate(value: string | undefined, today: string): value is strin
   return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value && value >= today;
 }
 
-function ResultNumbers({ values, color, label = "Números sorteados" }: { values: string[]; color: string; label?: string }) {
-  return <ol className="result-numbers" aria-label={label}>
-    {values.map((value, index) => <li key={`${index}-${value}`} style={{ backgroundColor: color }} className={String(value).length > 2 ? "number-ticket" : undefined}>{String(value).padStart(2, "0")}</li>)}
-  </ol>;
-}
-
 function LotteryCard({ slug, draw, today }: { slug: string; draw: DrawMeta | null; today: string }) {
   const cfg = LOTERIAS_CONFIG[slug];
   const officialNext = draw && isOfficialCaixaSource(draw.source_url) && isCurrentDate(draw.proxima_data, today) &&
@@ -56,15 +51,16 @@ function LotteryCard({ slug, draw, today }: { slug: string; draw: DrawMeta | nul
     {draw ? <>
       <p className="result-date">Sorteio de <time dateTime={draw.draw_date}>{formatDateShort(draw.draw_date)}</time></p>
       {draw.numeros_segundo_sorteio?.length ? <p className="numbers-label">Primeiro sorteio</p> : null}
-      <ResultNumbers values={draw.numeros} color={cfg.ballColor} />
+      <DrawNumbers values={draw.numeros} color={cfg.ballColor} loteria={slug} />
       {!!draw.numeros_segundo_sorteio?.length && <>
         <p className="numbers-label">Segundo sorteio</p>
-        <ResultNumbers values={draw.numeros_segundo_sorteio} color={cfg.ballColor} label="Números do segundo sorteio" />
+        <DrawNumbers values={draw.numeros_segundo_sorteio} color={cfg.ballColor} label="Números do segundo sorteio" />
       </>}
+      {!!draw.trevos_sorteados?.length && <><p className="numbers-label">Trevos sorteados</p><DrawNumbers values={draw.trevos_sorteados} color={cfg.ballColor} label="Trevos sorteados" /></>}
       {luckyMonth && <p className="result-extra">Mês da sorte: <strong>{luckyMonth}</strong></p>}
       {heartTeam && <p className="result-extra">Time do coração: <strong>{heartTeam}</strong></p>}
-      <p className="result-summary">{draw.ganhadores > 0 ? `${integer.format(draw.ganhadores)} aposta${draw.ganhadores === 1 ? "" : "s"} ganhadora${draw.ganhadores === 1 ? "" : "s"} na faixa principal` : draw.rateio?.length ? "Sem aposta ganhadora na faixa principal" : draw.acumulou === true ? "Prêmio acumulado" : "Premiação aguardando confirmação"}
-        {draw.premio_principal > 0 && <strong>{money.format(draw.premio_principal)} por aposta</strong>}
+      <p className="result-summary">{slug === "federal" ? "Premiação do primeiro bilhete" : draw.ganhadores > 0 ? `${integer.format(draw.ganhadores)} aposta${draw.ganhadores === 1 ? "" : "s"} ganhadora${draw.ganhadores === 1 ? "" : "s"} na faixa principal` : draw.rateio?.length ? "Sem aposta ganhadora na faixa principal" : draw.acumulou === true ? "Prêmio acumulado" : "Premiação aguardando confirmação"}
+        {draw.premio_principal > 0 && <strong>{money.format(draw.premio_principal)}{slug === "federal" ? " no primeiro prêmio" : " por aposta"}</strong>}
       </p>
       {officialNext && <div className="next-contest-info">
         <span>Próximo: {draw.proximo_concurso} · {formatDateShort(draw.proxima_data!)}</span>

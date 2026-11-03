@@ -17,7 +17,7 @@ export default function Footer() {
           <div>
             <div style={{ fontWeight: 700, color: "#e2e8f0", marginBottom: "0.75rem", fontSize: "0.85rem" }}>LOTERIAS</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.82rem" }}>
-              {Object.entries(LOTERIAS_CONFIG).slice(0, 4).map(([slug, cfg]) => (
+              {Object.entries(LOTERIAS_CONFIG).map(([slug, cfg]) => (
                 <Link key={slug} href={`/loterias/${slug}`} style={{ color: "#94a3b8" }}>{cfg.name}</Link>
               ))}
             </div>

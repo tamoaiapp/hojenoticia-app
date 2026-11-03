@@ -17,7 +17,7 @@ export const viewport: Viewport = {
 export const metadata: Metadata = {
   title: { default: "Hoje Notícia — Resultados de Loterias", template: "%s | Hoje Notícia" },
   description:
-    "Resultados das loterias da Caixa: Mega-Sena, Quina, Lotofácil, Lotomania, Timemania, Dia de Sorte e Dupla Sena. Atualizado após cada sorteio.",
+    "Resultados das loterias com dados da Caixa. Consulte números, bilhetes, rateio e histórico de concursos, com a data e a fonte de cada resultado.",
   keywords:
     "resultado loteria, mega sena, quina, lotofacil, lotomania, timemania, dia de sorte, dupla sena, loterias caixa",
   metadataBase: new URL(BASE),
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     type: "website",
     url: BASE,
   },
-  twitter: { card: "summary_large_image", site: "@hojenoticia" },
+  twitter: { card: "summary_large_image" },
   robots: {
     index: true,
     follow: true,
@@ -72,6 +72,9 @@ const organizationLd = {
     "Timemania",
     "Dia de Sorte",
     "Dupla Sena",
+    "Federal",
+    "+Milionária",
+    "Super Sete",
   ],
 };
 
