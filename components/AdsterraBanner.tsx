@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Size = "300x250" | "728x90" | "320x50";
 
@@ -32,29 +32,29 @@ interface Props {
  */
 export default function AdsterraBanner({ size, showOn = "all", className }: Props) {
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [visible, setVisible] = useState(showOn === "all");
   const { width, height } = ADSTERRA_DIMS[size];
   const key = ADSTERRA_KEYS[size];
 
   useEffect(() => {
-    if (!iframeRef.current) return;
+    if (showOn === "all") return;
+    const media = window.matchMedia("(max-width: 767px)");
+    const update = () => setVisible(showOn === "mobile" ? media.matches : !media.matches);
+    update();
+    media.addEventListener("change", update);
+    return () => media.removeEventListener("change", update);
+  }, [showOn]);
+
+  useEffect(() => {
+    if (!visible || !iframeRef.current) return;
     const doc = iframeRef.current.contentDocument;
     if (!doc) return;
     doc.open();
-    doc.write(`<!doctype html><html><head><style>html,body{margin:0;padding:0;background:transparent;}</style></head><body><script>var atOptions={'key':'${key}','format':'iframe','height':${height},'width':${width},'params':{}};</script><script src="https://www.highperformanceformat.com/${key}/invoke.js"></script></body></html>`);
+    doc.write(`<!doctype html><html><head><style>html,body{margin:0;padding:0;background:transparent;}</style></head><body><script>var atOptions={'key':'${key}','format':'iframe','height':${height},'width':${width},'params':{}};</script><script src="https://bauval.org/22/${key}"></script></body></html>`);
     doc.close();
-  }, [key, width, height]);
+  }, [visible, key, width, height]);
 
-  const hideStyle: React.CSSProperties =
-    showOn === "desktop"
-      ? { width, height, maxWidth: "100%" }
-      : showOn === "mobile"
-      ? { width, height, maxWidth: "100%" }
-      : { width, height, maxWidth: "100%" };
-
-  const wrapperClass =
-    showOn === "desktop" ? "ad-desktop-only"
-    : showOn === "mobile" ? "ad-mobile-only"
-    : "";
+  const wrapperClass = showOn === "desktop" ? "ad-desktop-only" : showOn === "mobile" ? "ad-mobile-only" : "";
 
   return (
     <div
@@ -62,18 +62,20 @@ export default function AdsterraBanner({ size, showOn = "all", className }: Prop
       style={{
         margin: "1.5rem auto",
         textAlign: "center",
-        display: "block",
+        minHeight: height,
       }}
       aria-label="Anúncio"
     >
-      <iframe
-        ref={iframeRef}
-        width={width}
-        height={height}
-        style={{ border: 0, display: "inline-block", ...hideStyle }}
-        scrolling="no"
-        title="Anúncio"
-      />
+      {visible && (
+        <iframe
+          ref={iframeRef}
+          width={width}
+          height={height}
+          style={{ border: 0, display: "inline-block", maxWidth: "100%" }}
+          scrolling="no"
+          title="Anúncio"
+        />
+      )}
     </div>
   );
 }

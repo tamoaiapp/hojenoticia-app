@@ -273,6 +273,8 @@ export default function HomePage() {
         })}
       </div>
 
+      <AdsterraBanner size="300x250" />
+
       {/* Últimos resultados — internal linking pra Google indexar concursos recentes */}
       {(() => {
         const ultimos = getAllDraws()

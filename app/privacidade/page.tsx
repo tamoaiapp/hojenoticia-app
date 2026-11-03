@@ -26,14 +26,18 @@ export default function PrivacidadePage() {
 
       <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>2. Cookies</h2>
       <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
-        Utilizamos cookies para análise de tráfego e exibição de anúncios relevantes pelo Google AdSense.
+        Parceiros de publicidade podem usar cookies ou tecnologias semelhantes para exibição e medição de anúncios.
         Você pode desativar cookies nas configurações do seu navegador a qualquer momento, sem prejuízo ao acesso ao conteúdo.
       </p>
 
-      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>3. Anúncios (Google AdSense)</h2>
+      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>3. Anúncios</h2>
       <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
-        Exibimos anúncios do Google AdSense. O Google pode usar cookies para exibir anúncios baseados em visitas
-        anteriores ao nosso site ou a outros sites. Consulte a{" "}
+        Exibimos anúncios da Adsterra. O Google AdSense também pode ser usado quando estiver configurado no site.
+        Consulte a{" "}
+        <a href="https://adsterra.com/privacy-policy-managed" style={{ color: "#dc2626" }} target="_blank" rel="noopener noreferrer">
+          Política de Privacidade da Adsterra
+        </a>{" "}
+        e a{" "}
         <a href="https://policies.google.com/privacy" style={{ color: "#dc2626" }} target="_blank" rel="noopener noreferrer">
           Política de Privacidade do Google
         </a>{" "}

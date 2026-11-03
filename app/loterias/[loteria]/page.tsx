@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
+import AdsterraBanner from "@/components/AdsterraBanner";
+import AdsterraNative from "@/components/AdsterraNative";
 import {
   LOTERIAS_CONFIG, getDrawsByLoteria,
   formatBRL, formatDate, formatDateShort,
@@ -210,7 +212,10 @@ export default async function LoteriasPage({ params }: Props) {
         )}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: "2rem", alignItems: "start" }}>
+      <AdsterraBanner size="728x90" showOn="desktop" />
+      <AdsterraBanner size="320x50" showOn="mobile" />
+
+      <div className="lottery-page-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 300px", gap: "2rem", alignItems: "start" }}>
 
         {/* Coluna principal */}
         <div>
@@ -330,10 +335,13 @@ export default async function LoteriasPage({ params }: Props) {
               <p>Resultados sendo publicados em breve.</p>
             </div>
           )}
+
+          <AdsterraNative />
         </div>
 
         {/* Sidebar */}
         <aside style={{ position: "sticky", top: "2rem" }}>
+          <AdsterraBanner size="300x250" />
           <div style={{ background: "#fff", borderRadius: 14, padding: "1.25rem", border: "1px solid #e2e8f0", marginBottom: "1.25rem" }}>
             <div style={{ fontWeight: 800, fontSize: "0.85rem", color: "#0f172a", textTransform: "uppercase", letterSpacing: 1, borderBottom: `3px solid ${cfg.color}`, paddingBottom: "0.5rem", marginBottom: "1rem" }}>
               Outras Loterias
@@ -346,9 +354,6 @@ export default async function LoteriasPage({ params }: Props) {
             ))}
           </div>
 
-          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "1.5rem", textAlign: "center", color: "#94a3b8", fontSize: "0.78rem" }}>
-            [Anúncio]
-          </div>
         </aside>
       </div>
     </div>
