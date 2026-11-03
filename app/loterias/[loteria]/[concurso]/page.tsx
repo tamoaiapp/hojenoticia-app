@@ -12,26 +12,17 @@ import AdsterraNative from "@/components/AdsterraNative";
 export const revalidate = false; // resultado histórico nunca muda
 export const dynamicParams = true; // qualquer slug existente no content/ é válido (ISR on-demand pros raros)
 
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 interface Props { params: Promise<{ loteria: string; concurso: string }> }
 
 export async function generateStaticParams() {
-  // Pre-renderiza TODOS os publicados (cauda longa) + próximos 14 dias aguardando.
+  // Pre-renderiza somente resultados confirmados.
   // Concursos antigos publicados não vão mudar, então gerar uma vez no build é mais barato
   // que servir com ISR cada vez que algum bot indexar.
-  const today = new Date();
-  const cutoffFuture = new Date(today);
-  cutoffFuture.setDate(today.getDate() + 14);
-  const futureISO = cutoffFuture.toISOString().split("T")[0];
-
   const params: { loteria: string; concurso: string }[] = [];
   for (const lot of Object.keys(LOTERIAS_CONFIG)) {
-    const draws = getDrawsByLoteria(lot).filter((d) => {
-      if (d.status === "publicado") return true;
-      if (d.status === "aguardando") return d.draw_date <= futureISO;
-      return false;
-    });
+    const draws = getDrawsByLoteria(lot).filter((d) => d.status === "publicado");
     for (const d of draws) params.push({ loteria: lot, concurso: d.slug });
   }
   return params;
@@ -68,7 +59,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       : `${cfg.name} ${num} Resultado (${dateShortDM}) — Dezenas Sorteadas e Prêmio`;
     description = draw.ganhadores > 0
       ? `Resultado ${cfg.name} concurso ${num} de ${dateShort}: dezenas ${dezenas}. ${draw.ganhadores} ganhador${draw.ganhadores > 1 ? "es" : ""}, prêmio de ${formatBRL(draw.premio_principal)}${draw.cidade ? ` em ${draw.cidade}` : ""}. Confira os números sorteados agora.`
-      : `Resultado ${cfg.name} ${num} de ${dateShort}: dezenas sorteadas ${dezenas}. Sem ganhador principal — acumulou${draw.proximo_premio ? `, próximo prêmio ${formatBRL(draw.proximo_premio)}` : ""}. Veja todos os detalhes.`;
+      : `Resultado ${cfg.name} ${num} de ${dateShort}: dezenas sorteadas ${dezenas}. Sem ganhador principal — acumulou${draw.proximo_premio && draw.proxima_data && draw.proxima_data >= todayISO ? `, próximo prêmio ${formatBRL(draw.proximo_premio)}` : ""}. Veja todos os detalhes.`;
     extraKeywords = [
       isToday ? `${cfg.name.toLowerCase()} ${num} resultado de hoje` : null,
       `dezenas ${cfg.name.toLowerCase()} ${num}`,
@@ -115,6 +106,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title,
     description,
     keywords,
+    robots: isPublished ? undefined : { index: false, follow: true },
     openGraph: {
       title,
       description,
@@ -162,6 +154,9 @@ export default async function DrawPage({ params }: Props) {
   const isPublished = draw.status === "publicado";
   const drawDateFmt = formatDate(draw.draw_date);
   const pageUrl = `${BASE}/loterias/${loteria}/${concurso}`;
+  const todayISO = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date());
+  const currentNext = draw.proxima_data && draw.proxima_data >= todayISO ? draw.proxima_data : null;
+  const articleContent = currentNext ? draw.content : draw.content.replace(/\n## Próximo Sorteio[^\n]*\n[\s\S]*?(?=\n## |$)/, '');
 
   // === JSON-LD ===
 
@@ -239,10 +234,10 @@ export default async function DrawPage({ params }: Props) {
           : `O concurso ${draw.concurso} da ${cfg.name} não teve ganhadores do prêmio principal — o valor acumulou para o próximo sorteio.`,
     });
   }
-  if (draw.proxima_data && draw.proximo_concurso) {
+  if (currentNext && draw.proximo_concurso) {
     faqItems.push({
       q: `Quando é o próximo sorteio da ${cfg.name}?`,
-      a: `O próximo sorteio da ${cfg.name} é o concurso ${draw.proximo_concurso}, em ${formatDate(draw.proxima_data)}${draw.proximo_premio ? `, com prêmio estimado de ${formatBRL(draw.proximo_premio)}` : ""}.`,
+      a: `O próximo sorteio da ${cfg.name} é o concurso ${draw.proximo_concurso}, em ${formatDate(currentNext)}${draw.proximo_premio ? `, com prêmio estimado de ${formatBRL(draw.proximo_premio)}` : ""}.`,
     });
   }
   faqItems.push({
@@ -423,13 +418,13 @@ export default async function DrawPage({ params }: Props) {
       </Link>
 
       {/* Próximo sorteio */}
-      {draw.proxima_data && (
+      {currentNext && (
         <div style={{ background: "#f8fafc", borderRadius: 12, padding: "1rem 1.25rem", border: "1px solid #e2e8f0", marginBottom: "2rem", display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
           <span style={{ fontSize: "1.5rem" }}>📅</span>
           <div>
             <div style={{ fontWeight: 700, color: "#0f172a", fontSize: "0.9rem" }}>Próximo Sorteio</div>
             <div style={{ color: "#64748b", fontSize: "0.85rem" }}>
-              Concurso {draw.proximo_concurso} · {formatDate(draw.proxima_data)}
+              Concurso {draw.proximo_concurso} · {formatDate(currentNext)}
               {draw.proximo_premio && ` · Estimativa ${formatBRL(draw.proximo_premio)}`}
             </div>
           </div>
@@ -442,9 +437,9 @@ export default async function DrawPage({ params }: Props) {
       )}
 
       {/* Conteúdo MDX */}
-      {draw.content.trim() && (
+      {articleContent.trim() && (
         <div className="article-body" style={{ marginBottom: "2rem" }}>
-          <MDXRemote source={draw.content} />
+          <MDXRemote source={articleContent} />
         </div>
       )}
 

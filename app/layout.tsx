@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 const GSC_VERIFICATION = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const viewport: Viewport = {
   themeColor: "#dc2626",

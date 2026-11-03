@@ -26,20 +26,6 @@ const LOTERIAS = {
   'federal':        { api: 'federal',        name: 'Loteria Federal',  numCount: 5,  drawsPerWeek: 2 },
 };
 
-// Dias de sorteio por loteria (0=Dom,...,6=Sáb) — usado só para futuro
-const DRAW_DAYS = {
-  'mega-sena':      [3, 6],
-  'quina':          [1, 2, 3, 4, 5, 6],
-  'lotofacil':      [0, 1, 2, 3, 4, 5, 6],
-  'lotomania':      [1, 3, 5],
-  'timemania':      [2, 4, 6],
-  'diadesorte':     [2, 4, 6],
-  'dupla-sena':     [2, 4, 6],
-  'maismilionaria': [6],
-  'super-sete':     [1, 3, 5],
-  'federal':        [3, 6],
-};
-
 // ── helpers ──────────────────────────────────────────────────────────────────
 
 function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
@@ -48,10 +34,6 @@ function parseBRDate(str) {
   if (!str) return null;
   const [d, m, y] = str.split('/');
   return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
-}
-
-function dateToISO(d) {
-  return d.toISOString().split('T')[0];
 }
 
 function formatBRL(n) {
@@ -75,15 +57,6 @@ function daysSince2026Jan1(isoDate) {
   const jan1 = new Date('2026-01-01T12:00:00');
   const d = new Date(isoDate + 'T12:00:00');
   return Math.floor((d - jan1) / 86_400_000);
-}
-
-function nextDrawDate(isoDate, drawDays) {
-  const d = new Date(isoDate + 'T12:00:00');
-  for (let i = 1; i <= 7; i++) {
-    d.setDate(d.getDate() + 1);
-    if (drawDays.includes(d.getDay())) return dateToISO(d);
-  }
-  return null;
 }
 
 // ── Caixa API ─────────────────────────────────────────────────────────────────
@@ -252,13 +225,11 @@ date: "${drawDate}"
 
 O sorteio do concurso **${concurso}** da **${lnome}** está previsto para **${dateFormatted}**.${premioStr ? `\nA estimativa de prêmio é de **${premioStr}**.` : ''}
 
-Esta página será atualizada com o resultado oficial logo após o sorteio.
-Volte depois das 20h para conferir as dezenas!
+Esta página será atualizada quando a Caixa divulgar o resultado oficial.
 
 ## Apostar no Concurso ${concurso}
 
-Você pode realizar sua aposta até as 19h do dia do sorteio em qualquer lotérica credenciada
-ou pelo app da Caixa Econômica Federal.
+Consulte os horários e canais de aposta no site oficial da Caixa.
 `;
 }
 
@@ -338,30 +309,20 @@ async function processLoteria(loteriaKey, cfg) {
   }
   console.log(`  📝 Criados: ${created}, Atualizados (aguardando→publicado): ${updated}`);
 
-  // 5. Gerar concursos futuros (aguardando) até 31/12/2026
+  // 5. Gerar somente o próximo concurso confirmado pela Caixa.
   if (!latest.numeroConcursoProximo || !latest.dataProximoConcurso) {
     console.log(`  ⚠️  Sem próximo concurso — skipping futuros`);
     return;
   }
 
-  const drawDays = DRAW_DAYS[loteriaKey] || [1, 3, 5];
-  let nextNum = latest.numeroConcursoProximo;
-  let nextDate = parseBRDate(latest.dataProximoConcurso);
+  const nextNum = latest.numeroConcursoProximo;
+  const nextDate = parseBRDate(latest.dataProximoConcurso);
   const proxPremio = Number(latest.valorEstimadoProximoConcurso) || 0;
-  let futureCreated = 0;
-
-  while (nextDate && nextDate <= '2026-12-31') {
-    const slug = `concurso-${nextNum}`;
-    const mdxPath = path.join(dir, `${slug}.mdx`);
-    if (!fs.existsSync(mdxPath)) {
-      fs.writeFileSync(mdxPath, buildAguardandoMDX(loteriaKey, cfg, nextNum, nextDate, proxPremio), 'utf-8');
-      futureCreated++;
-    }
-    nextNum++;
-    nextDate = nextDrawDate(nextDate, drawDays);
+  const mdxPath = path.join(dir, `concurso-${nextNum}.mdx`);
+  if (nextDate && !fs.existsSync(mdxPath)) {
+    fs.writeFileSync(mdxPath, buildAguardandoMDX(loteriaKey, cfg, nextNum, nextDate, proxPremio), 'utf-8');
+    console.log(`  Próximo concurso criado: ${nextNum}`);
   }
-
-  console.log(`  🗓️  Futuros criados: ${futureCreated}`);
 }
 
 // ── limpeza de arquivos ruins (concurso em ano errado) ────────────────────────

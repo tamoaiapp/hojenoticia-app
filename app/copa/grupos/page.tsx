@@ -3,7 +3,7 @@ import Link from "next/link";
 import { GRUPOS } from "@/lib/copa-config";
 
 export const revalidate = 3600;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
   title: "Grupos da Copa do Mundo 2026 — Tabela Completa",

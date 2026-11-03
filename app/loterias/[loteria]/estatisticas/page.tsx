@@ -6,7 +6,7 @@ import { calcularEstatisticas, sugerirNumeros, type NumeroFrequencia } from "@/l
 
 export const revalidate = 86400; // 1 dia
 export const dynamicParams = false;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 interface Props { params: Promise<{ loteria: string }> }
 

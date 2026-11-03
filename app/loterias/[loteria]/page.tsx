@@ -9,7 +9,7 @@ import {
 export const revalidate = 1800;
 export const dynamicParams = true;
 
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 interface Props { params: Promise<{ loteria: string }> }
 
@@ -59,8 +59,10 @@ export default async function LoteriasPage({ params }: Props) {
 
   const draws      = getDrawsByLoteria(loteria);
   const published  = draws.filter(d => d.status === "publicado");
-  const upcoming   = draws.filter(d => d.status === "aguardando").sort((a, b) => a.concurso - b.concurso);
   const latest     = published[0];
+  const todayISO = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date());
+  const upcoming   = draws.filter(d => d.status === "aguardando" && latest &&
+    d.concurso === latest.proximo_concurso && d.draw_date === latest.proxima_data && d.draw_date >= todayISO);
   const recent     = published.slice(1, 10);
 
   const pageUrl = `${BASE}/loterias/${loteria}`;
@@ -197,7 +199,7 @@ export default async function LoteriasPage({ params }: Props) {
               ) : (
                 <span>🔄 <strong>Acumulou!</strong> Nenhum ganhador do prêmio principal</span>
               )}
-              {latest.proxima_data && (
+              {latest.proxima_data && latest.proxima_data >= todayISO && (
                 <span>📅 Próximo sorteio: <strong>{formatDateShort(latest.proxima_data)}</strong>
                   {latest.proximo_premio ? ` — ${formatBRL(latest.proximo_premio)}` : ""}</span>
               )}

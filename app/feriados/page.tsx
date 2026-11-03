@@ -3,7 +3,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getAnosDisponiveis } from "@/lib/feriados";
 
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
   title: "Feriados Nacionais — Calendário Completo | Hoje Notícia",

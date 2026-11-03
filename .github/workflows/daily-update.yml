@@ -16,7 +16,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
 
     steps:
       - name: Checkout
@@ -31,6 +31,8 @@ jobs:
           node-version: '20'
 
       - name: Run daily update (no auto-push — workflow handles git)
+        id: update
+        continue-on-error: true
         run: node scripts/daily-update.mjs --no-push
 
       - name: Commit and push if changes
@@ -45,3 +47,7 @@ jobs:
             git commit -m "auto: daily-update $DATE [skip ci]"
             git push
           fi
+
+      - name: Report updater failures
+        if: steps.update.outcome == 'failure'
+        run: exit 1

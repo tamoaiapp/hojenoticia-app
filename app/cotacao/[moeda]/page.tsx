@@ -7,7 +7,7 @@ import AdsterraNative from "@/components/AdsterraNative";
 
 export const revalidate = 86400;
 
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export function generateStaticParams() {
   return Object.values(MOEDA_INFO).map(m => ({ moeda: m.slug }));

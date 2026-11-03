@@ -6,11 +6,10 @@ import { MOEDA_INFO } from "@/lib/cambio";
 import { SIGNOS_LIST } from "@/lib/horoscopo";
 import { getAnosDisponiveis } from "@/lib/feriados";
 
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const draws = getAllDraws();
-  const now = new Date();
 
   // lastModified do conjunto = data do mais recente publicado (não fica mentindo)
   const latestPublishedDate = draws
@@ -18,7 +17,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     .map((d) => d.draw_date)
     .sort()
     .reverse()[0];
-  const homeLastMod = latestPublishedDate ? new Date(latestPublishedDate) : now;
+  const homeLastMod = latestPublishedDate ? new Date(latestPublishedDate) : undefined;
 
   const entries: MetadataRoute.Sitemap = [
     {
@@ -33,7 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   for (const lot of Object.keys(LOTERIAS_CONFIG)) {
     const lotDraws = getDrawsByLoteria(lot);
     const latest = lotDraws.find((d) => d.status === "publicado");
-    const lastMod = latest ? new Date(latest.draw_date) : now;
+    const lastMod = latest ? new Date(latest.draw_date) : undefined;
     entries.push({
       url: `${BASE}/loterias/${lot}`,
       lastModified: lastMod,
@@ -51,26 +50,26 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Concursos individuais
   for (const d of draws) {
+    if (d.status !== "publicado") continue;
     entries.push({
       url: `${BASE}/loterias/${d.loteria}/${d.slug}`,
       lastModified: new Date(d.draw_date),
-      changeFrequency: d.status === "aguardando" ? "daily" : "yearly",
-      priority: d.status === "publicado" ? 0.7 : 0.6,
+      changeFrequency: "yearly",
+      priority: 0.7,
     });
   }
 
   // Copa do Mundo 2026
   entries.push(
-    { url: `${BASE}/copa`,                 lastModified: now, changeFrequency: "daily",  priority: 0.95 },
-    { url: `${BASE}/copa/grupos`,          lastModified: now, changeFrequency: "weekly", priority: 0.85 },
-    { url: `${BASE}/copa/jogos`,           lastModified: now, changeFrequency: "daily",  priority: 0.92 },
-    { url: `${BASE}/copa/onde-assistir`,   lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${BASE}/copa`,                 changeFrequency: "daily",  priority: 0.95 },
+    { url: `${BASE}/copa/grupos`,          changeFrequency: "weekly", priority: 0.85 },
+    { url: `${BASE}/copa/jogos`,           changeFrequency: "daily",  priority: 0.92 },
+    { url: `${BASE}/copa/onde-assistir`,   changeFrequency: "weekly", priority: 0.8 },
   );
   // 104 jogos individuais
   for (const j of getJogos().jogos) {
     entries.push({
       url: `${BASE}/copa/jogos/${j.id}`,
-      lastModified: new Date(j.data),
       changeFrequency: "weekly",
       priority: 0.75,
     });
@@ -78,35 +77,32 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Eleições 2026
   entries.push(
-    { url: `${BASE}/eleicoes-2026`,             lastModified: now, changeFrequency: "daily",  priority: 0.95 },
-    { url: `${BASE}/eleicoes-2026/presidente`,  lastModified: now, changeFrequency: "daily",  priority: 0.9 },
+    { url: `${BASE}/eleicoes-2026`,             changeFrequency: "daily",  priority: 0.95 },
+    { url: `${BASE}/eleicoes-2026/presidente`,  changeFrequency: "daily",  priority: 0.9 },
   );
   for (const u of UFS) {
     entries.push({
       url: `${BASE}/eleicoes-2026/${u.sigla.toLowerCase()}`,
-      lastModified: now,
       changeFrequency: "weekly",
       priority: 0.7,
     });
   }
 
   // Cotações
-  entries.push({ url: `${BASE}/cotacao`, lastModified: now, changeFrequency: "daily", priority: 0.85 });
+  entries.push({ url: `${BASE}/cotacao`, changeFrequency: "daily", priority: 0.85 });
   for (const m of Object.values(MOEDA_INFO)) {
     entries.push({
       url: `${BASE}/cotacao/${m.slug}`,
-      lastModified: now,
       changeFrequency: "daily",
       priority: 0.7,
     });
   }
 
   // Horóscopo
-  entries.push({ url: `${BASE}/horoscopo`, lastModified: now, changeFrequency: "daily", priority: 0.85 });
+  entries.push({ url: `${BASE}/horoscopo`, changeFrequency: "daily", priority: 0.85 });
   for (const s of SIGNOS_LIST) {
     entries.push({
       url: `${BASE}/horoscopo/${s.slug}`,
-      lastModified: now,
       changeFrequency: "daily",
       priority: 0.7,
     });
@@ -115,11 +111,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // Feriados
   const anosFer = getAnosDisponiveis();
   if (anosFer.length > 0) {
-    entries.push({ url: `${BASE}/feriados`, lastModified: now, changeFrequency: "monthly", priority: 0.75 });
+    entries.push({ url: `${BASE}/feriados`, changeFrequency: "monthly", priority: 0.75 });
     for (const ano of anosFer) {
       entries.push({
         url: `${BASE}/feriados/${ano}`,
-        lastModified: now,
         changeFrequency: "monthly",
         priority: 0.7,
       });
@@ -128,9 +123,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // Institucional
   entries.push(
-    { url: `${BASE}/contato`,     lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE}/privacidade`, lastModified: now, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${BASE}/termos`,      lastModified: now, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE}/contato`,     changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE}/privacidade`, changeFrequency: "yearly", priority: 0.3 },
+    { url: `${BASE}/termos`,      changeFrequency: "yearly", priority: 0.3 },
   );
 
   return entries;

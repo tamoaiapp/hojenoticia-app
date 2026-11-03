@@ -4,7 +4,7 @@ import { ELEICAO_INFO, CARGOS, UFS } from "@/lib/eleicoes-config";
 import { getPresidentes } from "@/lib/eleicoes";
 
 export const revalidate = 3600;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
   title: "Eleições 2026 — Presidente, Governadores e Candidatos",

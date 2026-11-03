@@ -4,7 +4,7 @@ export const LOTERIAS_CONFIG: Record<string, {
 }> = {
   "mega-sena": {
     name: "Mega-Sena", emoji: "🍀", color: "#209869", ballColor: "#1a7a55",
-    numCount: 6, apiKey: "megasena", freq: "Quarta e Sábado",
+    numCount: 6, apiKey: "megasena", freq: "Terça, Quinta e Domingo",
     description: "O maior prêmio das loterias brasileiras. São sorteados 6 números de 1 a 60.",
   },
   "quina": {

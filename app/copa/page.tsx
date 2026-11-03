@@ -4,7 +4,7 @@ import { COPA_INFO, GRUPOS, SEDES, ONDE_ASSISTIR } from "@/lib/copa-config";
 import { getJogosBrasil, getProximosJogos, getBandeiraDoTime, formatData } from "@/lib/copa-jogos";
 
 export const revalidate = 3600;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
   title: "Copa do Mundo 2026 — Jogos, Grupos e Onde Assistir",

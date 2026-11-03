@@ -1,6 +1,6 @@
 /**
  * Módulo: Loterias.
- * Varre arquivos MDX "aguardando" cuja data já passou e busca o resultado na Caixa.
+ * Reconcilia os concursos locais com os números publicados pela Caixa.
  */
 import fs from 'fs';
 import path from 'path';
@@ -34,9 +34,11 @@ const NAMES = {
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 
 function parseBRDate(str) {
-  if (!str) return null;
+  if (!/^\d{2}\/\d{2}\/\d{4}$/.test(str || '')) return null;
   const [d, m, y] = str.split('/');
-  return `${y}-${m.padStart(2, '0')}-${d.padStart(2, '0')}`;
+  const iso = `${y}-${m}-${d}`;
+  const parsed = new Date(`${iso}T12:00:00Z`);
+  return !Number.isNaN(parsed.valueOf()) && parsed.toISOString().startsWith(iso) ? iso : null;
 }
 function formatBRL(n) {
   n = Number(n) || 0;
@@ -54,7 +56,7 @@ function formatDDMMYYYY(iso) {
 }
 
 async function fetchCaixa(api, numero) {
-  const url = `https://servicebus2.caixa.gov.br/portaldeloterias/api/${api}/${numero}`;
+  const url = `https://servicebus2.caixa.gov.br/portaldeloterias/api/${api}${numero == null ? '' : `/${numero}`}`;
   for (let i = 0; i < 3; i++) {
     try {
       const res = await fetch(url, {
@@ -65,10 +67,39 @@ async function fetchCaixa(api, numero) {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       return await res.json();
     } catch (e) {
-      if (i === 2) return null;
+      if (i === 2) throw new Error(`${url}: ${e.message}`);
       await sleep(500 * (i + 1));
     }
   }
+}
+
+function buildAguardandoMDX(loteriaKey, data) {
+  const concurso = Number(data.numeroConcursoProximo);
+  const drawDate = parseBRDate(data.dataProximoConcurso);
+  const premio = Number(data.valorEstimadoProximoConcurso) || 0;
+  const nome = NAMES[loteriaKey];
+  const premioTexto = premio > 0 ? ` Estimativa informada pela Caixa: ${formatBRL(premio)}.` : '';
+
+  return `---
+title: "${nome} Concurso ${concurso} – Sorteio previsto para ${formatDDMMYYYY(drawDate)}"
+description: "Concurso ${concurso} da ${nome} previsto para ${formatDDMMYYYY(drawDate)}.${premioTexto} Resultado aguardando confirmação da Caixa."
+loteria: ${loteriaKey}
+concurso: ${concurso}
+status: aguardando
+draw_date: "${drawDate}"
+numeros: []
+premio_principal: ${Math.round(premio)}
+ganhadores: 0
+keywords: "${nome} concurso ${concurso}"
+date: "${drawDate}"
+---
+
+## ${nome} — Concurso ${concurso}
+
+Sorteio previsto para **${formatPtDate(drawDate)}**.${premioTexto}
+
+Resultado aguardando confirmação da [Caixa](https://loterias.caixa.gov.br/).
+`;
 }
 
 function extractDrawData(data) {
@@ -167,48 +198,97 @@ export async function updateLoterias({ root, today }) {
   const CONTENT_DIR = path.join(root, 'content', 'loterias');
   let totalUpdated = 0;
   let totalChecked = 0;
+  const errors = [];
 
   for (const [loteriaKey, apiKey] of Object.entries(API_KEYS)) {
     const dir = path.join(CONTENT_DIR, loteriaKey);
     if (!fs.existsSync(dir)) continue;
 
-    const files = fs.readdirSync(dir)
-      .filter(f => f.endsWith('.mdx'))
-      .map(f => ({ file: f, fp: path.join(dir, f) }));
+    let latest;
+    try {
+      latest = await fetchCaixa(apiKey);
+      const latestDate = parseBRDate(latest?.dataApuracao);
+      const latestNumbers = latest?.dezenasSorteadasOrdemSorteio || latest?.listaDezenas || latest?.dezenas || [];
+      if (!Number.isInteger(Number(latest?.numero)) || Number(latest.numero) < 1 ||
+          !latestDate || latestDate > today || latestNumbers.length === 0) {
+        throw new Error('último concurso ausente ou com data inválida');
+      }
+    } catch (e) {
+      errors.push(`${loteriaKey}: ${e.message}`);
+      continue;
+    }
 
-    const toUpdate = files.filter(({ fp }) => {
-      const content = fs.readFileSync(fp, 'utf-8');
-      if (!content.includes('status: aguardando')) return false;
-      const m = content.match(/draw_date:\s*"(\d{4}-\d{2}-\d{2})"/);
-      return m && m[1] <= today;
-    });
+    const latestNumber = Number(latest.numero);
+    const files = fs.readdirSync(dir).filter(f => /^concurso-\d+\.mdx$/.test(f));
+    const publishedNumbers = files
+      .filter(f => fs.readFileSync(path.join(dir, f), 'utf-8').includes('status: publicado'))
+      .map(f => Number(f.match(/\d+/)[0]));
+    if (publishedNumbers.length > 0 && latestNumber < Math.max(...publishedNumbers)) {
+      errors.push(`${loteriaKey}: fonte oficial retornou concurso anterior ao já publicado`);
+      continue;
+    }
+    const firstMissing = publishedNumbers.length > 0 ? Math.max(...publishedNumbers) + 1 : latestNumber;
+    const start = Math.max(firstMissing, latestNumber - 119);
+    if (firstMissing < start) {
+      errors.push(`${loteriaKey}: lacuna maior que 120 concursos; recuperação parcial`);
+    }
+    const candidates = new Set();
+    for (let concurso = start; concurso <= latestNumber; concurso++) candidates.add(concurso);
+    for (const file of files) {
+      const numero = Number(file.match(/\d+/)[0]);
+      if (numero > latestNumber) continue;
+      if (fs.readFileSync(path.join(dir, file), 'utf-8').includes('status: aguardando')) candidates.add(numero);
+    }
 
-    if (toUpdate.length === 0) continue;
-    console.log(`  ${NAMES[loteriaKey]}: ${toUpdate.length} para checar`);
-
-    for (const { file, fp } of toUpdate) {
-      const concurso = parseInt(file.replace('concurso-', '').replace('.mdx', ''));
+    console.log(`  ${NAMES[loteriaKey]}: conferindo ${candidates.size} concursos pela numeração oficial`);
+    for (const concurso of [...candidates].sort((a, b) => a - b)) {
       totalChecked++;
-
       try {
         await sleep(300);
-        const data = await fetchCaixa(apiKey, concurso);
-        if (!data || !data.dataApuracao) continue;
-
-        const numeros = data.dezenasSorteadasOrdemSorteio || data.listaDezenas || [];
-        if (numeros.length === 0) continue;
-
-        fs.writeFileSync(fp, buildPublicadoMDX(loteriaKey, data), 'utf-8');
-        totalUpdated++;
-        console.log(`    ✓ ${loteriaKey}/${file}`);
+        const data = concurso === latestNumber ? latest : await fetchCaixa(apiKey, concurso);
+        const numeros = data?.dezenasSorteadasOrdemSorteio || data?.listaDezenas || data?.dezenas || [];
+        if (Number(data?.numero) !== concurso || !data?.dataApuracao || numeros.length === 0) {
+          throw new Error('resposta sem número, data ou dezenas válidos');
+        }
+        const fp = path.join(dir, `concurso-${concurso}.mdx`);
+        const nextContent = buildPublicadoMDX(loteriaKey, data);
+        if (!fs.existsSync(fp) || fs.readFileSync(fp, 'utf-8') !== nextContent) {
+          fs.writeFileSync(fp, nextContent, 'utf-8');
+          totalUpdated++;
+          console.log(`    ✓ ${loteriaKey}/concurso-${concurso}.mdx`);
+        }
       } catch (e) {
-        console.log(`    ✗ ${file}: ${e.message}`);
+        errors.push(`${loteriaKey}/${concurso}: ${e.message}`);
+      }
+    }
+
+    // Datas futuras foram estimadas no passado e podem apontar para concursos
+    // que já ocorreram. Mantenha apenas o próximo concurso informado pela Caixa.
+    const nextNumber = Number(latest.numeroConcursoProximo);
+    const nextDate = parseBRDate(latest.dataProximoConcurso);
+    const hasNext = Number.isInteger(nextNumber) && nextNumber > latestNumber && nextDate && nextDate >= today;
+    const nextFile = hasNext ? `concurso-${nextNumber}.mdx` : null;
+    for (const file of files) {
+      const fp = path.join(dir, file);
+      if (!fs.readFileSync(fp, 'utf-8').includes('status: aguardando')) continue;
+      if (file !== nextFile) {
+        fs.unlinkSync(fp);
+        totalUpdated++;
+      }
+    }
+    if (nextFile) {
+      const fp = path.join(dir, nextFile);
+      const nextContent = buildAguardandoMDX(loteriaKey, latest);
+      if (!fs.existsSync(fp) || fs.readFileSync(fp, 'utf-8') !== nextContent) {
+        fs.writeFileSync(fp, nextContent, 'utf-8');
+        totalUpdated++;
       }
     }
   }
 
   return {
     changes: totalUpdated,
-    summary: `${totalUpdated}/${totalChecked} concursos publicados`,
+    errors,
+    summary: `${totalChecked} concursos conferidos, ${totalUpdated} arquivos alterados, ${errors.length} falhas`,
   };
 }

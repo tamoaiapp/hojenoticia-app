@@ -48,7 +48,9 @@ function parseArgs() {
 
 async function main() {
   const { only, noPush } = parseArgs();
-  const today = new Date().toISOString().split('T')[0];
+  const today = new Intl.DateTimeFormat('en-CA', {
+    timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).format(new Date());
 
   console.log(`\n${'='.repeat(60)}`);
   console.log(`  DAILY UPDATE — ${today}`);
@@ -65,7 +67,12 @@ async function main() {
     try {
       const result = await MODULES[key]({ root: ROOT, today });
       stats[key] = result;
-      console.log(`✅ ${key}: ${result.summary || 'ok'}`);
+      if (result.errors?.length) {
+        console.error(`❌ ${key}: ${result.summary || 'falhas na atualização'}`);
+        for (const error of result.errors) console.error(`   ${error}`);
+      } else {
+        console.log(`✅ ${key}: ${result.summary || 'ok'}`);
+      }
     } catch (e) {
       stats[key] = { error: e.message };
       console.error(`❌ ${key}: ${e.message}`);
@@ -76,19 +83,22 @@ async function main() {
   console.log('  RESUMO');
   console.log(`${'='.repeat(60)}`);
   for (const [key, s] of Object.entries(stats)) {
-    if (s.error) console.log(`  ❌ ${key.padEnd(12)} ${s.error}`);
+    if (s.error || s.errors?.length) console.log(`  ❌ ${key.padEnd(12)} ${s.error || s.summary}`);
     else console.log(`  ✅ ${key.padEnd(12)} ${s.summary || 'ok'}`);
   }
 
   const totalChanges = Object.values(stats).reduce((acc, s) => acc + (s.changes || 0), 0);
+  const hasFailures = Object.values(stats).some(s => s.error || s.errors?.length);
 
   if (totalChanges === 0) {
     console.log('\nℹ️  Sem mudanças hoje. Nenhum commit feito.');
+    if (hasFailures) process.exitCode = 1;
     return;
   }
 
   if (noPush) {
     console.log(`\n📦 ${totalChanges} mudança(s) prontas. --no-push: não vou commitar.`);
+    if (hasFailures) process.exitCode = 1;
     return;
   }
 
@@ -104,6 +114,7 @@ async function main() {
     execSync(`git diff --cached --quiet || git commit -m "${msg.replace(/"/g, "'")}"`, { stdio: 'inherit', shell: true });
     execSync('git push', { stdio: 'inherit' });
     console.log('\n🚀 Deploy iniciado no Vercel (1 build/dia).');
+    if (hasFailures) process.exitCode = 1;
   } catch (e) {
     console.error('Erro no git push:', e.message);
     process.exit(1);
