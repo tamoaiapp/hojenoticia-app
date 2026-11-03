@@ -28,6 +28,7 @@ export default function AdsterraNative() {
 
   return (
     <div ref={wrapperRef} style={{ margin: "1.5rem auto", textAlign: "center" }} aria-label="Anúncio">
+      <span style={{ display: "block", color: "#64748b", fontSize: ".7rem", letterSpacing: ".08em", marginBottom: 4 }}>PUBLICIDADE</span>
       <div id={`container-${NATIVE_KEY}`} />
     </div>
   );

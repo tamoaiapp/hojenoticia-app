@@ -62,10 +62,11 @@ export default function AdsterraBanner({ size, showOn = "all", className }: Prop
       style={{
         margin: "1.5rem auto",
         textAlign: "center",
-        minHeight: height,
+        minHeight: height + 22,
       }}
       aria-label="Anúncio"
     >
+      <span style={{ display: "block", color: "#64748b", fontSize: ".7rem", letterSpacing: ".08em", marginBottom: 4 }}>PUBLICIDADE</span>
       {visible && (
         <iframe
           ref={iframeRef}

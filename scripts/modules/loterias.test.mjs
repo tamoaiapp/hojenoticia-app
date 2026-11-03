@@ -37,3 +37,144 @@ test('recovers a result whose local forecast date is still in the future', async
     fs.rmSync(root, { recursive: true, force: true });
   }
 });
+
+function fixture(files = {}, game = 'mega-sena') {
+  const root = fs.mkdtempSync(path.join(os.tmpdir(), 'hojenoticia-publication-'));
+  const dir = path.join(root, 'content', 'loterias', game);
+  fs.mkdirSync(dir, { recursive: true });
+  for (const [name, content] of Object.entries(files)) fs.writeFileSync(path.join(dir, name), content);
+  return { root, dir, cleanup: () => fs.rmSync(root, { recursive: true, force: true }) };
+}
+
+function official(overrides = {}) {
+  return {
+    numero: 3058,
+    dataApuracao: '03/11/2026',
+    listaDezenas: ['01', '02', '03', '04', '05', '06'],
+    acumulado: false,
+    listaRateioPremio: [
+      { faixa: 1, descricaoFaixa: '6 acertos', numeroDeGanhadores: 2, valorPremio: 12345.67 },
+      { faixa: 2, descricaoFaixa: '5 acertos', numeroDeGanhadores: 40, valorPremio: 123.45 },
+    ],
+    listaMunicipioUFGanhadores: [{ municipio: 'São Paulo', uf: 'SP', ganhadores: 1 }],
+    ...overrides,
+  };
+}
+
+function options(root, data, now = '2026-11-03T23:01:02.000Z') {
+  return {
+    root, today: '2026-11-03', now,
+    wait: async () => {},
+    fetchImpl: async () => new Response(JSON.stringify(data), { status: 200 }),
+  };
+}
+
+function field(content, name) {
+  const value = content.match(new RegExp(`^${name}: (.+)$`, 'm'))?.[1];
+  if (value === undefined) return undefined;
+  try { return JSON.parse(value); } catch { return value; }
+}
+
+test('records the real publication time and official prize data for a new result', async () => {
+  const f = fixture({ 'concurso-3058.mdx': 'status: aguardando\ndraw_date: "2026-11-04"\n' });
+  try {
+    const result = await updateLoterias(options(f.root, official()));
+    const content = fs.readFileSync(path.join(f.dir, 'concurso-3058.mdx'), 'utf-8');
+    assert.deepEqual(result.errors, []);
+    assert.equal(field(content, 'published_at'), '2026-11-03T23:01:02.000Z');
+    assert.equal(field(content, 'source_checked_at'), '2026-11-03T23:01:02.000Z');
+    assert.equal(field(content, 'source_url'), 'https://servicebus2.caixa.gov.br/portaldeloterias/api/megasena/3058');
+    assert.equal(field(content, 'ganhadores'), 2, 'rateio takes precedence over a partial municipality list');
+    assert.equal(field(content, 'premio_principal'), 12345.67, 'keep the actual cents');
+    assert.equal(field(content, 'rateio')[1].descricao, '5 acertos');
+    assert.match(content, /registro oficial da Caixa/);
+  } finally { f.cleanup(); }
+});
+
+test('preserves original publication when prize data changes, then leaves repeated polling unchanged', async () => {
+  const f = fixture();
+  try {
+    await updateLoterias(options(f.root, official()));
+    const corrected = official({ listaRateioPremio: [{ faixa: 1, descricaoFaixa: '6 acertos', numeroDeGanhadores: 2, valorPremio: 23456.78 }] });
+    await updateLoterias(options(f.root, corrected, '2026-11-03T23:05:00.000Z'));
+    const fp = path.join(f.dir, 'concurso-3058.mdx');
+    const content = fs.readFileSync(fp, 'utf-8');
+    assert.equal(field(content, 'published_at'), '2026-11-03T23:01:02.000Z');
+    assert.equal(field(content, 'updated_at'), '2026-11-03T23:05:00.000Z');
+    const repeated = await updateLoterias(options(f.root, corrected, '2026-11-03T23:15:00.000Z'));
+    assert.equal(repeated.changes, 0);
+    assert.equal(fs.readFileSync(fp, 'utf-8'), content, 'a fresh check alone cannot rejuvenate the article');
+  } finally { f.cleanup(); }
+});
+
+test('does not invent original publication timestamps for published legacy content', async () => {
+  const f = fixture({ 'concurso-3058.mdx': 'status: publicado\ndraw_date: "2026-11-03"\n' });
+  try {
+    await updateLoterias(options(f.root, official()));
+    const content = fs.readFileSync(path.join(f.dir, 'concurso-3058.mdx'), 'utf-8');
+    assert.equal(field(content, 'published_at'), undefined);
+    assert.equal(field(content, 'updated_at'), '2026-11-03T23:01:02.000Z');
+  } finally { f.cleanup(); }
+});
+
+test('reports source failures and preserves files instead of claiming a successful publication', async () => {
+  const f = fixture({ 'concurso-3058.mdx': 'status: aguardando\ndraw_date: "2026-11-03"\n' });
+  try {
+    const opts = options(f.root, null);
+    opts.fetchImpl = async () => new Response('', { status: 500 });
+    const result = await updateLoterias(opts);
+    assert.equal(result.changes, 0);
+    assert.equal(result.errors.length, 1);
+    assert.match(result.errors[0], /HTTP 500/);
+    assert.match(fs.readFileSync(path.join(f.dir, 'concurso-3058.mdx'), 'utf-8'), /status: aguardando/);
+  } finally { f.cleanup(); }
+});
+
+test('keeps a failed older result reachable for retry after a newer result has published', async () => {
+  const f = fixture({
+    'concurso-3057.mdx': 'status: publicado\n',
+    'concurso-3058.mdx': 'status: aguardando\n',
+  });
+  try {
+    const latest = official({ numero: 3059 });
+    const opts = options(f.root, latest);
+    opts.fetchImpl = async url => url.endsWith('/3058')
+      ? new Response('', { status: 500 })
+      : new Response(JSON.stringify(latest), { status: 200 });
+    const failed = await updateLoterias(opts);
+    assert.equal(failed.errors.length, 1);
+    assert.match(fs.readFileSync(path.join(f.dir, 'concurso-3058.mdx'), 'utf-8'), /status: aguardando/);
+    opts.fetchImpl = async url => new Response(JSON.stringify(url.endsWith('/3058') ? official() : latest), { status: 200 });
+    const recovered = await updateLoterias(opts);
+    assert.deepEqual(recovered.errors, []);
+    assert.match(fs.readFileSync(path.join(f.dir, 'concurso-3058.mdx'), 'utf-8'), /status: publicado/);
+  } finally { f.cleanup(); }
+});
+
+test('keeps the second Dupla Sena drawing separate and stores optional official fields', async () => {
+  const f = fixture({}, 'dupla-sena');
+  try {
+    const data = official({
+      listaDezenasSegundoSorteio: ['11', '12', '13', '14', '15', '16'],
+      nomeMesSorte: 'NOVEMBRO',
+      nomeTimeCoracaoMesSorte: 'TIME INFORMADO PELA FONTE',
+    });
+    await updateLoterias(options(f.root, data));
+    const content = fs.readFileSync(path.join(f.dir, 'concurso-3058.mdx'), 'utf-8');
+    assert.equal(field(content, 'numeros').length, 6);
+    assert.deepEqual(field(content, 'numeros_segundo_sorteio'), ['11', '12', '13', '14', '15', '16']);
+    assert.equal(field(content, 'mes_sorte'), 'NOVEMBRO');
+    assert.equal(field(content, 'time_coracao'), 'TIME INFORMADO PELA FONTE');
+  } finally { f.cleanup(); }
+});
+
+test('does not infer zero winners while official prize information is unavailable', async () => {
+  const f = fixture();
+  try {
+    await updateLoterias(options(f.root, official({ acumulado: undefined, listaRateioPremio: [], listaMunicipioUFGanhadores: [] })));
+    const content = fs.readFileSync(path.join(f.dir, 'concurso-3058.mdx'), 'utf-8');
+    assert.equal(field(content, 'acumulou'), undefined);
+    assert.match(content, /premiação por faixa permanece em confirmação/);
+    assert.doesNotMatch(content, /Não houve apostas ganhadoras/);
+  } finally { f.cleanup(); }
+});

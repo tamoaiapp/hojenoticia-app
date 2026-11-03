@@ -2,15 +2,16 @@ name: Daily Update
 
 on:
   schedule:
-    # 00:30 UTC = 21:30 BRT — after all Brazilian lottery draws (8 PM BRT)
-    - cron: '30 0 * * *'
+    # GitHub usa UTC: 01:20 UTC = 22:20 BRT do dia anterior.
+    # Os horários agendados são de melhores esforços, sujeitos a atrasos.
+    - cron: '20 1 * * *'
   workflow_dispatch:  # allow manual trigger from Actions tab
 
 permissions:
   contents: write
 
 concurrency:
-  group: daily-update
+  group: content-update
   cancel-in-progress: false
 
 jobs:
@@ -44,7 +45,7 @@ jobs:
             echo "No changes to commit"
           else
             DATE=$(date -u +%Y-%m-%d)
-            git commit -m "auto: daily-update $DATE [skip ci]"
+            git commit -m "auto: daily-update $DATE"
             git push
           fi
 

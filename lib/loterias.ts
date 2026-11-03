@@ -16,6 +16,7 @@ export interface DrawMeta {
   numeros: string[];
   premio_principal: number;
   ganhadores: number;
+  acumulou?: boolean;
   cidade?: string;
   proximo_concurso?: number;
   proxima_data?: string;
@@ -23,6 +24,15 @@ export interface DrawMeta {
   title: string;
   description: string;
   keywords: string;
+  published_at?: string;
+  updated_at?: string;
+  source_url?: string;
+  source_checked_at?: string;
+  rateio?: { faixa: number; descricao: string; ganhadores: number; premio: number }[];
+  municipios_ganhadores?: { municipio: string; uf: string; ganhadores: number }[];
+  numeros_segundo_sorteio?: string[];
+  mes_sorte?: string;
+  time_coracao?: string;
 }
 
 export interface Draw extends DrawMeta { content: string; }
@@ -39,6 +49,7 @@ function parseDraw(file: string, loteria: string): DrawMeta {
     numeros:          Array.isArray(data.numeros) ? data.numeros : [],
     premio_principal: Number(data.premio_principal ?? 0),
     ganhadores:       Number(data.ganhadores ?? 0),
+    acumulou:         typeof data.acumulou === "boolean" ? data.acumulou : undefined,
     cidade:           data.cidade,
     proximo_concurso: data.proximo_concurso ? Number(data.proximo_concurso) : undefined,
     proxima_data:     data.proxima_data,
@@ -46,6 +57,15 @@ function parseDraw(file: string, loteria: string): DrawMeta {
     title:            data.title ?? slug,
     description:      data.description ?? "",
     keywords:         data.keywords ?? "",
+    published_at:     typeof data.published_at === "string" ? data.published_at : undefined,
+    updated_at:       typeof data.updated_at === "string" ? data.updated_at : undefined,
+    source_url:       typeof data.source_url === "string" ? data.source_url : undefined,
+    source_checked_at: typeof data.source_checked_at === "string" ? data.source_checked_at : undefined,
+    rateio:           Array.isArray(data.rateio) ? data.rateio : [],
+    municipios_ganhadores: Array.isArray(data.municipios_ganhadores) ? data.municipios_ganhadores : [],
+    numeros_segundo_sorteio: Array.isArray(data.numeros_segundo_sorteio) ? data.numeros_segundo_sorteio : [],
+    mes_sorte:         typeof data.mes_sorte === "string" ? data.mes_sorte : undefined,
+    time_coracao:     typeof data.time_coracao === "string" ? data.time_coracao : undefined,
   };
 }
 

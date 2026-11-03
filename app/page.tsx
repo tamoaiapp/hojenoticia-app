@@ -125,7 +125,7 @@ export default function HomePage() {
             Copa 2026
           </div>
           <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
-            Jogos e onde assistir →
+            Arquivo da competição →
           </div>
         </Link>
 
@@ -142,7 +142,7 @@ export default function HomePage() {
             Eleições 2026
           </div>
           <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
-            Candidatos e calendário →
+            Arquivo eleitoral de 2026 →
           </div>
         </Link>
 

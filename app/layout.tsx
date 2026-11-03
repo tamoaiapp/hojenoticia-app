@@ -50,13 +50,17 @@ export const metadata: Metadata = {
 
 const organizationLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": "NewsMediaOrganization",
   "@id": `${BASE}/#organization`,
   name: "Hoje Notícia",
-  legalName: "Hoje Notícia",
   url: BASE,
   logo: { "@type": "ImageObject", url: `${BASE}/logo.svg`, width: 220, height: 60 },
-  foundingDate: "2025",
+  email: "tiago.mo@outlook.com",
+  publishingPrinciples: `${BASE}/politica-editorial`,
+  correctionsPolicy: `${BASE}/correcoes`,
+  masthead: `${BASE}/sobre`,
+  actionableFeedbackPolicy: `${BASE}/contato`,
+  contactPoint: { "@type": "ContactPoint", contactType: "Contato editorial e correções", email: "tiago.mo@outlook.com", availableLanguage: "pt-BR" },
   inLanguage: "pt-BR",
   areaServed: { "@type": "Country", name: "Brasil" },
   knowsAbout: [
@@ -86,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <head>
         <link rel="preconnect" href="https://img.youtube.com" />
+        <link rel="alternate" type="application/rss+xml" title="Hoje Notícia" href={`${BASE}/rss.xml`} />
         {ADSENSE_CLIENT && (
           <Script
             id="adsense"

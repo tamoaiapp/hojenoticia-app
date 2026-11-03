@@ -35,7 +35,7 @@ body {
 .article-thumb { width: 200px; height: 130px; }
 
 /* ── Header mobile ── */
-.header-nav { display: flex; }
+.header-nav { display: flex; flex-wrap: wrap; }
 .header-menu-btn { display: none; }
 
 /* ── Mobile ── */
@@ -73,7 +73,11 @@ body {
   }
 
   .header-nav.open { display: flex; }
-  .header-menu-btn { display: block; }
+  .header-menu-btn { display: flex; }
+}
+
+@media (max-width: 480px) {
+  .header-date { display: none; }
 }
 
 /* ── Article page mobile ── */

@@ -1,8 +1,9 @@
 /**
- * ORQUESTRADOR DIÁRIO — roda 1x por dia (Task Scheduler ~21h30).
+ * Atualização geral diária; execuções adicionais podem usar --only=loterias.
  *
  * Faz TODOS os updates locais e ao final faz UM ÚNICO commit + push.
- * Isso garante 1 build/dia no Vercel (economia de minutos de build).
+ * Só há commit quando o conteúdo muda. A rotina leve de loterias pode
+ * publicar um novo resultado ou uma correção após a divulgação oficial.
  *
  * Ordem:
  *   1. Loterias  — atualiza concursos "aguardando" → "publicado"
@@ -113,7 +114,7 @@ async function main() {
     const msg = `daily-update ${today} — ${changeLines}`;
     execSync(`git diff --cached --quiet || git commit -m "${msg.replace(/"/g, "'")}"`, { stdio: 'inherit', shell: true });
     execSync('git push', { stdio: 'inherit' });
-    console.log('\n🚀 Deploy iniciado no Vercel (1 build/dia).');
+    console.log('\n🚀 Alterações enviadas para o fluxo de deploy do repositório.');
     if (hasFailures) process.exitCode = 1;
   } catch (e) {
     console.error('Erro no git push:', e.message);
