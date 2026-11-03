@@ -10,7 +10,9 @@ O [manifesto de geração](post-result-image-prompts.json) registra os 20 prompt
 
 ## Clique e publicidade
 
-O clique é uma navegação nativa para o conteúdo educativo real. O Popunder previamente configurado continua no layout, com o código do fornecedor preservado. O bloco informa que o site pode abrir publicidade em outra aba. A abertura, frequência e bloqueios do anúncio continuam sob controle do fornecedor e do navegador; a calculadora permanece acessível diretamente.
+O clique é uma navegação nativa para o conteúdo educativo real. O Popunder global foi removido por solicitação do proprietário: menus, textos e outras áreas da página não devem abrir publicidade. Os banners e anúncios nativos continuam em seus próprios espaços. A calculadora permanece acessível diretamente.
+
+O repositório não contém um Smartlink (Direct Link) publicitário. O endereço do antigo script Popunder não é um link de destino e não deve ser movido para o clique da imagem, pois continuaria instalando comportamento global. Para vincular uma oferta exclusivamente à imagem, é necessário receber o Smartlink legítimo da conta do proprietário, conforme a [orientação da Adsterra para links em imagens](https://adsterra.com/blog/how-to-add-ads-to-wix-website-with-ad-codes/).
 
 Essa separação acompanha os [termos de publicidade da Adsterra](https://adsterra.com/publishers-terms-managed/) e a orientação do Google para [preservar o acesso ao conteúdo](https://developers.google.com/search/docs/appearance/avoid-intrusive-interstitials). O evento local `hoje:post-result-click` contém a identificação da imagem, loteria, concurso e destino. Ele é um ponto de integração para medição futura; esta alteração não instala um coletor, não grava esses eventos e não demonstra aumento de conversão.
 

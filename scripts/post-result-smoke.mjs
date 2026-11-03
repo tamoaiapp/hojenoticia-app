@@ -20,12 +20,14 @@ assert.equal((callout.match(/<a\b/g) || []).length, 1, 'Only the image is linked
 assert.match(callout, /<a class="post-result-image-link" href="\/loterias\/mega-sena\/probabilidades"/);
 assert.doesNotMatch(callout, /post-result-button|<h2[^>]*>\s*<a/);
 assert.match(callout, /Imagem ilustrativa gerada por IA/);
-assert.match(callout, /publicidade em outra aba/);
+assert.doesNotMatch(callout, /Ao navegar, o site pode abrir publicidade em outra aba/);
 assert.doesNotMatch(callout, /ganhei|ganhador|método para ganhar|window\.open|target="_blank"/i);
-assert.match(result, /https:\/\/abscloud\.org\/1\/4ae7a9b37950781d2eff34cd70e67d31/);
+assert.doesNotMatch(result, /adsterra-popunder|https:\/\/abscloud\.org\//, 'Results must not load a page-wide popunder');
+assert.doesNotMatch(await read('/'), /adsterra-popunder|https:\/\/abscloud\.org\//, 'Home must not load a page-wide popunder');
 assert.doesNotMatch(await read('/loterias/lotofacil/concurso-3910'), /<aside class="post-result-cta"/);
 
 const probabilities = await read('/loterias/mega-sena/probabilidades');
+assert.doesNotMatch(probabilities, /adsterra-popunder|https:\/\/abscloud\.org\//, 'Image destination must not load a page-wide popunder');
 assert.match(probabilities, /50\.063\.860/);
 assert.match(probabilities, /rel="canonical" href="https:\/\/www\.hojenoticia\.com\/loterias\/mega-sena\/probabilidades"/);
 assert.equal((probabilities.match(/<tr(?:\s|>)/g) || []).length, 16, '15 table rows plus heading');

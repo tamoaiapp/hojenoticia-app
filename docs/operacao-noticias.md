@@ -42,7 +42,7 @@ No Search Console, conferir inspeção de URLs, sitemaps, ações manuais, tipo 
 
 Os ajustes técnicos ajudam o Google a entender a publicação. A qualidade precisa continuar existindo: dados completos e corretos, fonte verificável, correções transparentes e conteúdo útil e original. Não inventar apuração humana, credenciais, fotos de eventos, datas ou fatos para preencher requisitos. As imagens atuais são infográficos próprios com dados da Caixa, identificados como tal.
 
-O popunder foi mantido por escolha expressa do proprietário. Sua presença não é tratada como veto automático do Google; a experiência de leitura e a proporção entre publicidade e conteúdo devem ser acompanhadas. Nas matérias, há um único banner incorporado após o conteúdo.
+O popunder global foi removido por solicitação do proprietário para que cliques em menus, textos e outras áreas não abram publicidade. Banners e anúncios nativos continuam nos próprios espaços. Nas matérias, há um único banner incorporado após o conteúdo.
 
 ## Fontes oficiais
 
