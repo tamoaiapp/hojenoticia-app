@@ -10,7 +10,7 @@ import {
 } from "@/lib/copa-jogos";
 
 export const revalidate = 3600;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
   title: "Tabela Completa de Jogos da Copa do Mundo 2026",

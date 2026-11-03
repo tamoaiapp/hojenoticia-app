@@ -4,7 +4,7 @@ import { getPresidentes, corPosicionamento, labelPosicionamento } from "@/lib/el
 import { ELEICAO_INFO } from "@/lib/eleicoes-config";
 
 export const revalidate = 3600;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
   title: "Candidatos a Presidente em 2026 — Lista Completa",

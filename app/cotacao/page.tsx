@@ -5,7 +5,7 @@ import AdsterraBanner from "@/components/AdsterraBanner";
 
 export const revalidate = 86400;
 
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
   title: "Cotação do Dólar, Euro e Bitcoin Hoje | Hoje Notícia",

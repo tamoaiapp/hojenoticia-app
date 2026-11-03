@@ -9,7 +9,7 @@ import { ONDE_ASSISTIR } from "@/lib/copa-config";
 
 export const revalidate = 3600;
 export const dynamicParams = false;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 interface Props { params: Promise<{ id: string }> }
 

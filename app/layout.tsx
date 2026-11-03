@@ -6,7 +6,7 @@ import Footer from "@/components/Footer";
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 const GSC_VERIFICATION = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const viewport: Viewport = {
   themeColor: "#dc2626",
@@ -50,13 +50,17 @@ export const metadata: Metadata = {
 
 const organizationLd = {
   "@context": "https://schema.org",
-  "@type": "Organization",
+  "@type": "NewsMediaOrganization",
   "@id": `${BASE}/#organization`,
   name: "Hoje Notícia",
-  legalName: "Hoje Notícia",
   url: BASE,
   logo: { "@type": "ImageObject", url: `${BASE}/logo.svg`, width: 220, height: 60 },
-  foundingDate: "2025",
+  email: "tiago.mo@outlook.com",
+  publishingPrinciples: `${BASE}/politica-editorial`,
+  correctionsPolicy: `${BASE}/correcoes`,
+  masthead: `${BASE}/sobre`,
+  actionableFeedbackPolicy: `${BASE}/contato`,
+  contactPoint: { "@type": "ContactPoint", contactType: "Contato editorial e correções", email: "tiago.mo@outlook.com", availableLanguage: "pt-BR" },
   inLanguage: "pt-BR",
   areaServed: { "@type": "Country", name: "Brasil" },
   knowsAbout: [
@@ -86,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="pt-BR">
       <head>
         <link rel="preconnect" href="https://img.youtube.com" />
+        <link rel="alternate" type="application/rss+xml" title="Hoje Notícia" href={`${BASE}/rss.xml`} />
         {ADSENSE_CLIENT && (
           <Script
             id="adsense"
@@ -95,6 +100,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT}`}
           />
         )}
+        <Script
+          id="adsterra-popunder"
+          src="https://abscloud.org/1/4ae7a9b37950781d2eff34cd70e67d31"
+          strategy="beforeInteractive"
+          data-cfasync="false"
+        />
       </head>
       <body>
         <script

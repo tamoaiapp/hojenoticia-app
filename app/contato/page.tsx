@@ -1,52 +1,30 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
-  title: "Contato — Hoje Notícia",
-  description: "Entre em contato com a equipe do Hoje Notícia.",
+  title: "Contato",
+  description: "Contato de Tiago Oliveira, responsável pelo site Hoje Notícia, para dúvidas, sugestões e correções.",
+  alternates: { canonical: "https://www.hojenoticia.com/contato" },
 };
 
 export default function ContatoPage() {
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", padding: "3rem 1.25rem", color: "#1e293b" }}>
-      <h1 style={{ fontSize: "2rem", fontWeight: 900, marginBottom: "0.5rem" }}>Contato</h1>
-      <p style={{ color: "#64748b", marginBottom: "2rem" }}>
-        Sugestões, correções ou parcerias? Fale com a gente.
+    <article className="article-body" style={{ maxWidth: 800, margin: "0 auto", padding: "3rem 1.25rem" }}>
+      <h1 style={{ fontSize: "2rem", fontWeight: 900, marginBottom: "1rem" }}>Contato</h1>
+      <p>
+        Para dúvidas, sugestões ou assuntos relacionados à publicação, entre em contato com{" "}
+        <Link href="/equipe/tiago-oliveira" style={{ color: "#2563eb", textDecoration: "underline" }}>Tiago Oliveira</Link>,
+        responsável pelo Hoje Notícia.
       </p>
-
-      <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 12, padding: "2rem" }}>
-        <div style={{ marginBottom: "1.25rem" }}>
-          <label style={{ display: "block", fontWeight: 600, marginBottom: "0.4rem", fontSize: "0.9rem" }}>Nome</label>
-          <input
-            type="text"
-            placeholder="Seu nome"
-            style={{ width: "100%", padding: "0.65rem 1rem", borderRadius: 8, border: "1px solid #cbd5e1", fontSize: "0.95rem", boxSizing: "border-box" }}
-          />
-        </div>
-        <div style={{ marginBottom: "1.25rem" }}>
-          <label style={{ display: "block", fontWeight: 600, marginBottom: "0.4rem", fontSize: "0.9rem" }}>E-mail</label>
-          <input
-            type="email"
-            placeholder="seu@email.com"
-            style={{ width: "100%", padding: "0.65rem 1rem", borderRadius: 8, border: "1px solid #cbd5e1", fontSize: "0.95rem", boxSizing: "border-box" }}
-          />
-        </div>
-        <div style={{ marginBottom: "1.5rem" }}>
-          <label style={{ display: "block", fontWeight: 600, marginBottom: "0.4rem", fontSize: "0.9rem" }}>Mensagem</label>
-          <textarea
-            placeholder="Sua mensagem..."
-            rows={5}
-            style={{ width: "100%", padding: "0.65rem 1rem", borderRadius: 8, border: "1px solid #cbd5e1", fontSize: "0.95rem", resize: "vertical", boxSizing: "border-box" }}
-          />
-        </div>
-        <button
-          style={{ background: "#2563eb", color: "#fff", fontWeight: 700, padding: "0.75rem 2rem", borderRadius: 8, border: "none", cursor: "pointer", fontSize: "1rem", width: "100%" }}
-        >
-          Enviar mensagem
-        </button>
-        <p style={{ fontSize: "0.8rem", color: "#94a3b8", textAlign: "center", marginTop: "1rem" }}>
-          (Formulário em breve — por enquanto entre em contato via redes sociais)
-        </p>
-      </div>
-    </div>
+      <p>
+        E-mail: <a href="mailto:tiago.mo@outlook.com?subject=Contato%20com%20o%20Hoje%20Not%C3%ADcia" style={{ color: "#2563eb", textDecoration: "underline", overflowWrap: "anywhere" }}>tiago.mo@outlook.com</a>.
+      </p>
+      <h2>Correções</h2>
+      <p>
+        Encontrou uma informação incorreta? Envie o endereço da página, indique o trecho e, quando possível,
+        inclua o link da fonte que permite conferir o dado. Veja como tratamos esses pedidos na{" "}
+        <Link href="/correcoes" style={{ color: "#2563eb", textDecoration: "underline" }}>política de correções</Link>.
+      </p>
+    </article>
   );
 }

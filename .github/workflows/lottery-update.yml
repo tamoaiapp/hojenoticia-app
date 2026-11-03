@@ -1,0 +1,54 @@
+name: Lottery Results Update
+
+on:
+  schedule:
+    # 21:20 e 23:20 BRT. A rotina geral também confere os resultados às 22:20.
+    - cron: '20 0,2 * * *'
+    # Janelas adicionais para a programação de domingo, às 11:20 e 12:20 BRT.
+    - cron: '20 14,15 * * 0'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: content-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Check official lottery results
+        id: update
+        continue-on-error: true
+        run: node scripts/daily-update.mjs --only=loterias --no-push
+
+      - name: Commit confirmed content changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add content/loterias/
+          if git diff --cached --quiet; then
+            echo "No lottery changes to commit"
+          else
+            DATE=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+            git commit -m "auto: lottery results $DATE"
+            git push
+          fi
+
+      - name: Report updater failures
+        if: steps.update.outcome == 'failure'
+        run: exit 1

@@ -10,10 +10,10 @@ export default function Footer() {
             Hoje<span style={{ color: "#ef4444" }}>Notícia</span>
           </div>
           <p style={{ fontSize: "0.85rem", maxWidth: 280 }}>
-            Resultados das loterias da Caixa Econômica Federal, atualizados após cada sorteio.
+            Resultados de loterias com dados da Caixa. Confira a data e a fonte de cada boletim.
           </p>
         </div>
-        <div style={{ display: "flex", gap: "3rem" }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "3rem" }}>
           <div>
             <div style={{ fontWeight: 700, color: "#e2e8f0", marginBottom: "0.75rem", fontSize: "0.85rem" }}>LOTERIAS</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.82rem" }}>
@@ -25,6 +25,10 @@ export default function Footer() {
           <div>
             <div style={{ fontWeight: 700, color: "#e2e8f0", marginBottom: "0.75rem", fontSize: "0.85rem" }}>INSTITUCIONAL</div>
             <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", fontSize: "0.82rem" }}>
+              <Link href="/sobre" style={{ color: "#94a3b8" }}>Sobre o Hoje Notícia</Link>
+              <Link href="/equipe/tiago-oliveira" style={{ color: "#94a3b8" }}>Responsável pelo site</Link>
+              <Link href="/politica-editorial" style={{ color: "#94a3b8" }}>Política editorial</Link>
+              <Link href="/correcoes" style={{ color: "#94a3b8" }}>Correções</Link>
               <Link href="/contato" style={{ color: "#94a3b8" }}>Contato</Link>
               <Link href="/privacidade" style={{ color: "#94a3b8" }}>Privacidade</Link>
               <Link href="/termos" style={{ color: "#94a3b8" }}>Termos de Uso</Link>
@@ -35,7 +39,10 @@ export default function Footer() {
       <div style={{ maxWidth: 1200, margin: "2rem auto 0", borderTop: "1px solid #1e293b", paddingTop: "1.5rem", fontSize: "0.78rem", textAlign: "center", lineHeight: 1.8 }}>
         © {new Date().getFullYear()} HojeNotícia. Todos os direitos reservados.
         <span style={{ display: "block", color: "#64748b", marginTop: "0.25rem" }}>
-          CNPJ 29.434.321/0001-20 &nbsp;·&nbsp;
+          Responsável: <Link href="/equipe/tiago-oliveira" style={{ color: "#94a3b8" }}>Tiago Oliveira</Link>
+          &nbsp;·&nbsp;
+          <a href="mailto:tiago.mo@outlook.com" style={{ color: "#94a3b8", overflowWrap: "anywhere" }}>tiago.mo@outlook.com</a>
+          &nbsp;·&nbsp;
           <Link href="/privacidade" style={{ color: "#64748b" }}>Política de Privacidade</Link>
           &nbsp;·&nbsp;
           <Link href="/termos" style={{ color: "#64748b" }}>Termos de Uso</Link>

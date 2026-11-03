@@ -1,6 +1,6 @@
 "use client";
 
-import Script from "next/script";
+import { useEffect, useRef } from "react";
 
 const NATIVE_KEY = "2109e405159d5c45e474e9558c57bed0";
 
@@ -9,15 +9,26 @@ const NATIVE_KEY = "2109e405159d5c45e474e9558c57bed0";
  * entre listagens / no fim do artigo.
  */
 export default function AdsterraNative() {
+  const wrapperRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    const container = wrapper.querySelector<HTMLDivElement>(`#container-${NATIVE_KEY}`);
+    const script = document.createElement("script");
+    script.async = true;
+    script.dataset.cfasync = "false";
+    script.src = `https://bauval.org/21/${NATIVE_KEY}`;
+    wrapper.prepend(script);
+    return () => {
+      script.remove();
+      container?.replaceChildren();
+    };
+  }, []);
+
   return (
-    <div style={{ margin: "1.5rem auto", textAlign: "center" }} aria-label="Anúncio">
-      <Script
-        id="adsterra-native-loader"
-        strategy="afterInteractive"
-        async
-        data-cfasync="false"
-        src={`https://pl29428023.profitablecpmratenetwork.com/${NATIVE_KEY}/invoke.js`}
-      />
+    <div ref={wrapperRef} style={{ margin: "1.5rem auto", textAlign: "center" }} aria-label="Anúncio">
+      <span style={{ display: "block", color: "#64748b", fontSize: ".7rem", letterSpacing: ".08em", marginBottom: 4 }}>PUBLICIDADE</span>
       <div id={`container-${NATIVE_KEY}`} />
     </div>
   );

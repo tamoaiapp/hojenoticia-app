@@ -5,7 +5,7 @@ import { getFeriadosAno, getAnosDisponiveis, formatDateBR, formatDateShort } fro
 import AdsterraBanner from "@/components/AdsterraBanner";
 import AdsterraNative from "@/components/AdsterraNative";
 
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export function generateStaticParams() {
   return getAnosDisponiveis().map(a => ({ ano: String(a) }));

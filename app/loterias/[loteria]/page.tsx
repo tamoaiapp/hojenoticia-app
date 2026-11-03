@@ -1,6 +1,8 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
+import AdsterraBanner from "@/components/AdsterraBanner";
+import AdsterraNative from "@/components/AdsterraNative";
 import {
   LOTERIAS_CONFIG, getDrawsByLoteria,
   formatBRL, formatDate, formatDateShort,
@@ -9,7 +11,7 @@ import {
 export const revalidate = 1800;
 export const dynamicParams = true;
 
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 interface Props { params: Promise<{ loteria: string }> }
 
@@ -59,8 +61,10 @@ export default async function LoteriasPage({ params }: Props) {
 
   const draws      = getDrawsByLoteria(loteria);
   const published  = draws.filter(d => d.status === "publicado");
-  const upcoming   = draws.filter(d => d.status === "aguardando").sort((a, b) => a.concurso - b.concurso);
   const latest     = published[0];
+  const todayISO = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date());
+  const upcoming   = draws.filter(d => d.status === "aguardando" && latest &&
+    d.concurso === latest.proximo_concurso && d.draw_date === latest.proxima_data && d.draw_date >= todayISO);
   const recent     = published.slice(1, 10);
 
   const pageUrl = `${BASE}/loterias/${loteria}`;
@@ -197,7 +201,7 @@ export default async function LoteriasPage({ params }: Props) {
               ) : (
                 <span>🔄 <strong>Acumulou!</strong> Nenhum ganhador do prêmio principal</span>
               )}
-              {latest.proxima_data && (
+              {latest.proxima_data && latest.proxima_data >= todayISO && (
                 <span>📅 Próximo sorteio: <strong>{formatDateShort(latest.proxima_data)}</strong>
                   {latest.proximo_premio ? ` — ${formatBRL(latest.proximo_premio)}` : ""}</span>
               )}
@@ -208,7 +212,10 @@ export default async function LoteriasPage({ params }: Props) {
         )}
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 300px", gap: "2rem", alignItems: "start" }}>
+      <AdsterraBanner size="728x90" showOn="desktop" />
+      <AdsterraBanner size="320x50" showOn="mobile" />
+
+      <div className="lottery-page-grid" style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) 300px", gap: "2rem", alignItems: "start" }}>
 
         {/* Coluna principal */}
         <div>
@@ -328,10 +335,13 @@ export default async function LoteriasPage({ params }: Props) {
               <p>Resultados sendo publicados em breve.</p>
             </div>
           )}
+
+          <AdsterraNative />
         </div>
 
         {/* Sidebar */}
         <aside style={{ position: "sticky", top: "2rem" }}>
+          <AdsterraBanner size="300x250" />
           <div style={{ background: "#fff", borderRadius: 14, padding: "1.25rem", border: "1px solid #e2e8f0", marginBottom: "1.25rem" }}>
             <div style={{ fontWeight: 800, fontSize: "0.85rem", color: "#0f172a", textTransform: "uppercase", letterSpacing: 1, borderBottom: `3px solid ${cfg.color}`, paddingBottom: "0.5rem", marginBottom: "1rem" }}>
               Outras Loterias
@@ -344,9 +354,6 @@ export default async function LoteriasPage({ params }: Props) {
             ))}
           </div>
 
-          <div style={{ background: "#f8fafc", border: "1px solid #e2e8f0", borderRadius: 10, padding: "1.5rem", textAlign: "center", color: "#94a3b8", fontSize: "0.78rem" }}>
-            [Anúncio]
-          </div>
         </aside>
       </div>
     </div>

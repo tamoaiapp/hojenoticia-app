@@ -3,7 +3,7 @@ import Link from "next/link";
 import { ONDE_ASSISTIR, COPA_INFO } from "@/lib/copa-config";
 
 export const revalidate = 86400;
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
   title: "Onde Assistir a Copa do Mundo 2026 — TV e Streaming",

@@ -18,7 +18,7 @@ export default function Header() {
             className="header-menu-btn"
             onClick={() => setOpen((o) => !o)}
             aria-label="Menu"
-            style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", display: "flex", flexDirection: "column", gap: 5 }}
+            style={{ background: "none", border: "none", cursor: "pointer", padding: "0.25rem", flexDirection: "column", gap: 5 }}
           >
             <span style={{ display: "block", width: 22, height: 2, background: "#374151" }} />
             <span style={{ display: "block", width: 22, height: 2, background: "#374151" }} />
@@ -38,12 +38,13 @@ export default function Header() {
           </Link>
 
           <div style={{ fontSize: "0.75rem", color: "#94a3b8", fontStyle: "italic" }} className="header-date">
-            {new Date().toLocaleDateString("pt-BR", { weekday: "long", day: "numeric", month: "long", year: "numeric" })}
+            {new Date().toLocaleDateString("pt-BR", { timeZone: "America/Sao_Paulo", weekday: "long", day: "numeric", month: "long", year: "numeric" })}
           </div>
         </div>
 
         {/* Nav principal */}
         <nav aria-label="Navegação principal" className={`header-nav${open ? " open" : ""}`}>
+          <Link href="/noticias" onClick={() => setOpen(false)} style={{ padding: ".55rem 1rem", fontSize: ".78rem", fontWeight: 800, color: "#dc2626", textTransform: "uppercase" }}>Notícias</Link>
           <Link
             href="/copa"
             onClick={() => setOpen(false)}

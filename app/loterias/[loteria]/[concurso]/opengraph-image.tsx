@@ -3,7 +3,7 @@ import { LOTERIAS_CONFIG, getDrawBySlug, formatBRL, formatDateShort } from "@/li
 
 export const runtime = "nodejs";
 export const alt = "Resultado do concurso";
-export const size = { width: 1200, height: 630 };
+export const size = { width: 1200, height: 675 };
 export const contentType = "image/png";
 
 interface Props { params: Promise<{ loteria: string; concurso: string }> }
@@ -70,7 +70,6 @@ export default async function Image({ params }: Props) {
               fontWeight: 800,
             }}
           >
-            <span style={{ fontSize: 40 }}>{cfg.emoji}</span>
             <span>{cfg.name}</span>
           </div>
           <div
@@ -155,37 +154,20 @@ export default async function Image({ params }: Props) {
             marginTop: "auto",
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-            {isPublished ? (
-              <>
-                <div style={{ fontSize: 22, opacity: 0.85 }}>
-                  {draw.ganhadores > 0
-                    ? `${draw.ganhadores} ganhador${draw.ganhadores > 1 ? "es" : ""}`
-                    : "Acumulou"}
-                </div>
-                {draw.ganhadores > 0 && draw.premio_principal > 0 && (
-                  <div style={{ fontSize: 38, fontWeight: 900 }}>
-                    {formatBRL(draw.premio_principal)}
-                  </div>
-                )}
-                {draw.ganhadores === 0 && draw.proximo_premio && (
-                  <div style={{ fontSize: 30, fontWeight: 800 }}>
-                    Próximo: {formatBRL(draw.proximo_premio)}
-                  </div>
-                )}
-              </>
-            ) : (
-              draw.premio_principal > 0 && (
-                <div style={{ fontSize: 36, fontWeight: 900 }}>
-                  Estimativa: {formatBRL(draw.premio_principal)}
-                </div>
-              )
-            )}
+          <div style={{ display: "flex", flexDirection: "column", gap: 10, width: 680 }}>
+            <div style={{ display: "flex", fontSize: 22, opacity: 0.85 }}>
+              {isPublished ? draw.ganhadores > 0 ? `${draw.ganhadores} aposta(s) ganhadora(s)` : draw.acumulou === true ? "Acumulou" : "Premiação na fonte oficial" : "Resultado aguardando confirmação"}
+            </div>
+            <div style={{ display: "flex", fontSize: 28, fontWeight: 800 }}>
+              {isPublished && draw.ganhadores > 0 && draw.premio_principal > 0
+                ? formatBRL(draw.premio_principal)
+                : draw.proximo_premio ? `Estimativa seguinte: ${formatBRL(draw.proximo_premio)}` : ""}
+            </div>
           </div>
           <div
             style={{
               display: "flex",
-              fontSize: 24,
+              fontSize: 20,
               fontWeight: 800,
               background: "#fff",
               color: cfg.color,
@@ -193,7 +175,7 @@ export default async function Image({ params }: Props) {
               borderRadius: 8,
             }}
           >
-            hojenoticia.com
+            Hoje Notícia · dados Caixa
           </div>
         </div>
       </div>

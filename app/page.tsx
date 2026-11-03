@@ -6,7 +6,7 @@ import AdsterraNative from "@/components/AdsterraNative";
 
 export const revalidate = 86400;
 
-const BASE = "https://hojenoticia.com";
+const BASE = "https://www.hojenoticia.com";
 
 export const metadata: Metadata = {
   title: "Resultados de Loterias – Mega-Sena, Quina, Lotofácil | Hoje Notícia",
@@ -98,6 +98,7 @@ function NumberBall({ num, color }: { num: string; color: string }) {
 
 export default function HomePage() {
   const latest = getLatestDrawPerLoteria();
+  const todayISO = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo' }).format(new Date());
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "2rem 1.25rem" }}>
@@ -124,7 +125,7 @@ export default function HomePage() {
             Copa 2026
           </div>
           <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
-            Jogos e onde assistir →
+            Arquivo da competição →
           </div>
         </Link>
 
@@ -141,7 +142,7 @@ export default function HomePage() {
             Eleições 2026
           </div>
           <div style={{ fontSize: "0.85rem", opacity: 0.95 }}>
-            Candidatos e calendário →
+            Arquivo eleitoral de 2026 →
           </div>
         </Link>
 
@@ -203,7 +204,7 @@ export default function HomePage() {
           🎰 Resultados de Loterias
         </h1>
         <p style={{ color: "#64748b", marginTop: "0.4rem", fontSize: "1.05rem" }}>
-          Mega-Sena, Quina, Lotofácil e mais — resultados atualizados após cada sorteio.
+          Mega-Sena, Quina, Lotofácil e mais — confira a data de cada resultado.
         </p>
       </div>
 
@@ -251,7 +252,7 @@ export default function HomePage() {
                         </div>
                       ) : (
                         <div style={{ fontSize: "0.85rem", color: "#94a3b8" }}>
-                          Acumulou — próximo: {draw.proximo_premio ? formatBRL(draw.proximo_premio) : "—"}
+                          Acumulou{draw.proxima_data && draw.proxima_data >= todayISO && draw.proximo_premio ? ` — próximo: ${formatBRL(draw.proximo_premio)}` : ""}
                         </div>
                       )}
                     </>
@@ -271,6 +272,8 @@ export default function HomePage() {
           );
         })}
       </div>
+
+      <AdsterraBanner size="300x250" />
 
       {/* Últimos resultados — internal linking pra Google indexar concursos recentes */}
       {(() => {
