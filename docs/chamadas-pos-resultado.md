@@ -1,6 +1,6 @@
 # Chamadas depois dos resultados
 
-As páginas de concursos publicados exibem uma chamada logo depois dos números e antes do infográfico. Somente a foto leva ao conteúdo educativo: probabilidades na Mega-Sena e estatísticas da própria modalidade nos outros jogos. O título e os textos são informativos, com uma indicação para clicar na imagem. As páginas que ainda aguardam resultado mantêm seu fluxo de acompanhamento.
+As páginas de concursos publicados exibem uma chamada logo depois dos números e antes do infográfico. Somente a foto leva ao conteúdo educativo: probabilidades na Mega-Sena, histórico na Federal/Super Sete e estatísticas da própria modalidade nos demais jogos. O título e os textos são informativos, com uma indicação para clicar na imagem. As páginas que ainda aguardam resultado mantêm seu fluxo de acompanhamento.
 
 Foram geradas 20 fotos individuais com o **image_gen integrado**: adultos fictícios de idades variadas com bilhetes genéricos. As chamadas tratam de combinações, independência dos sorteios e chances de sena, quina e quadra. A legenda visível identifica cada cena como imagem ilustrativa gerada por IA.
 

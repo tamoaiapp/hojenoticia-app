@@ -261,7 +261,7 @@ export default async function DrawPage({ params }: Props) {
         <h2>Continue sua consulta</h2>
         <div className="draw-explore-links">
           <Link href={`/loterias/${loteria}#historico`}><strong>Outros concursos</strong><span>Navegue pelo histórico da {cfg.name} →</span></Link>
-          <Link href={`/loterias/${loteria}/estatisticas`}><strong>Estatísticas dos resultados</strong><span>Explore a frequência dos números publicados →</span></Link>
+          {loteria !== "federal" && loteria !== "super-sete" && <Link href={`/loterias/${loteria}/estatisticas`}><strong>Estatísticas dos resultados</strong><span>Explore a frequência dos números publicados →</span></Link>}
           {loteria === "mega-sena" && <Link href="/loterias/mega-sena/probabilidades"><strong>Compare as probabilidades</strong><span>Entenda a conta de 6 a 20 dezenas →</span></Link>}
         </div>
       </nav>

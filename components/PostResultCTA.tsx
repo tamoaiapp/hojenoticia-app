@@ -31,10 +31,11 @@ export default function PostResultCTA({ loteria, concurso }: { loteria: string; 
 
   const creative = POST_RESULT_CREATIVES[index];
   const megaSena = loteria === "mega-sena";
+  const historyOnly = loteria === "federal" || loteria === "super-sete";
   const gameName = LOTERIAS_CONFIG[loteria]?.name ?? "loteria";
-  const destination = megaSena ? "/loterias/mega-sena/probabilidades" : `/loterias/${loteria}/estatisticas`;
+  const destination = megaSena ? "/loterias/mega-sena/probabilidades" : historyOnly ? `/loterias/${loteria}#historico` : `/loterias/${loteria}/estatisticas`;
   const title = megaSena ? creative.title : `Conferiu os números? Explore o histórico da ${gameName}.`;
-  const action = megaSena ? "ver as probabilidades" : "explorar as estatísticas";
+  const action = megaSena ? "ver as probabilidades" : historyOnly ? "consultar o histórico" : "explorar as estatísticas";
 
   function handleImageClick(event: MouseEvent<HTMLAnchorElement>) {
     if (event.defaultPrevented || event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
@@ -63,7 +64,7 @@ export default function PostResultCTA({ loteria, concurso }: { loteria: string; 
       <div className="post-result-copy">
         <p className="post-result-kicker">{gameName} · Continue sua consulta</p>
         <h2 id="post-result-title">{title}</h2>
-        <p>{megaSena ? "Compare as chances de sena, quina e quadra e veja como a quantidade de dezenas entra nessa conta." : `Veja as frequências dos números e navegue pelos resultados publicados da ${gameName}.`}</p>
+        <p>{megaSena ? "Compare as chances de sena, quina e quadra e veja como a quantidade de dezenas entra nessa conta." : historyOnly ? loteria === "federal" ? "Consulte os bilhetes premiados em cada concurso e navegue pelo histórico da Federal." : "Confira os dígitos de cada coluna e navegue pelos concursos publicados do Super Sete." : `Veja as frequências dos números e navegue pelos resultados publicados da ${gameName}.`}</p>
         <p className="post-result-image-hint">Clique na foto para {action}.{POST_RESULT_AD.enabled && " O clique também abre publicidade em outra aba."}</p>
         <p className="post-result-note">Os sorteios são independentes. O histórico não prevê o próximo resultado.</p>
       </div>

@@ -43,6 +43,15 @@ assert.match(quinaCallout, /href="\/loterias\/quina\/estatisticas"/, 'Other game
 assert.doesNotMatch(quinaCallout, /href="\/loterias\/mega-sena\/probabilidades"/);
 assert.equal((quinaCallout.match(/<a\b/g) || []).length, 1);
 
+for (const [game, slug] of [['federal', 'concurso-6114'], ['super-sete', 'concurso-917']]) {
+  const html = await read(`/loterias/${game}/${slug}`);
+  const start = html.indexOf('<aside class="post-result-cta"');
+  assert.ok(start > 0);
+  const imageCallout = html.slice(start, html.indexOf('</aside>', start));
+  assert.ok(imageCallout.includes(`href="/loterias/${game}#historico"`));
+  assert.doesNotMatch(imageCallout, /frequências|\/estatisticas/);
+}
+
 const probabilities = await read('/loterias/mega-sena/probabilidades');
 assert.doesNotMatch(probabilities, /adsterra-popunder|https:\/\/abscloud\.org\//, 'Image destination must not load a page-wide popunder');
 assert.match(probabilities, /50\.063\.860/);
