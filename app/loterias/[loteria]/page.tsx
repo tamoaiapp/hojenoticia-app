@@ -167,6 +167,7 @@ export default async function LoteriasPage({ params }: Props) {
         <a href="#historico">Histórico de resultados</a>
         {draws.some(draw => draw.status === "aguardando" && draw.concurso > (latest?.concurso || 0)) && <a href="#future-contests-title">Próximos concursos</a>}
         <Link href={`/loterias/${loteria}/estatisticas`}>Estatísticas da {cfg.name}</Link>
+        {loteria === "mega-sena" && <Link href="/loterias/mega-sena/probabilidades">Probabilidades da Mega-Sena</Link>}
         <a href={cfg.sourceUrl} target="_blank" rel="noopener noreferrer">Programação e regras na Caixa</a>
       </nav>
       <AdsterraBanner size="728x90" showOn="desktop" />
