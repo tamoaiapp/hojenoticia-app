@@ -1,7 +1,7 @@
 /**
  * Módulo: Horóscopo.
  * Gera horóscopo dos 12 signos pro dia atual usando templates determinísticos
- * (seed = data + signo). Custo zero, conteúdo varia por dia/signo.
+ * (seed = data + signo). Geração sem API de IA; conteúdo varia por dia/signo.
  *
  * Output: content/horoscopo/{YYYY-MM-DD}.json + latest.json
  */
@@ -119,13 +119,48 @@ function gerarHoroscopo(signo, dateISO) {
   return out;
 }
 
-export async function updateHoroscopo({ root, today }) {
+function validDate(value) {
+  if (typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T12:00:00Z`);
+  return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+function readSnapshot(file) {
+  let raw;
+  try { raw = fs.readFileSync(file, 'utf8'); }
+  catch (error) { if (error.code === 'ENOENT') return null; throw error; }
+  let data;
+  try { data = JSON.parse(raw); } catch { return null; }
+  const textFields = ['name', 'periodo', 'elemento', 'regente', ...Object.keys(TEMPLATES), 'cor_sorte'];
+  if (!data || !validDate(data.date) || !data.signos || typeof data.signos !== 'object' || Array.isArray(data.signos)) return null;
+  const stamp = typeof data.updated_at === 'string' ? new Date(data.updated_at) : null;
+  if (!stamp || !Number.isFinite(stamp.getTime()) || stamp.toISOString() !== data.updated_at) return null;
+  if (Object.keys(data.signos).length !== SIGNOS.length || !SIGNOS.every(signo => {
+    const value = data.signos[signo.slug];
+    return value && value.slug === signo.slug && textFields.every(field => typeof value[field] === 'string' && value[field].trim()) && Number.isInteger(value.numero_sorte) && value.numero_sorte >= 1 && value.numero_sorte <= 99;
+  })) return null;
+  return { data, raw };
+}
+
+function stableJSON(value) {
+  if (Array.isArray(value)) return `[${value.map(stableJSON).join(',')}]`;
+  if (value && typeof value === 'object') return `{${Object.keys(value).sort().map(key => `${JSON.stringify(key)}:${stableJSON(value[key])}`).join(',')}}`;
+  return JSON.stringify(value);
+}
+
+// Formatting, key order and the time of a repeated execution are not new content.
+function sameContent(snapshot, data) {
+  return !!snapshot && stableJSON({ date: snapshot.data.date, signos: snapshot.data.signos }) === stableJSON({ date: data.date, signos: data.signos });
+}
+
+export async function updateHoroscopo({ root, today, now = new Date() }) {
+  if (!validDate(today)) throw new Error('Data do horóscopo inválida; use YYYY-MM-DD com uma data existente.');
+  if (!(now instanceof Date) || !Number.isFinite(now.getTime())) throw new Error('Horário de geração do horóscopo inválido.');
   const OUT_DIR = path.join(root, 'content', 'horoscopo');
-  if (!fs.existsSync(OUT_DIR)) fs.mkdirSync(OUT_DIR, { recursive: true });
 
   const data = {
     date: today,
-    updated_at: new Date().toISOString(),
+    updated_at: now.toISOString(),
     signos: {},
   };
 
@@ -139,14 +174,30 @@ export async function updateHoroscopo({ root, today }) {
   const latestPath = path.join(OUT_DIR, 'latest.json');
   const dailyPath  = path.join(OUT_DIR, `${today}.json`);
 
-  // Se já existe arquivo do dia idêntico, não recria
-  const newContent = JSON.stringify(data, null, 2);
-  if (fs.existsSync(dailyPath) && fs.readFileSync(dailyPath, 'utf-8') === newContent) {
-    return { changes: 0, summary: 'horóscopo do dia já existe' };
+  const daily = readSnapshot(dailyPath), latest = readSnapshot(latestPath);
+  // An unchanged day is also the source for repairing latest.json, retaining its
+  // original generation time and bytes (including a Windows CRLF checkout).
+  const snapshot = sameContent(daily, data) ? daily : sameContent(latest, data) ? latest : { data, raw: JSON.stringify(data, null, 2) };
+  let changes = 0;
+  const write = (file, raw) => {
+    fs.mkdirSync(OUT_DIR, { recursive: true });
+    fs.writeFileSync(file, raw, 'utf8');
+    changes++;
+  };
+  if (!sameContent(daily, data)) write(dailyPath, snapshot.raw);
+
+  let targetLatest = snapshot;
+  if (latest && latest.data.date > today) targetLatest = latest;
+  else if (!latest) {
+    // A retrospective repair must not point latest at an older day when a valid
+    // newer daily snapshot survives, even if latest itself was lost or corrupt.
+    const newerDays = fs.readdirSync(OUT_DIR).filter(name => /^\d{4}-\d{2}-\d{2}\.json$/.test(name) && name.slice(0, 10) > today).sort().reverse();
+    for (const name of newerDays) {
+      const saved = readSnapshot(path.join(OUT_DIR, name));
+      if (saved && saved.data.date === name.slice(0, 10)) { targetLatest = saved; break; }
+    }
   }
+  if (!sameContent(latest, targetLatest.data)) write(latestPath, targetLatest.raw);
 
-  fs.writeFileSync(latestPath, newContent, 'utf-8');
-  fs.writeFileSync(dailyPath, newContent, 'utf-8');
-
-  return { changes: 1, summary: '12 signos gerados' };
+  return { changes, summary: changes ? `12 signos disponíveis; ${changes} arquivo(s) atualizado(s)` : 'horóscopo do dia já existe; nenhum conteúdo alterado' };
 }
