@@ -33,14 +33,3 @@
 .inbox li { border-bottom: 1px solid #cbd5e1; padding-bottom: .8rem; line-height: 1.65; }
 .prizes { font-size: .88rem; line-height: 1.65; padding-left: 1.2rem; margin-top: .7rem; }
 @media (max-width: 600px) { .panel { padding: 1rem; } .actions .button { width: 100%; } }
-@media (prefers-color-scheme: dark) {
-  .page { color: #e2e8f0; }
-  .panel, .card, .button { background: #111827; border-color: #64748b; }
-  .button, .links a, .textLink, .card summary { color: #93c5fd; }
-  .primary { background: #1d4ed8; color: #fff; }
-  .button:hover:not(:disabled), .option:has(input:checked) { background: #172554; }
-  .muted { color: #cbd5e1; }
-  .notice { background: #172554; }
-  .warning { background: #422006; color: #fef3c7; }
-  .numbers li { background: #334155; color: #f8fafc; }
-}
