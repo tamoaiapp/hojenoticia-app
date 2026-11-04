@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getCambioLatest, MOEDA_INFO, formatBRL } from "@/lib/cambio";
+import { getCambioLatest, getQuoteTiming, MOEDA_INFO, formatBRL } from "@/lib/cambio";
 import AdsterraBanner from "@/components/AdsterraBanner";
 
-export const revalidate = 86400;
+export const revalidate = 300;
 
 const BASE = "https://www.hojenoticia.com";
 
@@ -14,22 +14,21 @@ export const metadata: Metadata = {
 };
 
 export default function CotacaoPage() {
-  const data = getCambioLatest();
+  const now = new Date();
+  const data = getCambioLatest(now);
 
   if (!data) {
     return (
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "2rem 1.25rem" }}>
         <h1>Cotações</h1>
-        <p>Ainda não há cotações disponíveis para consulta.</p>
+        <p>Não há cotações validadas disponíveis para consulta.</p>
       </div>
     );
   }
 
   const updatedAt = new Date(data.updated_at).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-  const todayISO = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date());
-  const recordDay = new Intl.DateTimeFormat("en-CA", { timeZone: "America/Sao_Paulo" }).format(new Date(data.updated_at));
-
   const pares = Object.values(data.pares);
+  const hasPreviousDate = pares.some(par => getQuoteTiming(par.timestamp, now)?.isFromPreviousDate);
 
   const itemListLd = {
     "@context": "https://schema.org",
@@ -46,7 +45,7 @@ export default function CotacaoPage() {
 
   return (
     <div style={{ maxWidth: 1100, margin: "0 auto", padding: "2rem 1.25rem" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(itemListLd).replace(/</g, "\\u003c") }} />
 
       <AdsterraBanner size="728x90" showOn="desktop" />
       <AdsterraBanner size="320x50" showOn="mobile" />
@@ -59,11 +58,11 @@ export default function CotacaoPage() {
           Valores registrados para dólar, euro, outras moedas e criptoativos.
         </p>
         <p style={{ color: "#94a3b8", fontSize: "0.82rem", marginTop: "0.3rem" }}>
-          Dados consultados em: {updatedAt} (horário de Brasília). Os horários de cada par podem variar.
+          Coleta deste registro: {updatedAt} (horário de Brasília). Abaixo, cada par mostra o horário da negociação informado pela fonte.
         </p>
-        {recordDay < todayISO && (
+        {hasPreviousDate && (
           <p style={{ color: "#92400e", fontSize: "0.9rem", marginTop: "0.6rem" }}>
-            O registro disponível é de uma data anterior a hoje e pode não refletir os valores neste momento.
+            Uma ou mais cotações têm negociação registrada pela fonte em data anterior a hoje e podem não refletir os valores neste momento.
           </p>
         )}
       </div>
@@ -73,6 +72,7 @@ export default function CotacaoPage() {
           const info = MOEDA_INFO[p.code];
           if (!info) return null;
           const subiu = p.pctChange >= 0;
+          const timing = getQuoteTiming(p.timestamp, now);
           return (
             <Link key={p.code} href={`/cotacao/${info.slug}`} style={{ textDecoration: "none" }}>
               <div style={{
@@ -92,6 +92,8 @@ export default function CotacaoPage() {
                     máx {formatBRL(p.high)} / mín {formatBRL(p.low)}
                   </span>
                 </div>
+                {timing && <p style={{ marginTop: "0.65rem", fontSize: "0.8rem", color: "#475569" }}>Negociação na fonte: <time dateTime={timing.iso}>{timing.formatted}</time> (Brasília).</p>}
+                {timing?.isFromPreviousDate && <p style={{ marginTop: "0.4rem", fontSize: "0.82rem", color: "#92400e" }}>Negociação de uma data anterior a hoje.</p>}
               </div>
             </Link>
           );

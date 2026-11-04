@@ -26,6 +26,16 @@ As consultas programadas ocorrem às 21h20, 22h20 e 23h20 de Brasília, com jane
 
 Somente o próximo concurso com data explícita na resposta oficial recebe calendário confirmado. As outras futuras são indexáveis, têm canonical próprio, links no histórico e entrada no sitemap comum, sem números sorteados, datas editoriais ou prêmios inventados. A Federal não informou a data da próxima extração nesta consulta, que permanece a confirmar. Futuras não entram no sitemap de notícias nem recebem marcação NewsArticle.
 
+## Manutenção do câmbio — 04/11/2026
+
+O Daily Update mantém cada módulo independente: uma falha no câmbio não descarta resultados confirmados das loterias, mas a execução continua marcada como falha. O resumo do Actions identifica o módulo afetado.
+
+A AwesomeAPI é consultada com até três tentativas para falhas de rede, HTTP 429 ou 5xx. A espera acumulada é limitada a 30 segundos por endpoint; um `Retry-After` maior encerra a consulta sem antecipar a nova tentativa. Falha na consulta principal ou resposta incompleta/inválida preserva os arquivos anteriores. Falha apenas no histórico mantém a série anterior e gera aviso; um 429 esgotado suspende as outras consultas de histórico na mesma execução.
+
+Dados idênticos não recebem nova data de coleta. As páginas exibem separadamente a coleta do registro e o horário da negociação de cada par, em Brasília. O histórico usa o dia de Brasília derivado do timestamp da fonte, inclusive na leitura de arquivos antigos.
+
+Opcionalmente, o proprietário pode configurar o secret `AWESOMEAPI_KEY` no GitHub, com uma chave da própria AwesomeAPI. A rotina envia essa credencial apenas pelo cabeçalho `x-api-key`, conforme a [documentação da fonte](https://docs.awesomeapi.com.br/instrucoes-api-key). Sem esse secret, utiliza o acesso público. Teste local sem publicar: `node scripts/daily-update.mjs --only=cambio --no-push`. Testes sem rede: `node --test scripts/modules/cambio.test.mjs scripts/cambio-freshness.test.mjs` (o teste de leitura requer as dependências do projeto instaladas).
+
 ## Textos e navegação
 
 - Os títulos dos concursos publicados identificam modalidade, concurso e data do sorteio. Foram retirados “hoje”, prêmios antigos no título e frases que anunciavam próximos sorteios já passados.

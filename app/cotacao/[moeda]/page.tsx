@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCambioLatest, MOEDA_INFO, SLUG_TO_CODE, formatBRL } from "@/lib/cambio";
+import { getCambioLatest, getQuoteTiming, MOEDA_INFO, SLUG_TO_CODE, formatBRL } from "@/lib/cambio";
 import AdsterraBanner from "@/components/AdsterraBanner";
 import AdsterraNative from "@/components/AdsterraNative";
 
-export const revalidate = 86400;
+export const revalidate = 300;
 
 const BASE = "https://www.hojenoticia.com";
 
@@ -33,14 +33,15 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
   const code = SLUG_TO_CODE[moeda];
   if (!code) notFound();
   const info = MOEDA_INFO[code];
-  const data = getCambioLatest();
+  const now = new Date();
+  const data = getCambioLatest(now);
   const par = data?.pares[code];
 
   if (!data || !par) {
     return (
       <div style={{ maxWidth: 900, margin: "0 auto", padding: "2rem 1.25rem" }}>
         <h1>{info.nome}</h1>
-        <p>Cotação ainda não disponível.</p>
+        <p>Não há cotação validada disponível para esta moeda.</p>
       </div>
     );
   }
@@ -48,9 +49,7 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
   const historico = data.historico?.[code] ?? [];
   const subiu = par.pctChange >= 0;
   const updatedAt = new Date(data.updated_at).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-  const observedAt = Number.isFinite(par.timestamp) && par.timestamp > 0
-    ? new Date(par.timestamp * 1000).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" })
-    : null;
+  const timing = getQuoteTiming(par.timestamp, now);
 
   // Estatísticas do histórico
   const valores = historico.map(h => h.bid).filter(v => v > 0);
@@ -87,9 +86,10 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
           Cotação: {info.nome}
         </h1>
         <p style={{ color: "#94a3b8", fontSize: "0.82rem", marginTop: "0.4rem" }}>
-          Dados consultados em: {updatedAt} (horário de Brasília).
+          Coleta deste registro: {updatedAt} (horário de Brasília).
         </p>
-        {observedAt && <p style={{ color: "#64748b", fontSize: "0.85rem", marginTop: "0.3rem" }}>Registro da fonte em: {observedAt} (horário de Brasília).</p>}
+        {timing && <p style={{ color: "#64748b", fontSize: "0.85rem", marginTop: "0.3rem" }}>Negociação na fonte: <time dateTime={timing.iso}>{timing.formatted}</time> (horário de Brasília).</p>}
+        {timing?.isFromPreviousDate && <p style={{ color: "#92400e", fontSize: "0.9rem", marginTop: "0.6rem" }}>A negociação foi registrada pela fonte em data anterior a hoje. A cotação registrada pode não refletir os valores neste momento.</p>}
       </div>
 
       <div style={{ background: "#fff", borderRadius: 14, padding: "1.75rem", border: "1px solid #e2e8f0", marginBottom: "1.5rem" }}>

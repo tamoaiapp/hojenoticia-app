@@ -20,6 +20,7 @@
  *   node scripts/daily-update.mjs --only=cambio,horoscopo
  */
 import { execSync } from 'child_process';
+import fs from 'node:fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
@@ -68,6 +69,9 @@ async function main() {
     try {
       const result = await MODULES[key]({ root: ROOT, today });
       stats[key] = result;
+      for (const warning of result.warnings ?? []) {
+        console.warn(`::warning title=Atualização de ${key}::${String(warning).replace(/[\r\n]/g, ' ')}`);
+      }
       if (result.errors?.length) {
         console.error(`❌ ${key}: ${result.summary || 'falhas na atualização'}`);
         for (const error of result.errors) console.error(`   ${error}`);
@@ -86,6 +90,20 @@ async function main() {
   for (const [key, s] of Object.entries(stats)) {
     if (s.error || s.errors?.length) console.log(`  ❌ ${key.padEnd(12)} ${s.error || s.summary}`);
     else console.log(`  ✅ ${key.padEnd(12)} ${s.summary || 'ok'}`);
+  }
+
+  if (process.env.GITHUB_STEP_SUMMARY) {
+    const cell = value => String(value ?? '').replace(/[\r\n]/g, ' ').replace(/\|/g, '\\|');
+    const rows = Object.entries(stats).map(([key, result]) => {
+      const failed = result.error || result.errors?.length;
+      const status = failed ? 'Falha' : result.warnings?.length ? 'Atualizado com aviso' : 'OK';
+      const detail = [result.error || result.summary, ...(result.errors ?? []), ...(result.warnings ?? [])].filter(Boolean).join('; ');
+      return `| ${cell(key)} | ${status} | ${cell(detail)} |`;
+    });
+    fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY, [
+      '## Atualização de conteúdo', '', '| Módulo | Estado | Detalhes |', '| --- | --- | --- |', ...rows, '',
+      'Falhas preservam os registros anteriores. O horário da fonte não é substituído pelo horário desta execução.', '',
+    ].join('\n'));
   }
 
   const totalChanges = Object.values(stats).reduce((acc, s) => acc + (s.changes || 0), 0);
