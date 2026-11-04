@@ -62,3 +62,13 @@ As estatísticas da Lotomania consideram os 100 números de 00 a 99. A +Milioná
 - A migração editorial preservou o hash dos campos factuais: `da41260388fcbedd43b65119d8d752aac1929f5f8c173ea49edf17d11d5fe8fc`.
 
 O volume de páginas não demonstra ganho de tráfego. O Google recomenda [conteúdo útil e confiável](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) e [títulos descritivos e concisos](https://developers.google.com/search/docs/appearance/title-link). A indexação, os títulos exibidos e a posição nas buscas são decisões dos sistemas do Google; os efeitos devem ser acompanhados no Search Console após a publicação.
+
+## Conteúdo por concurso — revisão de 04/11/2026
+
+Os modelos de resultados passaram a produzir um resumo do sorteio com números, complementos e premiação a partir dos campos confirmados. Há conferência específica por modalidade, explicação do formato, perguntas do concurso e navegação por seções. Os títulos de premiação e de resultado identificam modalidade e número do concurso. O leitor calcula títulos e descrições de forma consistente para metadados, cabeçalho, arquivos e feeds. O texto genérico reconhecido é substituído sem remover seções editoriais separadas.
+
+As 1.772 páginas de concursos do inventário atual recebem o modelo: 1.172 publicadas e 600 aguardando confirmação. Futuras continuam indexáveis e têm conteúdo de acompanhamento; datas antigas sem confirmação não entram no título ou na descrição. Bilhetes da Federal mantêm zeros e ordem de prêmio; Super Sete preserva as sete posições; Dupla Sena separa os sorteios e +Milionária mantém os trevos. Ausência de rateio não é apresentada como ausência de ganhadores. Nenhum arquivo de resultados, fonte ou timestamp de publicação foi regravado por esta revisão editorial.
+
+O [CSV de metadados calculados pelo modelo](seo-paginas-2026-11-04.csv) contém as 1.772 URLs, títulos e descrições distintos. A [auditoria HTTP](seo-render-2026-11-04.json) verificou 93 páginas representativas dos modelos e estados, 6.340 referências internas e 1.827 URLs no sitemap, sem falhas, H2 duplicados ou links de seção quebrados. Os 39 testes de dados, editorial, notícias e estatísticas passaram, assim como lint, tipos, build e os smokes de SEO e imagens.
+
+Na Quina 7158, a contagem do texto dentro do artigo passou de 467 para 806 palavras, incluindo títulos, números, tabela e navegação. Essa medida registra o aumento de informação disponível, sem estabelecer uma quantidade de palavras necessária para ranquear. O resumo passa a explicar o zero na faixa principal e os dados das faixas de quatro e três acertos do próprio concurso, em vez de apenas repetir sua identificação.

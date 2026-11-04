@@ -5,6 +5,7 @@ import AdsterraBanner from "@/components/AdsterraBanner";
 import AdsterraNative from "@/components/AdsterraNative";
 import FutureContests from "@/components/FutureContests";
 import DrawNumbers from "@/components/DrawNumbers";
+import { DRAW_GUIDES } from "@/lib/draw-editorial";
 import {
   LOTERIAS_CONFIG, getDrawsByLoteria,
   formatBRL, formatDate, formatDateShort,
@@ -133,7 +134,7 @@ export default async function LoteriasPage({ params }: Props) {
           <span style={{ fontSize: "2.5rem" }}>{cfg.emoji}</span>
           <div>
             <h1 style={{ fontSize: "1.8rem", fontWeight: 900, lineHeight: 1.2 }}>
-              Resultado da {cfg.name}
+              Resultado da {cfg.name}{latest ? ` ${latest.concurso}` : ""}
             </h1>
             <p style={{ opacity: 0.95, fontSize: "0.88rem", marginTop: ".5rem" }}>{cfg.description}</p>
           </div>
@@ -273,6 +274,13 @@ export default async function LoteriasPage({ params }: Props) {
             </div>
           )}
 
+          <section className="article-body draw-guide" aria-labelledby="consultar-resultados-title">
+            <h2 id="consultar-resultados-title">Como consultar os resultados da {cfg.name}</h2>
+            <p>Escolha no histórico o número do concurso ou a data que aparece no seu comprovante. Cada página reúne o resultado daquele sorteio, a premiação disponível e o endereço da fonte da Caixa. {latest ? <>O último resultado publicado neste arquivo é o <Link href={`/loterias/${loteria}/${latest.slug}`}>concurso {latest.concurso}, de {formatDate(latest.draw_date)}</Link>.</> : "Os resultados confirmados serão acrescentados conforme a divulgação oficial."}</p>
+            <p>{DRAW_GUIDES[loteria].format}</p>
+            <p>{DRAW_GUIDES[loteria].compare}</p>
+            <p>As páginas dos próximos concursos têm situação própria: uma data informada pela Caixa identifica a programação, enquanto uma data a confirmar indica que ainda falta calendário oficial para aquele concurso. Números e rateio somente aparecem após confirmação; os valores de concursos anteriores não representam prêmios de um sorteio futuro.</p>
+          </section>
           <FutureContests lottery={loteria} name={cfg.name} draws={draws.filter(draw => draw.status === "aguardando" && draw.concurso > (latest?.concurso || 0))} />
           <section style={{ margin: "2rem 0" }}>
             <h2 style={{ fontSize: "1.3rem", marginBottom: "1rem" }}>Dúvidas sobre a {cfg.name}</h2>

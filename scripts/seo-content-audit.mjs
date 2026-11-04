@@ -2,6 +2,15 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import path from 'node:path';
 import matter from 'gray-matter';
+import ts from 'typescript';
+
+async function loadEditorialModule(file) {
+  const source = fs.readFileSync(new URL(`../lib/${file}.ts`, import.meta.url), 'utf8');
+  const { outputText } = ts.transpileModule(source, { compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 } });
+  return import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
+}
+const { getDrawSearchCopy } = await loadEditorialModule('draw-editorial');
+const { LOTERIAS_CONFIG } = await loadEditorialModule('loterias-config');
 
 // Read-only audit of every lottery URL, its metadata, and Markdown links.
 const root = process.cwd();
@@ -23,7 +32,8 @@ for (const loteria of fs.readdirSync(contentRoot)) {
     const { data, content } = matter(fs.readFileSync(path.join(dir, file), 'utf8'));
     const url = `/loterias/${loteria}/${file.replace(/\.mdx?$/, '')}`;
     routes.add(url);
-    records.push({ data, content, url, loteria });
+    const copy = getDrawSearchCopy({ ...data, loteria, numeros: Array.isArray(data.numeros) ? data.numeros : [] }, LOTERIAS_CONFIG[loteria].name);
+    records.push({ data: { ...data, ...copy }, content, url, loteria });
   }
 }
 
