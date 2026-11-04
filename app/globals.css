@@ -72,6 +72,9 @@ button:disabled { cursor: default; }
 .lottery-card { display: flex; min-width: 0; flex-direction: column; padding: 20px; border: 1px solid #dfe5ed; border-top: 3px solid #64748b; border-radius: 12px; background: #fff; }
 .lottery-card-heading { display: flex; min-width: 0; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
 .lottery-card-heading h3 { display: inline-flex; min-width: 0; align-items: center; gap: 8px; font-size: 1.15rem; font-weight: 750; line-height: 1.4; }
+.home-tool-card h3 { font-size: 1.15rem; font-weight: 750; line-height: 1.4; }
+.home-tool-card p { margin: .75rem 0 1.25rem; line-height: 1.65; color: #475569; }
+.home-tool-card > .button { margin-top: auto; }
 .lottery-color-dot { width: 9px; height: 9px; flex-shrink: 0; border-radius: 50%; }
 .contest-badge { padding: 3px 7px; border: 1px solid #e2e8f0; border-radius: 5px; color: #64748b; font-size: 0.65rem; font-weight: 600; white-space: nowrap; }
 .result-date { margin-top: 7px; color: #64748b; font-size: 0.76rem; }

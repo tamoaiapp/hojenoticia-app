@@ -56,7 +56,8 @@ await Promise.all(Array.from({ length: 3 }, async () => {
       for (const [, href] of html.matchAll(/<a\b[^>]*\bhref="([^\"]+)"/g)) {
         if (!href.startsWith('/') || href.startsWith('//')) continue;
         const destination = new URL(href.replace(/&amp;/g, '&'), 'https://www.hojenoticia.com').pathname.replace(/\/$/, '') || '/';
-        assert.ok(sitemapPaths.has(destination) || ['/rss.xml', '/news-sitemap.xml'].includes(destination), `Link outside known pages: ${href}`);
+        // Personal preferences and calendar downloads are usable routes, deliberately outside the search index.
+        assert.ok(sitemapPaths.has(destination) || ['/rss.xml', '/news-sitemap.xml', '/meus-resultados', '/api/calendario'].includes(destination), `Link outside known pages: ${href}`);
         linksChecked++;
       }
     } catch (error) {
