@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState, type MouseEvent } from "react";
-import { initialCreativeIndex, POST_RESULT_CREATIVES } from "@/lib/post-result-creatives";
+import { initialCreativeIndex, POST_RESULT_CREATIVES, POST_RESULT_HISTORY_COPY, POST_RESULT_STATISTICS_COPY } from "@/lib/post-result-creatives";
 import { POST_RESULT_AD, postResultAdUrl } from "@/lib/post-result-ad";
 import { LOTERIAS_CONFIG } from "@/lib/loterias-config";
 
@@ -34,7 +34,8 @@ export default function PostResultCTA({ loteria, concurso }: { loteria: string; 
   const historyOnly = loteria === "federal" || loteria === "super-sete";
   const gameName = LOTERIAS_CONFIG[loteria]?.name ?? "loteria";
   const destination = megaSena ? "/loterias/mega-sena/probabilidades" : historyOnly ? `/loterias/${loteria}#historico` : `/loterias/${loteria}/estatisticas`;
-  const title = megaSena ? creative.title : `Conferiu os números? Explore o histórico da ${gameName}.`;
+  const copy = megaSena ? creative : historyOnly ? POST_RESULT_HISTORY_COPY[index % POST_RESULT_HISTORY_COPY.length] : POST_RESULT_STATISTICS_COPY[index];
+  const title = copy.title;
   const action = megaSena ? "ver as probabilidades" : historyOnly ? "consultar o histórico" : "explorar as estatísticas";
 
   function handleImageClick(event: MouseEvent<HTMLAnchorElement>) {
@@ -57,15 +58,15 @@ export default function PostResultCTA({ loteria, concurso }: { loteria: string; 
       <figure className="post-result-visual">
         <a className="post-result-image-link" href={destination} onClick={handleImageClick} data-ad-unit-id={POST_RESULT_AD.unitId} aria-label={`${title} Clique para ${action}.${POST_RESULT_AD.enabled ? " Também abre publicidade em outra aba." : ""}`}>
           <Image src={`/images/post-result/creative-${creative.id}.webp`} alt="Pessoa adulta segurando um bilhete de loteria em uma cena ilustrativa" width={600} height={400} sizes="(max-width: 640px) 100vw, 380px" />
-          <div className="post-result-image-copy" aria-hidden="true"><span>{megaSena ? creative.cue : "Conheça o histórico"}</span><span className="post-result-photo-action">{megaSena ? "Entenda as chances" : "Explore os resultados"} <span aria-hidden="true">↗</span></span></div>
+          <div className="post-result-image-copy" aria-hidden="true"><span>{copy.cue}</span><span className="post-result-photo-action">{megaSena ? "Quero entender essa conta" : historyOnly ? "Quero comparar os resultados" : "Quero ver a lista"} <span aria-hidden="true">↗</span></span></div>
         </a>
         <figcaption>{POST_RESULT_AD.enabled && "Publicidade ao clicar · "}Imagem ilustrativa gerada por IA</figcaption>
       </figure>
       <div className="post-result-copy">
-        <p className="post-result-kicker">{gameName} · Continue sua consulta</p>
+        <p className="post-result-kicker">{gameName} · Olhe mais de perto</p>
         <h2 id="post-result-title">{title}</h2>
-        <p>{megaSena ? "Compare as chances de sena, quina e quadra e veja como a quantidade de dezenas entra nessa conta." : historyOnly ? loteria === "federal" ? "Consulte os bilhetes premiados em cada concurso e navegue pelo histórico da Federal." : "Confira os dígitos de cada coluna e navegue pelos concursos publicados do Super Sete." : `Veja as frequências dos números e navegue pelos resultados publicados da ${gameName}.`}</p>
-        <p className="post-result-image-hint">Clique na foto para {action}.{POST_RESULT_AD.enabled && " O clique também abre publicidade em outra aba."}</p>
+        <p>{megaSena ? "Anos repetindo o mesmo jogo, uma dezena a mais ou prêmio acumulado: descubra o que entra na conta das chances de sena, quina e quadra." : historyOnly ? loteria === "federal" ? "Volte aos concursos publicados da Federal e compare os bilhetes premiados, prêmio por prêmio." : "Volte aos concursos publicados do Super Sete e compare os dígitos, coluna por coluna." : `Procure seu favorito entre os números mais sorteados e os maiores intervalos sem aparecer na amostra da ${gameName}. A frequência dele é a que você imaginava?`}</p>
+        <p className="post-result-image-hint">Clique na foto e {megaSena ? "descubra o que muda nas chances do seu jogo." : historyOnly ? "volte aos resultados anteriores." : "descubra quais números estão no topo da lista."}{POST_RESULT_AD.enabled && " O clique também abre publicidade em outra aba."}</p>
         <p className="post-result-note">Os sorteios são independentes. O histórico não prevê o próximo resultado.</p>
       </div>
     </aside>

@@ -121,6 +121,8 @@ export default async function ProbabilidadesPage({ params }: Props) {
 
       <section aria-labelledby="duvidas-title" style={{ marginBottom: "2rem", color: "#334155", lineHeight: 1.85 }}>
         <h2 id="duvidas-title" style={{ color: "#0f172a", fontSize: "1.4rem", marginBottom: "1rem" }}>Dúvidas sobre as chances da Mega-Sena</h2>
+        <h3 style={{ fontSize: "1.05rem", color: "#0f172a", marginBottom: ".5rem" }}>Jogo há 10 anos. Isso aumenta a chance do próximo bilhete?</h3>
+        <p style={{ marginBottom: "1.25rem" }}>O tempo que você já jogou não aumenta a chance do próximo bilhete. Cada concurso é independente: uma seleção de seis dezenas continua com chance de 1 em {integer.format(MEGA_SENA_TOTAL_RESULTADOS)} de acertar a sena naquele sorteio. Repetir números por anos não acumula sorte nem estabelece um prazo para ganhar.</p>
         <h3 style={{ fontSize: "1.05rem", color: "#0f172a", marginBottom: ".5rem" }}>Números mais sorteados têm mais chance no próximo concurso?</h3>
         <p style={{ marginBottom: "1.25rem" }}>Não. A frequência resume o que ocorreu na amostra consultada. No modelo de sorteios aleatórios independentes, o resultado anterior não muda as probabilidades do próximo concurso. A Caixa explica os controles de aleatoriedade e a igualdade de condições das bolas em seu <a href={sourceFairness} style={{ textDecoration: "underline" }}>guia sobre mitos e verdades dos sorteios</a>.</p>
         <h3 style={{ fontSize: "1.05rem", color: "#0f172a", marginBottom: ".5rem" }}>Uma sequência de seis números tem menos chance?</h3>
