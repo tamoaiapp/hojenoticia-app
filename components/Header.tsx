@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { LOTERIAS_CONFIG } from "@/lib/loterias-config";
 
-const featured = ["quina", "lotofacil", "mega-sena"];
-const tools = [{ href: "/cotacao", label: "Cotação" }, { href: "/horoscopo", label: "Horóscopo" }, { href: "/feriados", label: "Feriados" }];
+const featured = ["lotofacil", "quina", "mega-sena"];
+const tools = [{ href: "/meus-resultados", label: "Meus resultados" }, { href: "/feriados", label: "Feriados" }, { href: "/dias-uteis", label: "Dias úteis" }, { href: "/cotacao", label: "Cotação" }, { href: "/horoscopo", label: "Horóscopo" }];
 
 export default function Header() {
   const pathname = usePathname();

@@ -5,6 +5,7 @@ import AdsterraBanner from "@/components/AdsterraBanner";
 import AdsterraNative from "@/components/AdsterraNative";
 import FutureContests from "@/components/FutureContests";
 import DrawNumbers from "@/components/DrawNumbers";
+import { FavoriteButton } from "@/components/ResultsFollowingProvider";
 import { DRAW_GUIDES } from "@/lib/draw-editorial";
 import {
   LOTERIAS_CONFIG, getDrawsByLoteria,
@@ -124,6 +125,11 @@ export default async function LoteriasPage({ params }: Props) {
         <span>/</span>
         <span>{cfg.name}</span>
       </nav>
+
+      <div style={{ marginBottom: "1.25rem", display: "flex", flexWrap: "wrap", alignItems: "center", gap: "1rem" }}>
+        <FavoriteButton game={loteria} name={cfg.name} />
+        <Link href="/meus-resultados" style={{ color: "#2563eb", textDecoration: "underline" }}>Ver meus resultados e avisos locais</Link>
+      </div>
 
       {/* Hero com último resultado */}
       <div style={{

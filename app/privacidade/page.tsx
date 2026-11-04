@@ -10,10 +10,10 @@ export default function PrivacidadePage() {
   return (
     <div style={{ maxWidth: 800, margin: "0 auto", padding: "3rem 1.25rem", color: "#1e293b" }}>
       <h1 style={{ fontSize: "2rem", fontWeight: 900, marginBottom: "0.5rem" }}>Política de Privacidade</h1>
-      <p style={{ color: "#64748b", marginBottom: "2rem" }}>Última atualização: 3 de novembro de 2026</p>
+      <p style={{ color: "#64748b", marginBottom: "2rem" }}>Última atualização: 4 de novembro de 2026</p>
 
       <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "2rem" }}>
-        O <strong>Hoje Notícia</strong>, sob responsabilidade de Tiago Oliveira, doravante denominado "nós" ou "Portal",
+        O <strong>Hoje Notícia</strong>, sob responsabilidade de Tiago Oliveira, doravante denominado &quot;nós&quot; ou &quot;Portal&quot;,
         está comprometido com a proteção dos dados pessoais dos seus usuários, em conformidade com a
         Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD) e demais legislações aplicáveis.
       </p>
@@ -31,7 +31,19 @@ export default function PrivacidadePage() {
         Você pode desativar cookies nas configurações do seu navegador a qualquer momento, sem prejuízo ao acesso ao conteúdo.
       </p>
 
-      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>3. Anúncios</h2>
+      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>3. Preferências locais</h2>
+      <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
+        Em Meus resultados, os favoritos, a referência de resultados já vistos, a preferência de avisos e até 100 avisos ficam no armazenamento local deste navegador.
+        Não solicitamos números de bilhetes nem uma conta para esse recurso. Esses dados não são enviados ao servidor pelo acompanhamento;
+        o navegador consulta um arquivo público de resultados. Você pode desativar os avisos e apagar os dados na própria página ou nas configurações do navegador.
+        Notificações do navegador dependem de uma autorização explícita e funcionam com o site aberto e a aba visível; não são notificações push com o site fechado.
+      </p>
+      <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
+        A capital escolhida no calendário de feriados também pode ser salva somente neste navegador.
+        Essa preferência não exige conta e não é enviada como uma lista pessoal ao servidor. As consultas de calendários usam páginas e arquivos públicos.
+        Você pode apagar a capital salva pelo controle do calendário ou limpar o armazenamento nas configurações do navegador.
+      </p>
+      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>4. Anúncios</h2>
       <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
         Exibimos banners e anúncios nativos da Adsterra. Os links desses anúncios são acionados ao clicar no próprio anúncio.
         Quando esse formato está ativo, a imagem da chamada após os resultados também pode abrir publicidade da Adsterra em outra aba quando clicada;
@@ -48,13 +60,13 @@ export default function PrivacidadePage() {
         para mais informações.
       </p>
 
-      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>4. Links Externos</h2>
+      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>5. Links Externos</h2>
       <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
         Nosso site pode conter links para sites externos. Não nos responsabilizamos pelas práticas de privacidade
         desses sites. Recomendamos a leitura das políticas de privacidade de cada site visitado.
       </p>
 
-      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>5. Seus Direitos (LGPD)</h2>
+      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>6. Seus Direitos (LGPD)</h2>
       <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
         Nos termos da LGPD, você tem direito a confirmar a existência de tratamento de dados, acessar seus dados,
         corrigir dados incorretos, solicitar a eliminação de dados, bem como revogar consentimento a qualquer momento.
@@ -62,13 +74,13 @@ export default function PrivacidadePage() {
         <a href="mailto:tiago.mo@outlook.com" style={{ color: "#dc2626" }}>tiago.mo@outlook.com</a>.
       </p>
 
-      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>6. Contato sobre dados pessoais</h2>
+      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>7. Contato sobre dados pessoais</h2>
       <p style={{ lineHeight: 1.8, color: "#334155", marginBottom: "1rem" }}>
         O responsável pelo site, Tiago Oliveira, pode ser contatado pelo e-mail{" "}
         <a href="mailto:tiago.mo@outlook.com" style={{ color: "#dc2626" }}>tiago.mo@outlook.com</a>.
       </p>
 
-      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>7. Alterações desta Política</h2>
+      <h2 style={{ fontSize: "1.2rem", fontWeight: 700, marginBottom: "0.75rem", marginTop: "2rem" }}>8. Alterações desta Política</h2>
       <p style={{ lineHeight: 1.8, color: "#334155" }}>
         Esta política pode ser atualizada periodicamente. A data de última atualização será sempre indicada no topo
         desta página. Recomendamos revisitá-la regularmente.

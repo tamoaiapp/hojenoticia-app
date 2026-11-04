@@ -7,98 +7,182 @@
       "nome": "Confraternização Universal",
       "tipo": "nacional",
       "facultativo": false,
-      "dia_semana": "sexta-feira"
+      "feriado": true,
+      "dia_semana": "sexta-feira",
+      "fonte": {
+        "title": "Lei Federal 10.607/2002",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/2002/lei-10607-19-dezembro-2002-473572-publicacaooriginal-1-pl.html"
+      },
+      "observacao": ""
     },
     {
       "data": "2027-02-08",
-      "nome": "Carnaval (segunda)",
-      "tipo": "nacional",
-      "facultativo": true,
-      "dia_semana": "segunda-feira"
+      "nome": "Carnaval (segunda-feira)",
+      "tipo": "referencia",
+      "facultativo": false,
+      "feriado": false,
+      "dia_semana": "segunda-feira",
+      "fonte": {
+        "title": "Lei Federal 9.093/1995 — feriados locais",
+        "url": "https://legis.senado.gov.br/norma/550969/publicacao/15650123"
+      },
+      "observacao": "Data calculada como referência. O enquadramento local e o expediente dependem de lei ou ato aplicável. Não é descontada automaticamente como feriado nacional."
     },
     {
       "data": "2027-02-09",
-      "nome": "Carnaval",
-      "tipo": "nacional",
-      "facultativo": true,
-      "dia_semana": "terça-feira"
+      "nome": "Carnaval (terça-feira)",
+      "tipo": "referencia",
+      "facultativo": false,
+      "feriado": false,
+      "dia_semana": "terça-feira",
+      "fonte": {
+        "title": "Lei Federal 9.093/1995 — feriados locais",
+        "url": "https://legis.senado.gov.br/norma/550969/publicacao/15650123"
+      },
+      "observacao": "Data calculada como referência. O enquadramento local e o expediente dependem de lei ou ato aplicável. Não é descontada automaticamente como feriado nacional."
     },
     {
       "data": "2027-03-26",
-      "nome": "Sexta-feira Santa",
-      "tipo": "nacional",
+      "nome": "Sexta-feira da Paixão",
+      "tipo": "referencia",
       "facultativo": false,
-      "dia_semana": "sexta-feira"
+      "feriado": false,
+      "dia_semana": "sexta-feira",
+      "fonte": {
+        "title": "Lei Federal 9.093/1995 — feriados locais",
+        "url": "https://legis.senado.gov.br/norma/550969/publicacao/15650123"
+      },
+      "observacao": "Data calculada como referência. O enquadramento local e o expediente dependem de lei ou ato aplicável. Não é descontada automaticamente como feriado nacional."
     },
     {
       "data": "2027-03-28",
       "nome": "Páscoa",
-      "tipo": "nacional",
+      "tipo": "comemorativa",
       "facultativo": false,
-      "dia_semana": "domingo"
+      "feriado": false,
+      "dia_semana": "domingo",
+      "fonte": {
+        "title": "Lei Federal 9.093/1995 — feriados locais",
+        "url": "https://legis.senado.gov.br/norma/550969/publicacao/15650123"
+      },
+      "observacao": "Data comemorativa; não representa, por si só, um feriado nacional adicional."
     },
     {
       "data": "2027-04-21",
       "nome": "Tiradentes",
       "tipo": "nacional",
       "facultativo": false,
-      "dia_semana": "quarta-feira"
+      "feriado": true,
+      "dia_semana": "quarta-feira",
+      "fonte": {
+        "title": "Lei Federal 10.607/2002",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/2002/lei-10607-19-dezembro-2002-473572-publicacaooriginal-1-pl.html"
+      },
+      "observacao": ""
     },
     {
       "data": "2027-05-01",
       "nome": "Dia do Trabalhador",
       "tipo": "nacional",
       "facultativo": false,
-      "dia_semana": "sábado"
+      "feriado": true,
+      "dia_semana": "sábado",
+      "fonte": {
+        "title": "Lei Federal 10.607/2002",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/2002/lei-10607-19-dezembro-2002-473572-publicacaooriginal-1-pl.html"
+      },
+      "observacao": ""
     },
     {
       "data": "2027-05-27",
       "nome": "Corpus Christi",
-      "tipo": "nacional",
-      "facultativo": true,
-      "dia_semana": "quinta-feira"
+      "tipo": "referencia",
+      "facultativo": false,
+      "feriado": false,
+      "dia_semana": "quinta-feira",
+      "fonte": {
+        "title": "Lei Federal 9.093/1995 — feriados locais",
+        "url": "https://legis.senado.gov.br/norma/550969/publicacao/15650123"
+      },
+      "observacao": "Data calculada como referência. O enquadramento local e o expediente dependem de lei ou ato aplicável. Não é descontada automaticamente como feriado nacional."
     },
     {
       "data": "2027-09-07",
       "nome": "Independência do Brasil",
       "tipo": "nacional",
       "facultativo": false,
-      "dia_semana": "terça-feira"
+      "feriado": true,
+      "dia_semana": "terça-feira",
+      "fonte": {
+        "title": "Lei Federal 10.607/2002",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/2002/lei-10607-19-dezembro-2002-473572-publicacaooriginal-1-pl.html"
+      },
+      "observacao": ""
     },
     {
       "data": "2027-10-12",
       "nome": "Nossa Senhora Aparecida",
       "tipo": "nacional",
       "facultativo": false,
-      "dia_semana": "terça-feira"
+      "feriado": true,
+      "dia_semana": "terça-feira",
+      "fonte": {
+        "title": "Lei Federal 6.802/1980",
+        "url": "https://www.planalto.gov.br/ccivil_03/leis/l6802.htm"
+      },
+      "observacao": ""
     },
     {
       "data": "2027-11-02",
       "nome": "Finados",
       "tipo": "nacional",
       "facultativo": false,
-      "dia_semana": "terça-feira"
+      "feriado": true,
+      "dia_semana": "terça-feira",
+      "fonte": {
+        "title": "Lei Federal 10.607/2002",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/2002/lei-10607-19-dezembro-2002-473572-publicacaooriginal-1-pl.html"
+      },
+      "observacao": ""
     },
     {
       "data": "2027-11-15",
       "nome": "Proclamação da República",
       "tipo": "nacional",
       "facultativo": false,
-      "dia_semana": "segunda-feira"
+      "feriado": true,
+      "dia_semana": "segunda-feira",
+      "fonte": {
+        "title": "Lei Federal 10.607/2002",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/2002/lei-10607-19-dezembro-2002-473572-publicacaooriginal-1-pl.html"
+      },
+      "observacao": ""
     },
     {
       "data": "2027-11-20",
-      "nome": "Dia da Consciência Negra",
+      "nome": "Dia Nacional de Zumbi e da Consciência Negra",
       "tipo": "nacional",
       "facultativo": false,
-      "dia_semana": "sábado"
+      "feriado": true,
+      "dia_semana": "sábado",
+      "fonte": {
+        "title": "Lei Federal 14.759/2023",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/2023/lei-14759-21-dezembro-2023-795091-norma-pl.html"
+      },
+      "observacao": ""
     },
     {
       "data": "2027-12-25",
       "nome": "Natal",
       "tipo": "nacional",
       "facultativo": false,
-      "dia_semana": "sábado"
+      "feriado": true,
+      "dia_semana": "sábado",
+      "fonte": {
+        "title": "Lei Federal 10.607/2002",
+        "url": "https://www2.camara.leg.br/legin/fed/lei/2002/lei-10607-19-dezembro-2002-473572-publicacaooriginal-1-pl.html"
+      },
+      "observacao": ""
     }
   ]
 }

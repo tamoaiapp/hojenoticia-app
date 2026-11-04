@@ -3,6 +3,7 @@ import Script from "next/script";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { ResultsFollowingProvider } from "@/components/ResultsFollowingProvider";
 
 const ADSENSE_CLIENT = process.env.NEXT_PUBLIC_ADSENSE_CLIENT;
 const GSC_VERIFICATION = process.env.NEXT_PUBLIC_GSC_VERIFICATION;
@@ -113,9 +114,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteLd) }}
         />
-        <Header />
-        <main id="conteudo" style={{ minHeight: "80vh" }}>{children}</main>
-        <Footer />
+        <ResultsFollowingProvider>
+          <Header />
+          <main id="conteudo" style={{ minHeight: "80vh" }}>{children}</main>
+          <Footer />
+        </ResultsFollowingProvider>
       </body>
     </html>
   );

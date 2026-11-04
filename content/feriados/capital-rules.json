@@ -1,0 +1,972 @@
+{
+  "version": 1,
+  "checked_at": "2026-11-04",
+  "locations": {
+    "rio-branco-ac": {
+      "note": "Cobertura parcial: datas locais expressamente classificadas no calendário oficial municipal de 2026. Não estendidas a 2027; pontos facultativos e possíveis transferências de observância não foram convertidos em feriados gerais.",
+      "rules": [
+        {
+          "id": "catolico",
+          "name": "Dia do Católico",
+          "kind": "estadual",
+          "month": 1,
+          "day": 20,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário oficial de Rio Branco — feriados e pontos facultativos 2026 (RBPREV)",
+            "url": "https://rbprev.riobranco.ac.gov.br/calendario_feriados"
+          }
+        },
+        {
+          "id": "evangelico",
+          "name": "Dia do Evangélico",
+          "kind": "estadual",
+          "month": 1,
+          "day": 23,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário oficial de Rio Branco — feriados e pontos facultativos 2026 (RBPREV)",
+            "url": "https://rbprev.riobranco.ac.gov.br/calendario_feriados"
+          }
+        },
+        {
+          "id": "aniversario",
+          "name": "Aniversário de Rio Branco",
+          "kind": "municipal",
+          "month": 12,
+          "day": 28,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário oficial de Rio Branco — feriados e pontos facultativos 2026 (RBPREV)",
+            "url": "https://rbprev.riobranco.ac.gov.br/calendario_feriados"
+          }
+        }
+      ]
+    },
+    "maceio-al": {
+      "note": "Cobertura parcial, limitada ao Decreto municipal 10.234/2025 e ao calendário oficial de 2026. Não projeta estes registros anuais em 2027 e não inclui os pontos facultativos do decreto.",
+      "rules": [
+        {
+          "id": "paixao",
+          "name": "Sexta-feira da Paixão",
+          "kind": "municipal",
+          "easterOffset": -2,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal 10.234/2025 — calendário de feriados 2026 de Maceió",
+            "url": "https://maceio.al.gov.br/feriados-municipais"
+          }
+        },
+        {
+          "id": "corpus",
+          "name": "Corpus Christi",
+          "kind": "municipal",
+          "easterOffset": 60,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal 10.234/2025 — calendário de feriados 2026 de Maceió",
+            "url": "https://maceio.al.gov.br/feriados-municipais"
+          }
+        },
+        {
+          "id": "sao-joao",
+          "name": "São João",
+          "kind": "estadual",
+          "month": 6,
+          "day": 24,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal 10.234/2025 — calendário de feriados 2026 de Maceió",
+            "url": "https://maceio.al.gov.br/feriados-municipais"
+          }
+        },
+        {
+          "id": "marechal-floriano",
+          "name": "Marechal Floriano Peixoto",
+          "kind": "municipal",
+          "month": 6,
+          "day": 29,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal 10.234/2025 — calendário de feriados 2026 de Maceió",
+            "url": "https://maceio.al.gov.br/feriados-municipais"
+          }
+        },
+        {
+          "id": "padroeira",
+          "name": "Nossa Senhora dos Prazeres",
+          "kind": "municipal",
+          "month": 8,
+          "day": 27,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal 10.234/2025 — calendário de feriados 2026 de Maceió",
+            "url": "https://maceio.al.gov.br/feriados-municipais"
+          }
+        },
+        {
+          "id": "emancipacao-alagoas",
+          "name": "Emancipação Política de Alagoas",
+          "kind": "estadual",
+          "month": 9,
+          "day": 16,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal 10.234/2025 — calendário de feriados 2026 de Maceió",
+            "url": "https://maceio.al.gov.br/feriados-municipais"
+          }
+        },
+        {
+          "id": "evangelico",
+          "name": "Dia Estadual do Evangélico",
+          "kind": "estadual",
+          "month": 11,
+          "day": 30,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal 10.234/2025 — calendário de feriados 2026 de Maceió",
+            "url": "https://maceio.al.gov.br/feriados-municipais"
+          }
+        },
+        {
+          "id": "conceicao",
+          "name": "Nossa Senhora da Conceição",
+          "kind": "municipal",
+          "month": 12,
+          "day": 8,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal 10.234/2025 — calendário de feriados 2026 de Maceió",
+            "url": "https://maceio.al.gov.br/feriados-municipais"
+          }
+        }
+      ]
+    },
+    "macapa-ap": {
+      "note": "Cobertura parcial: aniversário municipal comprovado no calendário oficial de feriados publicado no Diário Oficial de 2026. A regra recorrente e os demais feriados locais ainda não foram auditados; registro restrito a 2026.",
+      "rules": [
+        {
+          "id": "aniversario",
+          "name": "Aniversário de Macapá",
+          "kind": "municipal",
+          "month": 2,
+          "day": 4,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Diário Oficial do Amapá — calendário de feriados 2026",
+            "url": "https://diofe.portal.ap.gov.br/portal/edicoes/download/9953"
+          }
+        }
+      ]
+    },
+    "manaus-am": {
+      "note": "Cobertura parcial: feriado de elevação do Amazonas confirmado em norma oficial de 2026, com fundamento estadual e municipal. Não incorpora feriados forenses, pontos facultativos do tribunal ou presume cobertura municipal completa em 2027.",
+      "rules": [
+        {
+          "id": "elevacao-amazonas",
+          "name": "Elevação do Amazonas à categoria de Província",
+          "kind": "estadual",
+          "month": 9,
+          "day": 5,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Portaria TRE-AM 1.127/2025, Anexo 1 — Lei promulgada estadual 25/1977 e art. 437 da Lei Orgânica de Manaus",
+            "url": "https://www.tre-am.jus.br/legislacao/compilada/portarias/2025/portaria-no-1-127-de-2-de-dezembro-de-2025"
+          }
+        }
+      ]
+    },
+    "salvador-ba": {
+      "note": "Cobertura parcial: inclui a data magna estadual prevista na Constituição da Bahia. A legislação dos feriados municipais de Salvador e atos anuais de expediente ainda não foram incorporados.",
+      "rules": [
+        {
+          "id": "data-magna",
+          "name": "Independência da Bahia — Dois de Julho",
+          "kind": "estadual",
+          "month": 7,
+          "day": 2,
+          "source": {
+            "title": "Constituição do Estado da Bahia, art. 6º, § 3º",
+            "url": "https://al.ba.gov.br/fserver/%3AimagensAlbanet%3Aupload%3AConstituicao_2018_EC_251.pdf"
+          }
+        }
+      ]
+    },
+    "fortaleza-ce": {
+      "note": "Feriados religiosos recorrentes fundamentados na Lei municipal 8.796/2003. Cobertura parcial dos demais feriados; o aniversário excepcional de 300 anos em 13/04/2026 está limitado a 2026 e não é repetido em 2027.",
+      "rules": [
+        {
+          "id": "sao-jose",
+          "name": "São José",
+          "kind": "municipal",
+          "month": 3,
+          "day": 19,
+          "source": {
+            "title": "Lei municipal 8.796/2003, art. 1º",
+            "url": "https://sapl.fortaleza.ce.leg.br/ta/2208/text"
+          }
+        },
+        {
+          "id": "padroeira",
+          "name": "Nossa Senhora da Assunção",
+          "kind": "municipal",
+          "month": 8,
+          "day": 15,
+          "source": {
+            "title": "Lei municipal 8.796/2003, art. 1º",
+            "url": "https://sapl.fortaleza.ce.leg.br/ta/2208/text"
+          }
+        },
+        {
+          "id": "paixao",
+          "name": "Sexta-feira Santa",
+          "kind": "municipal",
+          "easterOffset": -2,
+          "source": {
+            "title": "Lei municipal 8.796/2003, art. 1º",
+            "url": "https://sapl.fortaleza.ce.leg.br/ta/2208/text"
+          }
+        },
+        {
+          "id": "corpus",
+          "name": "Corpus Christi",
+          "kind": "municipal",
+          "easterOffset": 60,
+          "source": {
+            "title": "Lei municipal 8.796/2003, art. 1º",
+            "url": "https://sapl.fortaleza.ce.leg.br/ta/2208/text"
+          }
+        },
+        {
+          "id": "data-magna",
+          "name": "Data Magna do Ceará",
+          "kind": "estadual",
+          "month": 3,
+          "day": 25,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Portaria Conjunta TRE-CE 3/2026 — calendário e fundamento constitucional da Data Magna",
+            "url": "https://www.tre-ce.jus.br/legislacao/compilada/portaria-conjunta/2026/portaria-conjunta-no-3-de-9-de-abril-de-2026"
+          }
+        },
+        {
+          "id": "tricentenario",
+          "name": "Tricentenário de Fortaleza",
+          "kind": "municipal",
+          "month": 4,
+          "day": 13,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Portaria Conjunta TRE-CE 3/2026 — Lei municipal 11.649/2026",
+            "url": "https://www.tre-ce.jus.br/legislacao/compilada/portaria-conjunta/2026/portaria-conjunta-no-3-de-9-de-abril-de-2026"
+          }
+        }
+      ]
+    },
+    "brasilia-df": {
+      "note": "Cobertura parcial: feriado distrital de 30 de novembro fundamentado em lei. A categoria estadual representa aqui o âmbito do Distrito Federal; não implica classificação do DF como estado. Pontos facultativos não incluídos.",
+      "rules": [
+        {
+          "id": "evangelico",
+          "name": "Dia do Evangélico — Distrito Federal",
+          "kind": "estadual",
+          "month": 11,
+          "day": 30,
+          "source": {
+            "title": "Lei distrital 963/1995, art. 1º",
+            "url": "https://www.sinj.df.gov.br/sinj/norma/48922/lei_963_04_12_1995.html"
+          }
+        }
+      ]
+    },
+    "vitoria-es": {
+      "note": "Cobertura parcial: apenas datas classificadas como feriados municipais no calendário oficial de Vitória de 2026, Decreto 25.991/2025. Registros anuais não estendidos a 2027; Nossa Senhora da Penha permanece na data efetivamente informada para 2026.",
+      "rules": [
+        {
+          "id": "paixao",
+          "name": "Paixão de Cristo",
+          "kind": "municipal",
+          "easterOffset": -2,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário municipal 2026, Decreto 25.991/2025 — referência à Lei 1.732/1967",
+            "url": "https://www.vitoria.es.gov.br/servidor/calendario-de-feriados-do-municipio"
+          }
+        },
+        {
+          "id": "penha",
+          "name": "Nossa Senhora da Penha",
+          "kind": "municipal",
+          "month": 4,
+          "day": 13,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário municipal 2026, Decreto 25.991/2025 — referência à Lei 1.732/1967",
+            "url": "https://www.vitoria.es.gov.br/servidor/calendario-de-feriados-do-municipio"
+          }
+        },
+        {
+          "id": "corpus",
+          "name": "Corpus Christi",
+          "kind": "municipal",
+          "easterOffset": 60,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário municipal 2026, Decreto 25.991/2025 — referência à Lei 1.732/1967",
+            "url": "https://www.vitoria.es.gov.br/servidor/calendario-de-feriados-do-municipio"
+          }
+        },
+        {
+          "id": "padroeira",
+          "name": "Nossa Senhora da Vitória",
+          "kind": "municipal",
+          "month": 9,
+          "day": 8,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário municipal 2026, Decreto 25.991/2025 — referência à Lei 1.732/1967",
+            "url": "https://www.vitoria.es.gov.br/servidor/calendario-de-feriados-do-municipio"
+          }
+        }
+      ]
+    },
+    "goiania-go": {
+      "note": "Cobertura parcial: duas datas municipais com leis expressamente identificadas pela Prefeitura. Outros feriados religiosos, estaduais e alterações anuais de expediente dependem de validação adicional.",
+      "rules": [
+        {
+          "id": "padroeira",
+          "name": "Nossa Senhora Auxiliadora",
+          "kind": "municipal",
+          "month": 5,
+          "day": 24,
+          "source": {
+            "title": "Lei municipal 701/1956 — relação oficial da Guarda Municipal",
+            "url": "https://www.goiania.go.gov.br/shtml/guarda/eventos.shtml"
+          }
+        },
+        {
+          "id": "aniversario",
+          "name": "Aniversário de Goiânia",
+          "kind": "municipal",
+          "month": 10,
+          "day": 24,
+          "source": {
+            "title": "Lei municipal 6.968/1991 — relação oficial da Guarda Municipal",
+            "url": "https://www.goiania.go.gov.br/shtml/guarda/eventos.shtml"
+          }
+        }
+      ]
+    },
+    "sao-luis-ma": {
+      "note": "Cobertura parcial restrita a 2026, com base no calendário escolar oficial publicado pelo Município. Não presume que datas escolares ou pontos facultativos sejam feriados gerais; somente as duas datas expressamente identificadas como feriado foram incluídas.",
+      "rules": [
+        {
+          "id": "adesao-maranhao",
+          "name": "Adesão do Maranhão à Independência do Brasil",
+          "kind": "estadual",
+          "month": 7,
+          "day": 28,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Diário Oficial de São Luís — Calendário Escolar Oficial 2026",
+            "url": "https://diariooficial.saoluis.ma.gov.br/uploads/documento/13364/qX3nKMAuTGM29fafeGm2CQyxWU3qWIZC.pdf"
+          }
+        },
+        {
+          "id": "aniversario",
+          "name": "Natividade de Nossa Senhora e Aniversário de São Luís",
+          "kind": "municipal",
+          "month": 9,
+          "day": 8,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Diário Oficial de São Luís — Calendário Escolar Oficial 2026",
+            "url": "https://diariooficial.saoluis.ma.gov.br/uploads/documento/13364/qX3nKMAuTGM29fafeGm2CQyxWU3qWIZC.pdf"
+          }
+        }
+      ]
+    },
+    "cuiaba-mt": {
+      "note": "Cobertura parcial: aniversário municipal comprovado em ato oficial de 2026 com referência à Lei 1.077/1968. Outros feriados municipais e a projeção para 2027 não foram auditados nesta fonte anual.",
+      "rules": [
+        {
+          "id": "aniversario",
+          "name": "Aniversário de Cuiabá",
+          "kind": "municipal",
+          "month": 4,
+          "day": 8,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Portaria TRE-MT 511/2025, art. 4º — calendário 2026 e Lei municipal 1.077/1968",
+            "url": "https://www.tre-mt.jus.br/legislacao/compilada/portaria/2025/portaria-pre-no-511-de-17-de-novembro-de-2025"
+          }
+        }
+      ]
+    },
+    "campo-grande-ms": {
+      "note": "Cobertura parcial: inclui a criação do Estado expressamente classificada no Decreto municipal 16.469/2025 para 2026. Não transforma Corpus Christi ou outros pontos facultativos desse ato em feriados; base municipal recorrente ainda não auditada.",
+      "rules": [
+        {
+          "id": "criacao-estado",
+          "name": "Criação do Estado de Mato Grosso do Sul",
+          "kind": "estadual",
+          "month": 10,
+          "day": 11,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal 16.469/2025 — calendário de feriados e pontos facultativos 2026",
+            "url": "https://www.campogrande.ms.gov.br/cgnoticias/noticia/prefeitura-divulga-calendario-de-feriados-e-pontos-facultativos-para-2026/"
+          }
+        }
+      ]
+    },
+    "belo-horizonte-mg": {
+      "note": "Cobertura parcial limitada ao calendário oficial de 2026 da Prefeitura, Decreto 19.410. Não inclui Páscoa como feriado nacional e não estende o calendário anual a 2027.",
+      "rules": [
+        {
+          "id": "paixao",
+          "name": "Sexta-feira da Paixão",
+          "kind": "municipal",
+          "easterOffset": -2,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário oficial de feriados 2026 da Prefeitura de Belo Horizonte — Decreto 19.410",
+            "url": "https://sufis.pbh.gov.br/index.php?id=358&option=com_content&view=article"
+          }
+        },
+        {
+          "id": "corpus",
+          "name": "Corpus Christi",
+          "kind": "municipal",
+          "easterOffset": 60,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário oficial de feriados 2026 da Prefeitura de Belo Horizonte — Decreto 19.410",
+            "url": "https://sufis.pbh.gov.br/index.php?id=358&option=com_content&view=article"
+          }
+        },
+        {
+          "id": "padroeira",
+          "name": "Nossa Senhora da Boa Viagem",
+          "kind": "municipal",
+          "month": 8,
+          "day": 15,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário oficial de feriados 2026 da Prefeitura de Belo Horizonte — Decreto 19.410",
+            "url": "https://sufis.pbh.gov.br/index.php?id=358&option=com_content&view=article"
+          }
+        },
+        {
+          "id": "conceicao",
+          "name": "Imaculada Conceição de Maria",
+          "kind": "municipal",
+          "month": 12,
+          "day": 8,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário oficial de feriados 2026 da Prefeitura de Belo Horizonte — Decreto 19.410",
+            "url": "https://sufis.pbh.gov.br/index.php?id=358&option=com_content&view=article"
+          }
+        }
+      ]
+    },
+    "belem-pa": {
+      "note": "Cobertura parcial: feriado estadual do calendário 2026, sem extrapolação anual. O aniversário de Belém em 12 de janeiro de 2026 foi tratado pela Prefeitura como ponto facultativo e não foi convertido em feriado municipal.",
+      "rules": [
+        {
+          "id": "adesao-para",
+          "name": "Adesão do Grão-Pará à Independência do Brasil",
+          "kind": "estadual",
+          "month": 8,
+          "day": 15,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto estadual do Pará 5.122/2025, art. 1º, XIII — calendário 2026",
+            "url": "https://www.semas.pa.gov.br/legislacao/files/pdf/846515.pdf"
+          }
+        }
+      ],
+      "sources": [
+        {
+          "title": "Prefeitura de Belém — ponto facultativo em 12/01/2026",
+          "url": "https://agencia.belem.pa.gov.br/notas/prefeitura-decreta-ponto-facultativo-no-dia-12-de-janeiro-de-2026/"
+        }
+      ]
+    },
+    "joao-pessoa-pb": {
+      "note": "Cobertura parcial: Data Magna estadual confirmada no calendário oficial de 2026, com referência à Lei estadual 10.601/2015. Os feriados municipais e a recorrência para 2027 ainda dependem de leitura das normas de base.",
+      "rules": [
+        {
+          "id": "data-magna",
+          "name": "Data Magna da Paraíba",
+          "kind": "estadual",
+          "month": 8,
+          "day": 5,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Calendário oficial TJPB 2026 — Ato Conjunto 04/2025 e referência à Lei estadual 10.601/2015",
+            "url": "https://www.tjpb.jus.br/servicos/calendario-com-os-feriados-forenses"
+          }
+        }
+      ]
+    },
+    "curitiba-pr": {
+      "note": "Cobertura parcial limitada ao calendário oficial municipal de 2026. Inclui somente datas explicitamente classificadas como feriado religioso municipal; recessos, Carnaval e pontos facultativos não foram convertidos em feriados nem projetados em 2027.",
+      "rules": [
+        {
+          "id": "corpus",
+          "name": "Corpus Christi",
+          "kind": "municipal",
+          "easterOffset": 60,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Prefeitura de Curitiba — decreto e calendário municipal de feriados 2026",
+            "url": "https://www.curitiba.pr.gov.br/noticias/prefeitura-de-curitiba-define-calendario-de-feriados-recessos-e-pontos-facultativos-para-2026/80481"
+          }
+        },
+        {
+          "id": "padroeira",
+          "name": "Nossa Senhora da Luz dos Pinhais",
+          "kind": "municipal",
+          "month": 9,
+          "day": 8,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Prefeitura de Curitiba — decreto e calendário municipal de feriados 2026",
+            "url": "https://www.curitiba.pr.gov.br/noticias/prefeitura-de-curitiba-define-calendario-de-feriados-recessos-e-pontos-facultativos-para-2026/80481"
+          }
+        }
+      ]
+    },
+    "recife-pe": {
+      "note": "Regras municipais fundamentadas na Lei 9.777/1967 e Data Magna estadual na Lei 16.059/2017. Cobertura parcial de alterações posteriores e pontos facultativos. São João aparece sob a lei municipal conferida; não foi criada uma duplicata estadual sem leitura da norma correspondente.",
+      "rules": [
+        {
+          "id": "paixao",
+          "name": "Sexta-feira da Paixão",
+          "kind": "municipal",
+          "easterOffset": -2,
+          "source": {
+            "title": "Lei municipal do Recife 9.777/1967 — relação oficial de feriados da Prefeitura",
+            "url": "https://www2.recife.pe.gov.br/servico/feriados-municipais"
+          }
+        },
+        {
+          "id": "sao-joao",
+          "name": "São João",
+          "kind": "municipal",
+          "month": 6,
+          "day": 24,
+          "source": {
+            "title": "Lei municipal do Recife 9.777/1967 — relação oficial de feriados da Prefeitura",
+            "url": "https://www2.recife.pe.gov.br/servico/feriados-municipais"
+          }
+        },
+        {
+          "id": "padroeira",
+          "name": "Nossa Senhora do Carmo",
+          "kind": "municipal",
+          "month": 7,
+          "day": 16,
+          "source": {
+            "title": "Lei municipal do Recife 9.777/1967 — relação oficial de feriados da Prefeitura",
+            "url": "https://www2.recife.pe.gov.br/servico/feriados-municipais"
+          }
+        },
+        {
+          "id": "conceicao",
+          "name": "Nossa Senhora da Conceição",
+          "kind": "municipal",
+          "month": 12,
+          "day": 8,
+          "source": {
+            "title": "Lei municipal do Recife 9.777/1967 — relação oficial de feriados da Prefeitura",
+            "url": "https://www2.recife.pe.gov.br/servico/feriados-municipais"
+          }
+        },
+        {
+          "id": "data-magna",
+          "name": "Data Magna de Pernambuco",
+          "kind": "estadual",
+          "month": 3,
+          "day": 6,
+          "source": {
+            "title": "Lei estadual de Pernambuco 16.059/2017, art. 1º",
+            "url": "https://www.alepe.pe.gov.br/Flip/pubs/diario-oficial-2017-06-09/flip.pdf"
+          }
+        }
+      ]
+    },
+    "teresina-pi": {
+      "note": "Cobertura parcial: o ato oficial do TCE-PI transcreve o fundamento da Lei municipal 2.847/1999 para estas datas. Não inclui feriados forenses ou pontos facultativos próprios do tribunal, nem afirma cobertura integral dos feriados estaduais.",
+      "rules": [
+        {
+          "id": "paixao",
+          "name": "Sexta-feira da Paixão",
+          "kind": "municipal",
+          "easterOffset": -2,
+          "source": {
+            "title": "Lei municipal de Teresina 2.847/1999, fundamento reproduzido em ato oficial do TCE-PI",
+            "url": "https://www.tcepi.tc.br/publicacao/333711.pdf"
+          }
+        },
+        {
+          "id": "corpus",
+          "name": "Corpus Christi",
+          "kind": "municipal",
+          "easterOffset": 60,
+          "source": {
+            "title": "Lei municipal de Teresina 2.847/1999, fundamento reproduzido em ato oficial do TCE-PI",
+            "url": "https://www.tcepi.tc.br/publicacao/333711.pdf"
+          }
+        },
+        {
+          "id": "aniversario",
+          "name": "Aniversário de Teresina",
+          "kind": "municipal",
+          "month": 8,
+          "day": 16,
+          "source": {
+            "title": "Lei municipal de Teresina 2.847/1999, fundamento reproduzido em ato oficial do TCE-PI",
+            "url": "https://www.tcepi.tc.br/publicacao/333711.pdf"
+          }
+        },
+        {
+          "id": "conceicao",
+          "name": "Nossa Senhora da Conceição",
+          "kind": "municipal",
+          "month": 12,
+          "day": 8,
+          "source": {
+            "title": "Lei municipal de Teresina 2.847/1999, fundamento reproduzido em ato oficial do TCE-PI",
+            "url": "https://www.tcepi.tc.br/publicacao/333711.pdf"
+          }
+        }
+      ]
+    },
+    "rio-de-janeiro-rj": {
+      "note": "Cobertura parcial: São Sebastião na Lei Orgânica municipal, Carnaval na Lei estadual 5.243/2008 e Corpus Christi na Lei estadual 11.002/2025. A terça-feira de Carnaval é local ao RJ, nunca feriado nacional. Outros feriados dependem de leitura das normas correspondentes.",
+      "rules": [
+        {
+          "id": "sao-sebastiao",
+          "name": "São Sebastião",
+          "kind": "municipal",
+          "month": 1,
+          "day": 20,
+          "source": {
+            "title": "Lei Orgânica do Município do Rio de Janeiro, art. 26",
+            "url": "https://educacao.prefeitura.rio/wp-content/uploads/sites/42/2022/06/Lei_Organica_MRJ_comaltdo205.pdf"
+          }
+        },
+        {
+          "id": "carnaval",
+          "name": "Terça-feira de Carnaval",
+          "kind": "estadual",
+          "easterOffset": -47,
+          "source": {
+            "title": "Lei estadual do Rio de Janeiro 5.243/2008",
+            "url": "https://alerjln1.alerj.rj.gov.br/contlei.nsf/351902c88b9f0cde03256bcf00607a5b/063f7c027766eab48325744a007a4ab0"
+          }
+        },
+        {
+          "id": "corpus",
+          "name": "Corpus Christi",
+          "kind": "estadual",
+          "easterOffset": 60,
+          "source": {
+            "title": "Lei estadual do Rio de Janeiro 11.002/2025 — comunicação oficial da ALERJ",
+            "url": "https://www.alerj.rj.gov.br/Visualizar/Noticia/80212"
+          }
+        }
+      ]
+    },
+    "natal-rn": {
+      "note": "Cobertura parcial: feriado municipal expressamente relacionado no calendário estadual oficial de 2026. Não amplia esta comprovação anual a 2027 e não inclui dias de suspensão de expediente como feriados gerais.",
+      "rules": [
+        {
+          "id": "padroeira",
+          "name": "Nossa Senhora da Apresentação — Padroeira de Natal",
+          "kind": "municipal",
+          "month": 11,
+          "day": 21,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Diário Oficial do Rio Grande do Norte de 23/12/2025 — calendário de feriados 2026",
+            "url": "https://webdisk.diariooficial.rn.gov.br/Jornal/12025-12-23.pdf"
+          }
+        }
+      ]
+    },
+    "porto-alegre-rs": {
+      "note": "Cobertura parcial: feriados religiosos fixados na Lei municipal 4.453/1978, que altera a Lei 3.033/1967. Não inclui 26 de março como feriado e não incorpora pontos facultativos ou o calendário estadual ainda não auditado.",
+      "rules": [
+        {
+          "id": "navegantes",
+          "name": "Nossa Senhora dos Navegantes",
+          "kind": "municipal",
+          "month": 2,
+          "day": 2,
+          "source": {
+            "title": "Lei municipal de Porto Alegre 4.453/1978, art. 1º",
+            "url": "https://legislacao.portoalegre.rs.gov.br/media/sapl/public/normajuridica/sirel/Norma_4453_19780918_1.html"
+          }
+        },
+        {
+          "id": "paixao",
+          "name": "Sexta-feira da Paixão",
+          "kind": "municipal",
+          "easterOffset": -2,
+          "source": {
+            "title": "Lei municipal de Porto Alegre 4.453/1978, art. 1º",
+            "url": "https://legislacao.portoalegre.rs.gov.br/media/sapl/public/normajuridica/sirel/Norma_4453_19780918_1.html"
+          }
+        },
+        {
+          "id": "corpus",
+          "name": "Corpus Christi",
+          "kind": "municipal",
+          "easterOffset": 60,
+          "source": {
+            "title": "Lei municipal de Porto Alegre 4.453/1978, art. 1º",
+            "url": "https://legislacao.portoalegre.rs.gov.br/media/sapl/public/normajuridica/sirel/Norma_4453_19780918_1.html"
+          }
+        }
+      ]
+    },
+    "porto-velho-ro": {
+      "note": "Cobertura parcial limitada ao Decreto municipal 21.691/2025 e ao ano de 2026. Foram separados os feriados expressos dos pontos facultativos; Corpus Christi não foi tratado como feriado municipal nesse ato.",
+      "rules": [
+        {
+          "id": "criacao-estado",
+          "name": "Criação e Instalação do Estado de Rondônia",
+          "kind": "estadual",
+          "month": 1,
+          "day": 4,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal de Porto Velho 21.691/2025, Anexo Único — calendário 2026",
+            "url": "https://sapl.portovelho.ro.leg.br/ta/8320/text"
+          }
+        },
+        {
+          "id": "aniversario",
+          "name": "Criação do Município de Porto Velho",
+          "kind": "municipal",
+          "month": 10,
+          "day": 2,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto municipal de Porto Velho 21.691/2025, Anexo Único — calendário 2026",
+            "url": "https://sapl.portovelho.ro.leg.br/ta/8320/text"
+          }
+        }
+      ]
+    },
+    "boa-vista-rr": {
+      "note": "Cobertura parcial limitada ao calendário oficial de Boa Vista para 2026 publicado no DOM 6.493. Não inclui folgas administrativas ou pontos facultativos, nem estende as datas anuais a 2027.",
+      "rules": [
+        {
+          "id": "aniversario",
+          "name": "Aniversário de Boa Vista",
+          "kind": "municipal",
+          "month": 7,
+          "day": 9,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Diário Oficial do Município de Boa Vista 6.493 de 15/12/2025 — calendário 2026",
+            "url": "https://publicacoes.boavista.rr.gov.br/ler/diario/6493"
+          }
+        },
+        {
+          "id": "criacao-estado",
+          "name": "Aniversário do Estado de Roraima",
+          "kind": "estadual",
+          "month": 10,
+          "day": 5,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Diário Oficial do Município de Boa Vista 6.493 de 15/12/2025 — calendário 2026",
+            "url": "https://publicacoes.boavista.rr.gov.br/ler/diario/6493"
+          }
+        }
+      ]
+    },
+    "florianopolis-sc": {
+      "note": "Cobertura parcial, restrita à comprovação do feriado municipal em 2026 no Ato da Mesa 031/2026. O documento também trata de expediente interno, não convertido em feriados gerais. Não foi criada regra fixa para 11 de agosto: a legislação estadual prevê transferência para domingo.",
+      "rules": [
+        {
+          "id": "aniversario",
+          "name": "Aniversário de Florianópolis",
+          "kind": "municipal",
+          "month": 3,
+          "day": 23,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Ato da Mesa da ALESC 031/2026, art. 1º, IV — feriado municipal em Florianópolis",
+            "url": "https://leis.alesc.sc.gov.br/ato-normativo/53834"
+          }
+        }
+      ]
+    },
+    "sao-paulo-sp": {
+      "note": "Regras locais fundamentadas na legislação municipal consolidada e na lei estadual. Não inclui pontos facultativos ou transferências excepcionais de outros anos; feriados que também são nacionais não foram duplicados nesta lista.",
+      "rules": [
+        {
+          "id": "aniversario",
+          "name": "Aniversário de São Paulo",
+          "kind": "municipal",
+          "month": 1,
+          "day": 25,
+          "source": {
+            "title": "Lei municipal de São Paulo 14.485/2007, art. 10",
+            "url": "https://legislacao.prefeitura.sp.gov.br/lei-20000-de-19-de-julho-de-2007"
+          }
+        },
+        {
+          "id": "paixao",
+          "name": "Sexta-feira da Paixão",
+          "kind": "municipal",
+          "easterOffset": -2,
+          "source": {
+            "title": "Lei municipal de São Paulo 14.485/2007, art. 10",
+            "url": "https://legislacao.prefeitura.sp.gov.br/lei-20000-de-19-de-julho-de-2007"
+          }
+        },
+        {
+          "id": "corpus",
+          "name": "Corpus Christi",
+          "kind": "municipal",
+          "easterOffset": 60,
+          "source": {
+            "title": "Lei municipal de São Paulo 14.485/2007, art. 10",
+            "url": "https://legislacao.prefeitura.sp.gov.br/lei-20000-de-19-de-julho-de-2007"
+          }
+        },
+        {
+          "id": "data-magna",
+          "name": "Revolução Constitucionalista — Data Magna de São Paulo",
+          "kind": "estadual",
+          "month": 7,
+          "day": 9,
+          "source": {
+            "title": "Lei estadual de São Paulo 9.497/1997, art. 1º",
+            "url": "https://www.al.sp.gov.br/repositorio/legislacao/lei/1997/compilacao-lei-9497-05.03.1997.html"
+          }
+        }
+      ]
+    },
+    "aracaju-se": {
+      "note": "Cobertura parcial limitada ao Ato da Presidência TCE-SE 72/2025 para 2026. Inclui somente o aniversário municipal identificado como feriado; pontos facultativos e feriados internos do órgão não foram incorporados.",
+      "rules": [
+        {
+          "id": "aniversario",
+          "name": "Aniversário de Aracaju",
+          "kind": "municipal",
+          "month": 3,
+          "day": 17,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Ato da Presidência TCE-SE 72/2025 — calendário de feriados 2026",
+            "url": "https://www.tce.se.gov.br/Atos%20da%20Presidencia/2025/Ato%20da%20Presid%C3%AAncia%2072%20-2025.pdf"
+          }
+        }
+      ]
+    },
+    "palmas-to": {
+      "note": "Cobertura parcial restrita ao aniversário municipal expressamente relacionado no Decreto Administrativo AL-TO 156/2026. Outros feriados locais e a extensão a 2027 dependem de leitura das leis de base; pontos facultativos não foram convertidos em feriados gerais.",
+      "rules": [
+        {
+          "id": "aniversario",
+          "name": "Aniversário de Palmas",
+          "kind": "municipal",
+          "month": 5,
+          "day": 20,
+          "years": [
+            2026
+          ],
+          "source": {
+            "title": "Decreto Administrativo AL-TO 156/2026 — calendário de feriados 2026",
+            "url": "https://www.al.to.leg.br/arquivos/publicacao-interna_156_79045.PDF"
+          }
+        }
+      ]
+    }
+  }
+}

@@ -34,6 +34,9 @@ jobs:
       - name: Test exchange-rate updater
         run: node --test scripts/modules/cambio.test.mjs
 
+      - name: Test calendar rules and local result following
+        run: node --test scripts/holiday-calendar.test.mjs scripts/resultados-following.test.mjs
+
       - name: Run daily update (no auto-push — workflow handles git)
         id: update
         continue-on-error: true

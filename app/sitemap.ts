@@ -3,6 +3,7 @@ import { LOTERIAS_CONFIG, getAllDraws, getDrawsByLoteria } from "@/lib/loterias"
 import { MOEDA_INFO } from "@/lib/cambio";
 import { SIGNOS_LIST } from "@/lib/horoscopo";
 import { getAnosDisponiveis } from "@/lib/feriados";
+import { CAPITALS } from "@/lib/holiday-calendar.mjs";
 import { publicationTime } from "@/lib/news";
 
 const BASE = "https://www.hojenoticia.com";
@@ -83,12 +84,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const anosFer = getAnosDisponiveis();
   if (anosFer.length > 0) {
     entries.push({ url: `${BASE}/feriados`, changeFrequency: "monthly", priority: 0.75 });
+    entries.push({ url: `${BASE}/dias-uteis`, changeFrequency: "monthly", priority: 0.75 });
     for (const ano of anosFer) {
       entries.push({
         url: `${BASE}/feriados/${ano}`,
         changeFrequency: "monthly",
         priority: 0.7,
       });
+      for (const city of CAPITALS) {
+        entries.push({ url: `${BASE}/feriados/${ano}/${city.slug}`, changeFrequency: "monthly", priority: 0.65 });
+      }
     }
   }
 

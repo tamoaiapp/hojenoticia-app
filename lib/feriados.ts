@@ -1,12 +1,13 @@
 import fs from "fs";
 import path from "path";
+import { getHolidayCalendar } from "./holiday-store";
 
 const FERIADOS_DIR = path.join(process.cwd(), "content", "feriados");
 
 export interface Feriado {
   data: string;
   nome: string;
-  tipo: "nacional" | "estadual" | "municipal";
+  tipo: "nacional" | "estadual" | "municipal" | "referencia" | "comemorativa";
   facultativo: boolean;
   dia_semana: string;
 }
@@ -18,9 +19,14 @@ export interface FeriadosAno {
 }
 
 export function getFeriadosAno(ano: number): FeriadosAno | null {
-  const fp = path.join(FERIADOS_DIR, `${ano}.json`);
-  if (!fs.existsSync(fp)) return null;
-  return JSON.parse(fs.readFileSync(fp, "utf-8"));
+  const calendar = getHolidayCalendar(ano);
+  if (!calendar) return null;
+  return {
+    ano, atualizado_em: calendar.checkedAt ?? "",
+    feriados: calendar.events.map(event => ({ data: event.date, nome: event.name, tipo: event.kind, facultativo: false,
+      dia_semana: new Date(`${event.date}T12:00:00Z`).toLocaleDateString("pt-BR", { timeZone: "UTC", weekday: "long" }),
+    })),
+  };
 }
 
 export function getAnosDisponiveis(): number[] {
