@@ -21,19 +21,24 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7.1.0
         with:
-          node-version: '20'
+          node-version: '24'
+
+      - name: Test exchange-rate updater
+        run: node --test scripts/modules/cambio.test.mjs
 
       - name: Run daily update (no auto-push — workflow handles git)
         id: update
         continue-on-error: true
+        env:
+          AWESOMEAPI_KEY: ${{ secrets.AWESOMEAPI_KEY }}
         run: node scripts/daily-update.mjs --no-push
 
       - name: Commit and push if changes
