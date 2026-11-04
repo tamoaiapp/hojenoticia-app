@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import { LOTERIAS_CONFIG } from "./loterias-config";
+import { getDrawSearchCopy } from "./draw-editorial";
 
 export { LOTERIAS_CONFIG, formatBRL, formatDate, formatDateShort } from "./loterias-config";
 
@@ -43,7 +44,7 @@ function parseDraw(file: string, loteria: string): DrawMeta {
   const slug = file.replace(/\.mdx?$/, "");
   const fp = path.join(LOTERIAS_DIR, loteria, file);
   const { data } = matter(fs.readFileSync(fp, "utf-8"));
-  return {
+  const draw: DrawMeta = {
     slug, loteria,
     concurso:         Number(data.concurso ?? 0),
     status:           data.status ?? "aguardando",
@@ -71,6 +72,7 @@ function parseDraw(file: string, loteria: string): DrawMeta {
     mes_sorte:         typeof data.mes_sorte === "string" ? data.mes_sorte : undefined,
     time_coracao:     typeof data.time_coracao === "string" ? data.time_coracao : undefined,
   };
+  return { ...draw, ...getDrawSearchCopy(draw, LOTERIAS_CONFIG[loteria].name) };
 }
 
 export function getDrawsByLoteria(loteria: string): DrawMeta[] {
@@ -107,7 +109,7 @@ export function getDrawBySlug(loteria: string, slug: string): Draw | null {
   for (const ext of [".mdx", ".md"]) {
     const fp = path.join(LOTERIAS_DIR, loteria, slug + ext);
     if (!fs.existsSync(fp)) continue;
-    const { data, content } = matter(fs.readFileSync(fp, "utf-8"));
+    const { content } = matter(fs.readFileSync(fp, "utf-8"));
     return { ...parseDraw(slug + ext, loteria), content };
   }
   return null;

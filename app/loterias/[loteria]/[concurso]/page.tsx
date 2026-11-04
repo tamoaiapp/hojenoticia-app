@@ -6,6 +6,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import AdsterraBanner from "@/components/AdsterraBanner";
 import DrawNumbers from "@/components/DrawNumbers";
 import PostResultCTA from "@/components/PostResultCTA";
+import DrawGuide from "@/components/DrawGuide";
+import { removeManagedDrawContent } from "@/lib/draw-editorial";
 import {
   LOTERIAS_CONFIG, getDrawBySlug, getDrawsByLoteria, formatDate, formatDateShort,
   type DrawMeta,
@@ -103,7 +105,7 @@ export default async function DrawPage({ params }: Props) {
   const sourceCheckedAt = knownTimestamp(draw.source_checked_at);
   const nextDate = currentNextDate(draw.proxima_data);
   // A seção gerada de próximo sorteio é apresentada abaixo apenas enquanto vigente.
-  const articleContent = draw.content.replace(/(^|\r?\n)## Próximo Sorteio[^\r\n]*\r?\n[\s\S]*?(?=\r?\n## |$)/gi, "\n");
+  const articleContent = removeManagedDrawContent(draw.content);
   const navigationDraws = getDrawsByLoteria(loteria);
   const latestPublished = navigationDraws.find(item => item.status === "publicado");
   const scheduleConfirmed = draw.schedule_status === "confirmed" || (draw.status === "aguardando" && draw.schedule_status !== "unconfirmed" && latestPublished?.proximo_concurso === draw.concurso && latestPublished?.proxima_data === draw.draw_date);
@@ -171,9 +173,17 @@ export default async function DrawPage({ params }: Props) {
         </p>}
       </header>
 
+      <nav aria-label={`Nesta página: ${cfg.name} ${draw.concurso}`} style={{ display: "flex", flexWrap: "wrap", gap: ".6rem 1.2rem", padding: ".9rem 0", marginBottom: "1rem", lineHeight: 1.8, color: "#146542", textDecoration: "underline" }}>
+        <a href={published ? "#resultado-title" : "#pending-title"}>{published ? "Números do resultado" : "Situação do concurso"}</a>
+        <a href="#resumo-concurso-title">{published ? "Resumo do sorteio" : "Acompanhar divulgação"}</a>
+        {published && rateio.length > 0 && <a href="#rateio-title">Premiação e ganhadores</a>}
+        <a href="#conferencia-title">Conferir o bilhete</a>
+        <a href="#duvidas-concurso-title">Perguntas do concurso</a>
+      </nav>
+
       {published ? (
         <section className="draw-result" aria-labelledby="resultado-title" style={{ background: "#fff", border: `1px solid ${cfg.color}`, borderRadius: 14, padding: "1.25rem", marginBottom: "2rem" }}>
-          <h2 id="resultado-title" style={{ fontSize: "1.35rem", fontWeight: 800 }}>Resultado do concurso {draw.concurso}</h2>
+          <h2 id="resultado-title" style={{ fontSize: "1.35rem", fontWeight: 800 }}>Resultado da {cfg.name} {draw.concurso}: {formatDateShort(draw.draw_date)}</h2>
           <p style={{ color: "#475569", marginTop: "0.5rem" }}>Sorteio realizado em {formatDate(draw.draw_date)}.</p>
           {draw.numeros.length > 0 && <>
             <h3 style={{ fontSize: "1rem", fontWeight: 700, marginTop: "1rem" }}>{loteria === "federal" ? "Bilhetes do primeiro ao quinto prêmio" : loteria === "super-sete" ? "Dígitos por coluna" : draw.numeros_segundo_sorteio?.length ? "Primeiro sorteio" : "Números sorteados"}</h3>
@@ -194,7 +204,7 @@ export default async function DrawPage({ params }: Props) {
         </section>
       ) : (
         <section aria-labelledby="pending-title" style={{ background: "#fff", border: "1px solid #cbd5e1", borderRadius: 14, padding: "1.25rem", marginBottom: "2rem" }}>
-          <h2 id="pending-title" style={{ fontSize: "1.35rem", fontWeight: 800 }}>Resultado aguardando confirmação</h2>
+          <h2 id="pending-title" style={{ fontSize: "1.35rem", fontWeight: 800 }}>Resultado da {cfg.name} {draw.concurso} aguardando confirmação</h2>
           <p style={{ marginTop: "0.75rem" }}>Este concurso ainda não tem resultado confirmado nesta página. Consulte a fonte oficial para acompanhar a divulgação.</p>
           {scheduleConfirmed && draw.premio_principal > 0 && <p style={{ marginTop: "0.75rem" }}>Estimativa de prêmio informada para o concurso: <strong>{currency.format(draw.premio_principal)}</strong>.</p>}
           {!scheduleConfirmed && <p style={{ marginTop: "0.75rem" }}>A data e a estimativa serão atualizadas quando forem confirmadas pela Caixa.</p>}
@@ -211,7 +221,7 @@ export default async function DrawPage({ params }: Props) {
 
       {published && rateio.length > 0 && (
         <section aria-labelledby="rateio-title" style={{ marginBottom: "2rem" }}>
-          <h2 id="rateio-title" style={{ fontSize: "1.35rem", fontWeight: 800, marginBottom: "0.75rem" }}>Rateio informado pela Caixa</h2>
+          <h2 id="rateio-title" style={{ fontSize: "1.35rem", fontWeight: 800, marginBottom: "0.75rem" }}>Premiação da {cfg.name} {draw.concurso}: rateio e ganhadores</h2>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", background: "#fff", fontSize: "0.92rem" }}>
               <thead><tr style={{ background: "#e2e8f0", textAlign: "left" }}>
@@ -238,11 +248,12 @@ export default async function DrawPage({ params }: Props) {
         </section>
       )}
 
+      <DrawGuide draw={draw} latest={latestPublished} scheduleConfirmed={scheduleConfirmed} />
       {articleContent.trim() && <div className="article-body" style={{ marginBottom: "2rem" }}><MDXRemote source={articleContent} /></div>}
 
       {nextDate && draw.proximo_concurso && (
         <section style={{ marginBottom: "2rem", padding: "1.25rem", border: "1px solid #cbd5e1", borderRadius: 12 }}>
-          <h2 style={{ fontSize: "1.25rem", fontWeight: 800 }}>Próximo concurso informado</h2>
+          <h2 style={{ fontSize: "1.25rem", fontWeight: 800 }}>Próximo concurso da {cfg.name}: {draw.proximo_concurso}</h2>
           <p style={{ marginTop: "0.5rem" }}>Concurso {draw.proximo_concurso}, previsto para {formatDate(nextDate)}.</p>
           {!!draw.proximo_premio && <p>Estimativa de prêmio: {currency.format(draw.proximo_premio)}.</p>}
           {nextRecord && <Link href={`/loterias/${loteria}/${nextRecord.slug}`} style={{ color: "#1d4ed8", textDecoration: "underline" }}>Ver página do concurso {draw.proximo_concurso}</Link>}

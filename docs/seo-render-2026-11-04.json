@@ -1,0 +1,199 @@
+{
+  "base": "http://127.0.0.1:3086",
+  "renderedPages": 93,
+  "sitemapUrls": 1827,
+  "internalLinksChecked": 6340,
+  "articles": [
+    {
+      "path": "/loterias/quina/concurso-7050",
+      "words": 696,
+      "headings": 8
+    },
+    {
+      "path": "/loterias/mega-sena/concurso-3080",
+      "words": 827,
+      "headings": 10
+    },
+    {
+      "path": "/loterias/diadesorte/concurso-1159",
+      "words": 768,
+      "headings": 8
+    },
+    {
+      "path": "/loterias/diadesorte/concurso-1338",
+      "words": 892,
+      "headings": 10
+    },
+    {
+      "path": "/loterias/lotofacil/concurso-3910",
+      "words": 676,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/diadesorte/concurso-1339",
+      "words": 733,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/diadesorte/concurso-1398",
+      "words": 722,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/dupla-sena/concurso-2906",
+      "words": 844,
+      "headings": 9
+    },
+    {
+      "path": "/loterias/dupla-sena/concurso-3027",
+      "words": 878,
+      "headings": 10
+    },
+    {
+      "path": "/loterias/dupla-sena/concurso-3028",
+      "words": 710,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/dupla-sena/concurso-3072",
+      "words": 699,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/federal/concurso-6114",
+      "words": 758,
+      "headings": 9
+    },
+    {
+      "path": "/loterias/federal/concurso-6144",
+      "words": 674,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/lotofacil/concurso-3576",
+      "words": 738,
+      "headings": 8
+    },
+    {
+      "path": "/loterias/lotofacil/concurso-3820",
+      "words": 852,
+      "headings": 11
+    },
+    {
+      "path": "/loterias/lotofacil/concurso-3821",
+      "words": 684,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/lotofacil/concurso-3940",
+      "words": 673,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/lotomania/concurso-2869",
+      "words": 732,
+      "headings": 8
+    },
+    {
+      "path": "/loterias/lotomania/concurso-2994",
+      "words": 866,
+      "headings": 10
+    },
+    {
+      "path": "/loterias/lotomania/concurso-2995",
+      "words": 692,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/lotomania/concurso-3039",
+      "words": 681,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/maismilionaria/concurso-403",
+      "words": 912,
+      "headings": 10
+    },
+    {
+      "path": "/loterias/maismilionaria/concurso-404",
+      "words": 684,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/maismilionaria/concurso-433",
+      "words": 673,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/mega-sena/concurso-2819",
+      "words": 717,
+      "headings": 8
+    },
+    {
+      "path": "/loterias/mega-sena/concurso-3081",
+      "words": 712,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/mega-sena/concurso-3140",
+      "words": 701,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/quina/concurso-6916",
+      "words": 692,
+      "headings": 8
+    },
+    {
+      "path": "/loterias/quina/concurso-7158",
+      "words": 806,
+      "headings": 10
+    },
+    {
+      "path": "/loterias/quina/concurso-7278",
+      "words": 681,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/quina/concurso-7159",
+      "words": 692,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/super-sete/concurso-917",
+      "words": 853,
+      "headings": 11
+    },
+    {
+      "path": "/loterias/super-sete/concurso-918",
+      "words": 699,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/super-sete/concurso-962",
+      "words": 688,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/timemania/concurso-2338",
+      "words": 692,
+      "headings": 8
+    },
+    {
+      "path": "/loterias/timemania/concurso-2463",
+      "words": 852,
+      "headings": 10
+    },
+    {
+      "path": "/loterias/timemania/concurso-2464",
+      "words": 687,
+      "headings": 7
+    },
+    {
+      "path": "/loterias/timemania/concurso-2508",
+      "words": 676,
+      "headings": 7
+    }
+  ],
+  "failures": []
+}
