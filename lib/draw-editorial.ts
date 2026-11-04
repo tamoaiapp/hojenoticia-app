@@ -48,12 +48,13 @@ export function getDrawResultParagraphs(draw: DrawMeta, name: string): string[] 
     const firstPrize = rateio[0]?.premio || draw.premio_principal;
     if (firstPrize > 0) paragraphs.push(`O valor informado para o primeiro prêmio desta extração é ${money.format(firstPrize)}. Confira na Caixa o detalhamento dos demais prêmios e as regras aplicáveis ao bilhete e às frações adquiridas.`);
   } else {
-    const main = rateio.find(row => row.faixa === 1) ?? rateio[0];
+    const main = rateio.find(row => row.faixa === 1);
+    const principal = draw.loteria === "dupla-sena" ? "faixa principal do primeiro sorteio" : "faixa principal";
     if (main) paragraphs.push(main.ganhadores === 0
-      ? `O rateio do concurso ${draw.concurso} registra zero apostas ganhadoras na faixa principal${main.descricao ? ` (${main.descricao})` : ""}.${draw.acumulou === true ? " A Caixa informa que o prêmio acumulou." : " Consulte as demais faixas para conferir os prêmios distribuídos."}`
-      : `Na faixa principal${main.descricao ? ` (${main.descricao})` : ""}, o concurso ${draw.concurso} teve ${count.format(main.ganhadores)} aposta${main.ganhadores === 1 ? " ganhadora" : "s ganhadoras"}${main.premio > 0 ? `, com ${money.format(main.premio)} por aposta` : "; o valor individual deve ser consultado na fonte"}.`);
+      ? `O rateio do concurso ${draw.concurso} registra zero apostas ganhadoras na ${principal}${main.descricao ? ` (${main.descricao})` : ""}.${draw.acumulou === true ? " A Caixa informa que o prêmio acumulou." : " Consulte as demais faixas para conferir os prêmios distribuídos."}`
+      : `Na ${principal}${main.descricao ? ` (${main.descricao})` : ""}, o concurso ${draw.concurso} teve ${count.format(main.ganhadores)} aposta${main.ganhadores === 1 ? " ganhadora" : "s ganhadoras"}${main.premio > 0 ? `, com ${money.format(main.premio)} por aposta` : "; o valor individual deve ser consultado na fonte"}.`);
     else {
-      if (draw.ganhadores > 0) paragraphs.push(`O registro do concurso informa ${count.format(draw.ganhadores)} aposta${draw.ganhadores === 1 ? " ganhadora" : "s ganhadoras"} na faixa principal${draw.premio_principal > 0 ? `, com ${money.format(draw.premio_principal)} por aposta` : ""}.`);
+      if (!rateio.length && draw.ganhadores > 0) paragraphs.push(`O registro do concurso informa ${count.format(draw.ganhadores)} aposta${draw.ganhadores === 1 ? " ganhadora" : "s ganhadoras"} na ${principal}${draw.premio_principal > 0 ? `, com ${money.format(draw.premio_principal)} por aposta` : ""}.`);
       paragraphs.push("O rateio detalhado ainda não está disponível neste registro. A ausência dessa informação não significa que não houve ganhadores; confira a divulgação da Caixa antes de concluir a conferência do prêmio.");
     }
     const other = rateio.filter(row => row !== main && row.ganhadores > 0).slice(0, 2);

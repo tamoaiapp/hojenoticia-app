@@ -43,6 +43,18 @@ test('Federal tickets retain leading zeroes and the official prize order', () =>
   assert.doesNotMatch(text, /zero apostas ganhadoras/);
 });
 
+test('partial secondary prize tiers are not treated as jackpot evidence', () => {
+  const text = getDrawResultParagraphs(base({ ganhadores: 7, rateio: [{ faixa: 2, descricao: '4 acertos', ganhadores: 7, premio: 25 }] }), 'Quina').join(' ');
+  assert.doesNotMatch(text, /7 apostas ganhadoras na faixa principal|zero apostas ganhadoras na faixa principal/);
+  assert.match(text, /4 acertos/);
+});
+
+test('Dupla Sena jackpot narrative identifies the first draw explicitly', () => {
+  const text = getDrawResultParagraphs(base({ loteria: 'dupla-sena', rateio: [{ faixa: 1, descricao: '6 acertos', ganhadores: 0, premio: 0 }, { faixa: 5, descricao: '6 acertos', ganhadores: 1, premio: 99 }] }), 'Dupla Sena').join(' ');
+  assert.match(text, /zero apostas ganhadoras na faixa principal do primeiro sorteio/);
+  assert.match(text, /1 aposta ganhadora/);
+});
+
 test('Super Sete keeps repeated digits associated with all seven positions', () => {
   const text = getDrawResultParagraphs(base({ loteria: 'super-sete', numeros: ['1', '9', '2', '9', '4', '6', '5'] }), 'Super Sete').join(' ');
   assert.match(text, /coluna 2: 9/);
