@@ -1,7 +1,8 @@
-/** Cotações AwesomeAPI: tentativas limitadas e preservação do último registro válido. */
+/** Cotações com fontes independentes, tentativas limitadas e preservação do último registro válido. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
+import { fetchFallback } from './cambio-fallback.mjs';
 
 const PAIRS = ['USD-BRL', 'EUR-BRL', 'GBP-BRL', 'ARS-BRL', 'BTC-BRL', 'ETH-BRL'];
 const HISTORY_PAIRS = ['USD-BRL', 'EUR-BRL', 'BTC-BRL'];
@@ -141,7 +142,7 @@ function atomicWrite(file, value) {
   }
 }
 
-export async function updateCambio({ root, today, fetchImpl = fetch, wait = sleep, now = new Date(), apiKey = process.env.AWESOMEAPI_KEY ?? '' }) {
+async function updateAwesomeCurrency({ root, today, fetchImpl = fetch, wait = sleep, now = new Date(), apiKey = process.env.AWESOMEAPI_KEY ?? '' }) {
   if (!Number.isFinite(now.getTime()) || !/^\d{4}-\d{2}-\d{2}$/.test(today) || dayInBrazil(new Date(`${today}T12:00:00-03:00`)) !== today) {
     throw new Error('Data de coleta inválida');
   }
@@ -160,7 +161,9 @@ export async function updateCambio({ root, today, fetchImpl = fetch, wait = slee
   const warnings = [];
   let rateLimited = false;
   for (const pair of HISTORY_PAIRS) {
-    const cached = historyIsUsable(previous?.historico?.[pair], now) ? previous.historico[pair] : [];
+    // Séries de fontes/metodologias diferentes nunca são misturadas.
+    const cached = (!previous?.pares?.[pair]?.source || previous.pares[pair].source === 'awesomeapi')
+      && historyIsUsable(previous?.historico?.[pair], now) ? previous.historico[pair] : [];
     if (rateLimited) {
       historico[pair] = cached;
       warnings.push(`Histórico ${pair}: coleta adiada após HTTP 429; registro anterior preservado`);
@@ -183,4 +186,54 @@ export async function updateCambio({ root, today, fetchImpl = fetch, wait = slee
   atomicWrite(path.join(outDir, `${today}.json`), serialized);
   atomicWrite(latestPath, serialized);
   return { changes: 2, summary: `${PAIRS.length} pares atualizados`, warnings };
+}
+
+export async function updateCambio({
+  root, today, fetchImpl = fetch, wait = sleep, now = new Date(),
+  apiKey = process.env.AWESOMEAPI_KEY ?? '', fallbackImpl = fetchFallback,
+}) {
+  if (!Number.isFinite(now.getTime()) || !/^\d{4}-\d{2}-\d{2}$/.test(today)
+    || dayInBrazil(new Date(`${today}T12:00:00-03:00`)) !== today) {
+    throw new Error('Data de coleta inválida');
+  }
+  try {
+    return await updateAwesomeCurrency({ root, today, fetchImpl, wait, now, apiKey });
+  } catch (primaryError) {
+    if (!fallbackImpl) throw primaryError;
+    const outDir = path.join(root, 'content', 'cambio');
+    const latestPath = path.join(outDir, 'latest.json');
+    let previous = null;
+    try { previous = JSON.parse(fs.readFileSync(latestPath, 'utf8')); } catch { /* A fonte pode reparar o cache. */ }
+    let fallback;
+    try {
+      // A chave da AwesomeAPI nunca é enviada às fontes alternativas.
+      fallback = await fallbackImpl({ fetchImpl, wait, now, today });
+      for (const pair of PAIRS) {
+        const next = fallback.pares[pair];
+        const saved = previous?.pares?.[pair];
+        if (!next) throw new Error(`Par alternativo ausente: ${pair}`);
+        if (!Number.isSafeInteger(saved?.timestamp) || saved.timestamp <= 0 || saved.timestamp * 1000 > now.getTime()) continue;
+        // Uma PTAX diária e uma cotação intradiária têm precisões distintas.
+        // Entre fontes, comparamos a data civil; na mesma fonte, o instante.
+        const regressed = saved.source === next.source
+          ? next.timestamp < saved.timestamp
+          : dayInBrazil(new Date(next.timestamp * 1000)) < dayInBrazil(new Date(saved.timestamp * 1000));
+        if (regressed) throw new Error(`Fonte alternativa retornou cotação anterior ao registro salvo: ${pair}`);
+      }
+    } catch (fallbackError) {
+      throw new CurrencyRequestError(`AwesomeAPI: ${primaryError.message}; fontes alternativas: ${fallbackError.message}. Registros anteriores preservados.`);
+    }
+    const warnings = [`AwesomeAPI indisponível (${primaryError.message}); seis pares conferidos nas fontes alternativas gratuitas.`, ...(fallback.warnings ?? [])];
+    // Não reaproveitar históricos da AwesomeAPI como se fossem PTAX ou Binance.
+    const historico = fallback.historico ?? {};
+    if (isDeepStrictEqual(previous?.pares, fallback.pares) && isDeepStrictEqual(previous?.historico, historico)) {
+      return { changes: 0, summary: '6 pares conferidos nas fontes alternativas; sem mudança', warnings };
+    }
+    const snapshot = { updated_at: now.toISOString(), date: today, pares: fallback.pares, historico };
+    const serialized = JSON.stringify(snapshot, null, 2);
+    fs.mkdirSync(outDir, { recursive: true });
+    atomicWrite(path.join(outDir, `${today}.json`), serialized);
+    atomicWrite(latestPath, serialized);
+    return { changes: 2, summary: '6 pares atualizados: Banco Central (PTAX) e Binance (mercado de criptoativos)', warnings };
+  }
 }

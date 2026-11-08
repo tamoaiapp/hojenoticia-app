@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getCambioLatest, getQuoteTiming, MOEDA_INFO, formatBRL } from "@/lib/cambio";
+import { getCambioLatest, getQuoteSource, getQuoteTiming, MOEDA_INFO, formatBRL } from "@/lib/cambio";
 import AdsterraBanner from "@/components/AdsterraBanner";
 
 export const revalidate = 300;
@@ -29,6 +29,10 @@ export default function CotacaoPage() {
   const updatedAt = new Date(data.updated_at).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
   const pares = Object.values(data.pares);
   const hasPreviousDate = pares.some(par => getQuoteTiming(par.timestamp, now)?.isFromPreviousDate);
+  const sources = [...new Map(pares.map(par => {
+    const source = getQuoteSource(par);
+    return [source.name, source];
+  })).values()];
 
   const itemListLd = {
     "@context": "https://schema.org",
@@ -58,11 +62,11 @@ export default function CotacaoPage() {
           Valores registrados para dólar, euro, outras moedas e criptoativos.
         </p>
         <p style={{ color: "#94a3b8", fontSize: "0.82rem", marginTop: "0.3rem" }}>
-          Coleta deste registro: {updatedAt} (horário de Brasília). Abaixo, cada par mostra o horário da negociação informado pela fonte.
+          Coleta deste registro: {updatedAt} (horário de Brasília). Cada par identifica a fonte e a data da cotação.
         </p>
         {hasPreviousDate && (
           <p style={{ color: "#92400e", fontSize: "0.9rem", marginTop: "0.6rem" }}>
-            Uma ou mais cotações têm negociação registrada pela fonte em data anterior a hoje e podem não refletir os valores neste momento.
+            Uma ou mais cotações são de uma data anterior a hoje e podem não refletir os valores neste momento. Referências diárias podem manter o último fechamento em fins de semana e feriados.
           </p>
         )}
       </div>
@@ -71,8 +75,9 @@ export default function CotacaoPage() {
         {pares.map(p => {
           const info = MOEDA_INFO[p.code];
           if (!info) return null;
-          const subiu = p.pctChange >= 0;
-          const timing = getQuoteTiming(p.timestamp, now);
+          const subiu = p.pctChange !== null && p.pctChange >= 0;
+          const timing = getQuoteTiming(p.timestamp, now, p.timestamp_precision);
+          const source = getQuoteSource(p);
           return (
             <Link key={p.code} href={`/cotacao/${info.slug}`} style={{ textDecoration: "none" }}>
               <div style={{
@@ -86,14 +91,20 @@ export default function CotacaoPage() {
                 <div style={{ fontSize: "1.6rem", fontWeight: 900, color: info.cor }}>
                   {formatBRL(p.bid)}
                 </div>
-                <div style={{ marginTop: "0.4rem", display: "flex", justifyContent: "space-between", fontSize: "0.85rem", color: subiu ? "#16a34a" : "#dc2626", fontWeight: 700 }}>
-                  <span>{subiu ? "▲" : "▼"} {p.pctChange.toFixed(2)}%</span>
-                  <span style={{ color: "#94a3b8", fontWeight: 500 }}>
-                    máx {formatBRL(p.high)} / mín {formatBRL(p.low)}
-                  </span>
-                </div>
-                {timing && <p style={{ marginTop: "0.65rem", fontSize: "0.8rem", color: "#475569" }}>Negociação na fonte: <time dateTime={timing.iso}>{timing.formatted}</time> (Brasília).</p>}
-                {timing?.isFromPreviousDate && <p style={{ marginTop: "0.4rem", fontSize: "0.82rem", color: "#92400e" }}>Negociação de uma data anterior a hoje.</p>}
+                {(p.pctChange !== null || (p.high !== null && p.low !== null)) && (
+                  <div style={{ marginTop: "0.4rem", display: "flex", justifyContent: "space-between", fontSize: "0.85rem", color: subiu ? "#16a34a" : "#dc2626", fontWeight: 700 }}>
+                    {p.pctChange !== null && <span>{subiu ? "▲" : "▼"} {p.pctChange.toFixed(2)}%{p.source === "binance" ? " (24h)" : ""}</span>}
+                    {p.high !== null && p.low !== null && (
+                      <span style={{ color: "#94a3b8", fontWeight: 500 }}>
+                        {p.source === "binance" ? "24h: " : ""}máx {formatBRL(p.high)} / mín {formatBRL(p.low)}
+                      </span>
+                    )}
+                  </div>
+                )}
+                {p.source === "bcb-ptax" && <p style={{ marginTop: "0.4rem", fontSize: "0.85rem", color: "#475569" }}>PTAX de fechamento · referência diária</p>}
+                <p style={{ marginTop: "0.6rem", fontSize: "0.8rem", color: "#475569" }}>Fonte: {source.name}.</p>
+                {timing && <p style={{ marginTop: "0.35rem", fontSize: "0.8rem", color: "#475569" }}>{timing.dateOnly ? "Data do fechamento: " : "Cotação na fonte: "}<time dateTime={timing.iso}>{timing.formatted}</time>{timing.dateOnly ? "." : " (Brasília)."}</p>}
+                {timing?.isFromPreviousDate && <p style={{ marginTop: "0.4rem", fontSize: "0.82rem", color: "#92400e" }}>Cotação de uma data anterior a hoje.</p>}
               </div>
             </Link>
           );
@@ -105,14 +116,18 @@ export default function CotacaoPage() {
           Sobre as cotações
         </h2>
         <p style={{ color: "#475569", lineHeight: 1.7, marginBottom: "0.5rem" }}>
-          Os valores são referências informativas fornecidas pela AwesomeAPI. Eles não constituem uma oferta
+          Os valores são referências informativas das fontes identificadas em cada moeda. Eles não constituem uma oferta
           de compra ou venda e podem diferir do preço final de uma operação. Consulte o valor e as condições
           oferecidos pela instituição que realizará a transação.
         </p>
         <p style={{ color: "#475569", lineHeight: 1.7 }}>
-          Fonte dos valores: <a href="https://docs.awesomeapi.com.br/api-de-moedas" rel="noopener noreferrer" target="_blank" style={{ textDecoration: "underline" }}>AwesomeAPI</a>.
           Os dados podem apresentar atraso; confira a data antes de usar uma cotação como referência.
         </p>
+        {sources.map(source => (
+          <p key={source.name} style={{ color: "#475569", lineHeight: 1.7, marginTop: "0.5rem" }}>
+            <a href={source.url} rel="noopener noreferrer" target="_blank" style={{ textDecoration: "underline" }}>{source.name}</a>: {source.methodology}
+          </p>
+        ))}
       </section>
     </div>
   );

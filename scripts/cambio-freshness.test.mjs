@@ -8,7 +8,7 @@ const source = fs.readFileSync(new URL('../lib/cambio.ts', import.meta.url), 'ut
 const { outputText } = ts.transpileModule(source, {
   compilerOptions: { module: ts.ModuleKind.ESNext, target: ts.ScriptTarget.ES2022 },
 });
-const { getQuoteTiming, parseCambioSnapshot } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
+const { getQuoteSource, getQuoteTiming, parseCambioSnapshot } = await import(`data:text/javascript;base64,${Buffer.from(outputText).toString('base64')}`);
 const seconds = iso => Date.parse(iso) / 1000;
 const now = new Date('2026-11-04T15:00:00.000Z');
 function quote(code = 'USD-BRL', at = '2026-11-04T14:00:00Z') {
@@ -49,6 +49,26 @@ test('invalid or future source timestamps never become current quotes', () => {
     data.pares['USD-BRL'].timestamp = value;
     assert.equal(parseCambioSnapshot(data, now), null);
   }
+});
+
+test('source clock skew is bounded to five minutes and never changes the original timestamp', () => {
+  const data = snapshot();
+  const boundary = now.getTime() / 1000 + 300;
+  data.pares['USD-BRL'].timestamp = boundary;
+  data.historico['USD-BRL'] = [
+    { bid: 5, timestamp: boundary },
+    { bid: 6, timestamp: boundary + 1 },
+  ];
+  const parsed = parseCambioSnapshot(data, now);
+  assert.equal(parsed.pares['USD-BRL'].timestamp, boundary);
+  assert.equal(getQuoteTiming(boundary, now).iso, new Date(boundary * 1000).toISOString());
+  assert.equal(parsed.historico['USD-BRL'].length, 1);
+  assert.equal(getQuoteTiming(boundary + 1, now), null);
+  data.pares['USD-BRL'].timestamp = boundary + 1;
+  assert.equal(parseCambioSnapshot(data, now), null);
+  data.pares['USD-BRL'].timestamp = now.getTime() / 1000;
+  data.updated_at = new Date(now.getTime() + 1000).toISOString();
+  assert.equal(parseCambioSnapshot(data, now), null);
 });
 
 test('malformed prices and identifiers are excluded while another valid pair remains readable', () => {
@@ -92,4 +112,73 @@ test('legacy history dates are displayed by source timestamp in Brasilia without
   const parsed = parseCambioSnapshot(data, now);
   assert.deepEqual(parsed.historico['USD-BRL'], [{ bid: 5, timestamp: seconds('2026-11-04T01:15:00Z'), date: '2026-11-03' }]);
   assert.equal(data.historico['USD-BRL'][0].date, '2026-11-04');
+});
+
+function ptax() {
+  return {
+    ...quote(), source: 'bcb-ptax', timestamp_precision: 'day',
+    timestamp: seconds('2026-11-03T00:00:00-03:00'), create_date: '2026-11-03',
+    high: null, low: null, varBid: null, pctChange: null,
+  };
+}
+
+test('PTAX closing references admit unavailable intraday fields without inventing a time', () => {
+  const data = snapshot();
+  data.pares['USD-BRL'] = ptax();
+  const parsed = parseCambioSnapshot(data, now);
+  assert.equal(parsed.pares['USD-BRL'].high, null);
+  assert.equal(parsed.pares['USD-BRL'].pctChange, null);
+  const timing = getQuoteTiming(parsed.pares['USD-BRL'].timestamp, now, 'day');
+  assert.equal(timing.iso, '2026-11-03');
+  assert.equal(timing.formatted, '03/11/2026');
+  assert.equal(timing.dateOnly, true);
+  assert.equal(timing.isFromPreviousDate, true);
+  assert.equal(getQuoteSource(parsed.pares['USD-BRL']).name, 'Banco Central do Brasil — PTAX');
+});
+
+test('source identity and daily precision cannot disguise malformed quotes', () => {
+  for (const change of [
+    { source: 'untrusted' }, { source: '__proto__' }, { source: null },
+    { timestamp_precision: undefined }, { timestamp_precision: 'second' },
+    { create_date: '2026-02-30' }, { create_date: '2026-11-04' },
+    { timestamp: seconds('2026-11-03T03:00:01Z') },
+    { high: 5.1 }, { ask: null }, { bid: 0 },
+  ]) {
+    const data = snapshot();
+    data.pares['USD-BRL'] = { ...ptax(), ...change };
+    assert.equal(parseCambioSnapshot(data, now), null, JSON.stringify(change));
+  }
+  for (const source of ['awesomeapi', 'binance']) {
+    const data = snapshot();
+    data.pares['BTC-BRL'] = { ...quote('BTC-BRL'), source, timestamp_precision: 'day' };
+    assert.deepEqual(Object.keys(parseCambioSnapshot(data, now).pares), ['USD-BRL']);
+  }
+});
+
+test('new provider histories exclude anonymous legacy points and other providers', () => {
+  const data = snapshot();
+  data.pares['USD-BRL'] = ptax();
+  data.historico['USD-BRL'] = [
+    { bid: 5, timestamp: seconds('2026-11-03T03:00:00Z'), source: 'bcb-ptax' },
+    { bid: 8, timestamp: seconds('2026-11-02T03:00:00Z') },
+    { bid: 9, timestamp: seconds('2026-11-02T03:00:00Z'), source: 'binance' },
+  ];
+  assert.deepEqual(parseCambioSnapshot(data, now).historico['USD-BRL'], [{
+    bid: 5, timestamp: seconds('2026-11-03T03:00:00Z'), date: '2026-11-03', source: 'bcb-ptax',
+  }]);
+});
+
+test('Binance accepts only crypto pairs with finite extrema and no fabricated best-bid variation', () => {
+  const data = snapshot();
+  data.pares['BTC-BRL'] = { ...quote('BTC-BRL'), source: 'binance' };
+  data.pares['USD-BRL'].source = 'binance';
+  assert.deepEqual(Object.keys(parseCambioSnapshot(data, now).pares), ['BTC-BRL']);
+  data.pares['BTC-BRL'].high = null;
+  assert.equal(parseCambioSnapshot(data, now), null);
+  data.pares['BTC-BRL'].high = 5.1;
+  data.pares['BTC-BRL'].varBid = null;
+  assert.equal(parseCambioSnapshot(data, now), null);
+  data.pares['BTC-BRL'].pctChange = null;
+  assert.equal(parseCambioSnapshot(data, now).pares['BTC-BRL'].pctChange, null);
+  assert.equal(getQuoteSource({}).name, 'AwesomeAPI');
 });

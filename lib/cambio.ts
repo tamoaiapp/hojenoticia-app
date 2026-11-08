@@ -3,6 +3,8 @@ import path from "path";
 
 const CAMBIO_DIR = path.join(process.cwd(), "content", "cambio");
 
+export type QuoteSource = "awesomeapi" | "bcb-ptax" | "binance";
+
 export interface ParCambio {
   code: string;
   from: string;
@@ -10,18 +12,21 @@ export interface ParCambio {
   name: string;
   bid: number;
   ask: number;
-  high: number;
-  low: number;
-  varBid: number;
-  pctChange: number;
+  high: number | null;
+  low: number | null;
+  varBid: number | null;
+  pctChange: number | null;
   timestamp: number;
   create_date: string;
+  source?: QuoteSource;
+  timestamp_precision?: "day" | "second";
 }
 
 export interface HistoricoPoint {
   bid: number;
   timestamp: number;
   date: string;
+  source?: QuoteSource;
 }
 
 export interface CambioSnapshot {
@@ -32,6 +37,29 @@ export interface CambioSnapshot {
 }
 
 const BRASILIA = "America/Sao_Paulo";
+const MAX_SOURCE_CLOCK_SKEW_MS = 300_000;
+
+const QUOTE_SOURCES = {
+  awesomeapi: {
+    name: "AwesomeAPI",
+    url: "https://docs.awesomeapi.com.br/api-de-moedas",
+    methodology: "Referências de compra, venda e variação informadas pela AwesomeAPI.",
+  },
+  "bcb-ptax": {
+    name: "Banco Central do Brasil — PTAX",
+    url: "https://ptax.bcb.gov.br/ptax_internet/consultarTodasAsMoedas.do?method=consultaTodasMoedas",
+    methodology: "Taxa PTAX de fechamento da data indicada. É uma referência diária do Banco Central, não uma cotação intradiária. Máxima, mínima e variação não são informadas neste boletim.",
+  },
+  binance: {
+    name: "Binance — dados públicos de mercado",
+    url: "https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints#24hr-ticker-price-change-statistics",
+    methodology: "Compra e venda do mercado em reais na Binance. Máxima e mínima referem-se à janela móvel de 24 horas informada pela fonte. A variação da última negociação não é aplicada ao preço de compra.",
+  },
+} as const;
+
+export function getQuoteSource(quote: Pick<ParCambio, "source">) {
+  return QUOTE_SOURCES[quote.source ?? "awesomeapi"];
+}
 
 function record(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -39,7 +67,7 @@ function record(value: unknown): value is Record<string, unknown> {
 
 function validTimestamp(timestamp: unknown, now: Date): timestamp is number {
   return typeof timestamp === "number" && Number.isSafeInteger(timestamp) && timestamp > 0
-    && Number.isFinite(new Date(timestamp * 1000).getTime()) && timestamp * 1000 <= now.getTime();
+    && Number.isFinite(new Date(timestamp * 1000).getTime()) && timestamp * 1000 <= now.getTime() + MAX_SOURCE_CLOCK_SKEW_MS;
 }
 
 function brasiliaDay(date: Date): string {
@@ -48,14 +76,17 @@ function brasiliaDay(date: Date): string {
   }).format(date);
 }
 
-export function getQuoteTiming(timestamp: number, now = new Date()) {
+export function getQuoteTiming(timestamp: number, now = new Date(), precision: "day" | "second" = "second") {
   if (!validTimestamp(timestamp, now)) return null;
   const date = new Date(timestamp * 1000);
   const day = brasiliaDay(date);
   return {
-    iso: date.toISOString(),
+    iso: precision === "day" ? day : date.toISOString(),
     day,
-    formatted: date.toLocaleString("pt-BR", { timeZone: BRASILIA }),
+    formatted: precision === "day"
+      ? date.toLocaleDateString("pt-BR", { timeZone: BRASILIA })
+      : date.toLocaleString("pt-BR", { timeZone: BRASILIA }),
+    dateOnly: precision === "day",
     isFromPreviousDate: day < brasiliaDay(now),
   };
 }
@@ -81,17 +112,35 @@ export function parseCambioSnapshot(value: unknown, now = new Date()): CambioSna
     if (!record(par) || par.code !== code || par.from !== from || par.to !== to
       || typeof par.name !== "string" || !par.name.trim() || typeof par.create_date !== "string"
       || !validTimestamp(par.timestamp, now)) continue;
-    if (![par.bid, par.ask, par.high, par.low].every(n => typeof n === "number" && Number.isFinite(n) && n > 0)
-      || ![par.varBid, par.pctChange].every(n => typeof n === "number" && Number.isFinite(n))
-      || Number(par.high) < Number(par.low)) continue;
+    const source = par.source === undefined ? "awesomeapi" : par.source;
+    if (typeof source !== "string" || !Object.hasOwn(QUOTE_SOURCES, source)) continue;
+    if (![par.bid, par.ask].every(n => typeof n === "number" && Number.isFinite(n) && n > 0)) continue;
+    if (source === "bcb-ptax") {
+      if (!["USD", "EUR", "GBP", "ARS"].includes(from) || par.timestamp_precision !== "day"
+        || ![par.high, par.low, par.varBid, par.pctChange].every(n => n === null)) continue;
+      const day = brasiliaDay(new Date(par.timestamp * 1000));
+      // The CSV supplies a civil date. Midnight is only its storage boundary, never a trading time.
+      if (par.create_date !== day || par.timestamp !== Date.parse(`${day}T00:00:00-03:00`) / 1000) continue;
+    } else {
+      if (par.timestamp_precision !== undefined && par.timestamp_precision !== "second") continue;
+      if (source === "binance" && !["BTC", "ETH"].includes(from)) continue;
+      const hasVariation = [par.varBid, par.pctChange].every(n => typeof n === "number" && Number.isFinite(n));
+      const missingVariation = source === "binance" && par.varBid === null && par.pctChange === null;
+      if (![par.high, par.low].every(n => typeof n === "number" && Number.isFinite(n) && n > 0)
+        || (!hasVariation && !missingVariation)
+        || Number(par.high) < Number(par.low)) continue;
+    }
     pares[code] = par as unknown as ParCambio;
 
     const points = record(value.historico) ? value.historico[code] : undefined;
     historico[code] = Array.isArray(points) ? points.flatMap(point => {
       if (!record(point) || typeof point.bid !== "number" || !Number.isFinite(point.bid) || point.bid <= 0
-        || !validTimestamp(point.timestamp, now)) return [];
+        || !validTimestamp(point.timestamp, now)
+        || (point.source === undefined ? "awesomeapi" : point.source) !== source) return [];
       // Display the source timestamp in Brasilia, including legacy rows whose stored date used UTC.
-      return [{ bid: point.bid, timestamp: point.timestamp, date: brasiliaDay(new Date(point.timestamp * 1000)) }];
+      return [{ bid: point.bid, timestamp: point.timestamp, date: brasiliaDay(new Date(point.timestamp * 1000)),
+        ...(point.source !== undefined ? { source: source as QuoteSource } : {}),
+      }];
     }) : [];
   }
   if (!Object.keys(pares).length) return null;
