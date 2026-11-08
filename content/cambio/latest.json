@@ -1,5 +1,5 @@
 {
-  "updated_at": "2026-11-08T13:17:08.803Z",
+  "updated_at": "2026-11-08T13:20:21.660Z",
   "date": "2026-11-08",
   "pares": {
     "USD-BRL": {
@@ -71,14 +71,14 @@
       "from": "BTC",
       "to": "BRL",
       "name": "Bitcoin/Real Brasileiro",
-      "bid": 429052,
-      "ask": 429053,
-      "high": 429164,
+      "bid": 429231,
+      "ask": 429232,
+      "high": 429256,
       "low": 421462,
       "varBid": null,
       "pctChange": null,
-      "timestamp": 1794143847,
-      "create_date": "2026-11-08 13:17:27",
+      "timestamp": 1794144038,
+      "create_date": "2026-11-08 13:20:38",
       "source": "binance",
       "timestamp_precision": "second"
     },
@@ -87,14 +87,14 @@
       "from": "ETH",
       "to": "BRL",
       "name": "Ethereum/Real Brasileiro",
-      "bid": 12635.42,
-      "ask": 12643.08,
-      "high": 12646.42,
+      "bid": 12642.72,
+      "ask": 12654.76,
+      "high": 12654.51,
       "low": 12443,
       "varBid": null,
       "pctChange": null,
-      "timestamp": 1794143846,
-      "create_date": "2026-11-08 13:17:26",
+      "timestamp": 1794144038,
+      "create_date": "2026-11-08 13:20:38",
       "source": "binance",
       "timestamp_precision": "second"
     }
