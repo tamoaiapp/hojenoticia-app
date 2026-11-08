@@ -1,548 +1,103 @@
 {
-  "updated_at": "2026-11-04T11:19:18.089Z",
-  "date": "2026-11-04",
+  "updated_at": "2026-11-08T13:17:08.803Z",
+  "date": "2026-11-08",
   "pares": {
     "USD-BRL": {
       "code": "USD-BRL",
       "from": "USD",
       "to": "BRL",
       "name": "Dólar Americano/Real Brasileiro",
-      "bid": 5.4883,
-      "ask": 5.4888,
-      "high": 5.4883,
-      "low": 5.4883,
-      "varBid": 0,
-      "pctChange": 0.000003,
-      "timestamp": 1793777583,
-      "create_date": "2026-11-04 04:33:03"
-    },
-    "EUR-BRL": {
-      "code": "EUR-BRL",
-      "from": "EUR",
-      "to": "BRL",
-      "name": "Euro/Real Brasileiro",
-      "bid": 6.1742,
-      "ask": 6.1762,
-      "high": 6.1817,
-      "low": 6.1459,
-      "varBid": 0.0255,
-      "pctChange": 0.414718,
-      "timestamp": 1793789367,
-      "create_date": "2026-11-04 07:49:27"
+      "bid": 5.5007,
+      "ask": 5.5013,
+      "high": null,
+      "low": null,
+      "varBid": null,
+      "pctChange": null,
+      "timestamp": 1793934000,
+      "create_date": "2026-11-06",
+      "source": "bcb-ptax",
+      "timestamp_precision": "day"
     },
     "GBP-BRL": {
       "code": "GBP-BRL",
       "from": "GBP",
       "to": "BRL",
       "name": "Libra Esterlina/Real Brasileiro",
-      "bid": 7.39861,
-      "ask": 7.40265,
-      "high": 7.40884,
-      "low": 7.35835,
-      "varBid": 0.027005,
-      "pctChange": 0.366336,
-      "timestamp": 1793789361,
-      "create_date": "2026-11-04 07:49:21"
+      "bid": 7.3467,
+      "ask": 7.3519,
+      "high": null,
+      "low": null,
+      "varBid": null,
+      "pctChange": null,
+      "timestamp": 1793934000,
+      "create_date": "2026-11-06",
+      "source": "bcb-ptax",
+      "timestamp_precision": "day"
     },
     "ARS-BRL": {
       "code": "ARS-BRL",
       "from": "ARS",
       "to": "BRL",
       "name": "Peso Argentino/Real Brasileiro",
-      "bid": 0.00354064,
-      "ask": 0.00354066,
-      "high": 0.0035423,
-      "low": 0.00353358,
-      "varBid": 0,
-      "pctChange": -0.009034,
-      "timestamp": 1793789364,
-      "create_date": "2026-11-04 07:49:24"
+      "bid": 0.003559,
+      "ask": 0.003562,
+      "high": null,
+      "low": null,
+      "varBid": null,
+      "pctChange": null,
+      "timestamp": 1793934000,
+      "create_date": "2026-11-06",
+      "source": "bcb-ptax",
+      "timestamp_precision": "day"
+    },
+    "EUR-BRL": {
+      "code": "EUR-BRL",
+      "from": "EUR",
+      "to": "BRL",
+      "name": "Euro/Real Brasileiro",
+      "bid": 6.13,
+      "ask": 6.1317,
+      "high": null,
+      "low": null,
+      "varBid": null,
+      "pctChange": null,
+      "timestamp": 1793934000,
+      "create_date": "2026-11-06",
+      "source": "bcb-ptax",
+      "timestamp_precision": "day"
     },
     "BTC-BRL": {
       "code": "BTC-BRL",
       "from": "BTC",
       "to": "BRL",
       "name": "Bitcoin/Real Brasileiro",
-      "bid": 430116,
-      "ask": 430117,
-      "high": 430934,
-      "low": 418004,
-      "varBid": 7509,
-      "pctChange": 1.777,
-      "timestamp": 1793789407,
-      "create_date": "2026-11-04 07:50:07"
+      "bid": 429052,
+      "ask": 429053,
+      "high": 429164,
+      "low": 421462,
+      "varBid": null,
+      "pctChange": null,
+      "timestamp": 1794143847,
+      "create_date": "2026-11-08 13:17:27",
+      "source": "binance",
+      "timestamp_precision": "second"
     },
     "ETH-BRL": {
       "code": "ETH-BRL",
       "from": "ETH",
       "to": "BRL",
       "name": "Ethereum/Real Brasileiro",
-      "bid": 12740.95,
-      "ask": 12747.4,
-      "high": 12786.43,
-      "low": 12295.63,
-      "varBid": 284.75,
-      "pctChange": 2.286,
-      "timestamp": 1793789408,
-      "create_date": "2026-11-04 07:50:08"
+      "bid": 12635.42,
+      "ask": 12643.08,
+      "high": 12646.42,
+      "low": 12443,
+      "varBid": null,
+      "pctChange": null,
+      "timestamp": 1794143846,
+      "create_date": "2026-11-08 13:17:26",
+      "source": "binance",
+      "timestamp_precision": "second"
     }
   },
-  "historico": {
-    "USD-BRL": [
-      {
-        "bid": 5.4883,
-        "timestamp": 1793777583,
-        "date": "2026-11-04"
-      },
-      {
-        "bid": 5.4883,
-        "timestamp": 1793745469,
-        "date": "2026-11-03"
-      },
-      {
-        "bid": 5.4366,
-        "timestamp": 1793649844,
-        "date": "2026-11-02"
-      },
-      {
-        "bid": 5.4397,
-        "timestamp": 1793397608,
-        "date": "2026-10-30"
-      },
-      {
-        "bid": 5.3849,
-        "timestamp": 1793317363,
-        "date": "2026-10-29"
-      },
-      {
-        "bid": 5.3462,
-        "timestamp": 1793229652,
-        "date": "2026-10-28"
-      },
-      {
-        "bid": 5.3514,
-        "timestamp": 1793143108,
-        "date": "2026-10-27"
-      },
-      {
-        "bid": 5.3712,
-        "timestamp": 1793053805,
-        "date": "2026-10-26"
-      },
-      {
-        "bid": 4.9648,
-        "timestamp": 1792790992,
-        "date": "2026-10-23"
-      },
-      {
-        "bid": 5.0523,
-        "timestamp": 1792708204,
-        "date": "2026-10-22"
-      },
-      {
-        "bid": 5.0236,
-        "timestamp": 1792621806,
-        "date": "2026-10-21"
-      },
-      {
-        "bid": 5.0238,
-        "timestamp": 1792535470,
-        "date": "2026-10-20"
-      },
-      {
-        "bid": 5.0402,
-        "timestamp": 1792449006,
-        "date": "2026-10-19"
-      },
-      {
-        "bid": 5.0645,
-        "timestamp": 1792360803,
-        "date": "2026-10-18"
-      },
-      {
-        "bid": 5.0622,
-        "timestamp": 1792184463,
-        "date": "2026-10-16"
-      },
-      {
-        "bid": 5.098,
-        "timestamp": 1792103405,
-        "date": "2026-10-15"
-      },
-      {
-        "bid": 5.0479,
-        "timestamp": 1792013384,
-        "date": "2026-10-14"
-      },
-      {
-        "bid": 5.0266,
-        "timestamp": 1791930605,
-        "date": "2026-10-13"
-      },
-      {
-        "bid": 4.9863,
-        "timestamp": 1791815237,
-        "date": "2026-10-12"
-      },
-      {
-        "bid": 4.9918,
-        "timestamp": 1791756002,
-        "date": "2026-10-11"
-      },
-      {
-        "bid": 4.9918,
-        "timestamp": 1791585005,
-        "date": "2026-10-09"
-      },
-      {
-        "bid": 5.0179,
-        "timestamp": 1791498607,
-        "date": "2026-10-08"
-      },
-      {
-        "bid": 5.0221,
-        "timestamp": 1791412316,
-        "date": "2026-10-07"
-      },
-      {
-        "bid": 4.9825,
-        "timestamp": 1791325806,
-        "date": "2026-10-06"
-      },
-      {
-        "bid": 4.9988,
-        "timestamp": 1791239406,
-        "date": "2026-10-05"
-      },
-      {
-        "bid": 5.222,
-        "timestamp": 1791151203,
-        "date": "2026-10-04"
-      },
-      {
-        "bid": 5.2162,
-        "timestamp": 1790975871,
-        "date": "2026-10-02"
-      },
-      {
-        "bid": 5.2271,
-        "timestamp": 1790890065,
-        "date": "2026-10-01"
-      },
-      {
-        "bid": 5.184,
-        "timestamp": 1790807485,
-        "date": "2026-09-30"
-      },
-      {
-        "bid": 5.2031,
-        "timestamp": 1790717105,
-        "date": "2026-09-29"
-      }
-    ],
-    "EUR-BRL": [
-      {
-        "bid": 6.1699,
-        "timestamp": 1793790868,
-        "date": "2026-11-04"
-      },
-      {
-        "bid": 6.1487,
-        "timestamp": 1793750069,
-        "date": "2026-11-03"
-      },
-      {
-        "bid": 6.0852,
-        "timestamp": 1793663968,
-        "date": "2026-11-02"
-      },
-      {
-        "bid": 6.0117,
-        "timestamp": 1793577568,
-        "date": "2026-11-01"
-      },
-      {
-        "bid": 6.0846,
-        "timestamp": 1793397706,
-        "date": "2026-10-30"
-      },
-      {
-        "bid": 6.0211,
-        "timestamp": 1793318206,
-        "date": "2026-10-29"
-      },
-      {
-        "bid": 5.9654,
-        "timestamp": 1793231805,
-        "date": "2026-10-28"
-      },
-      {
-        "bid": 5.954,
-        "timestamp": 1793145408,
-        "date": "2026-10-27"
-      },
-      {
-        "bid": 6.0044,
-        "timestamp": 1793059006,
-        "date": "2026-10-26"
-      },
-      {
-        "bid": 5.6144,
-        "timestamp": 1792965603,
-        "date": "2026-10-25"
-      },
-      {
-        "bid": 5.5617,
-        "timestamp": 1792790969,
-        "date": "2026-10-23"
-      },
-      {
-        "bid": 5.6678,
-        "timestamp": 1792713572,
-        "date": "2026-10-22"
-      },
-      {
-        "bid": 5.6436,
-        "timestamp": 1792627171,
-        "date": "2026-10-21"
-      },
-      {
-        "bid": 5.6392,
-        "timestamp": 1792540769,
-        "date": "2026-10-20"
-      },
-      {
-        "bid": 5.6483,
-        "timestamp": 1792454087,
-        "date": "2026-10-19"
-      },
-      {
-        "bid": 5.6959,
-        "timestamp": 1792366794,
-        "date": "2026-10-18"
-      },
-      {
-        "bid": 5.7041,
-        "timestamp": 1792184969,
-        "date": "2026-10-16"
-      },
-      {
-        "bid": 5.7153,
-        "timestamp": 1792108768,
-        "date": "2026-10-15"
-      },
-      {
-        "bid": 5.6444,
-        "timestamp": 1792022336,
-        "date": "2026-10-14"
-      },
-      {
-        "bid": 5.6299,
-        "timestamp": 1791935068,
-        "date": "2026-10-13"
-      },
-      {
-        "bid": 5.5633,
-        "timestamp": 1791849569,
-        "date": "2026-10-12"
-      },
-      {
-        "bid": 5.5776,
-        "timestamp": 1791756002,
-        "date": "2026-10-11"
-      },
-      {
-        "bid": 5.5831,
-        "timestamp": 1791583490,
-        "date": "2026-10-09"
-      },
-      {
-        "bid": 5.6275,
-        "timestamp": 1791503989,
-        "date": "2026-10-08"
-      },
-      {
-        "bid": 5.6217,
-        "timestamp": 1791417594,
-        "date": "2026-10-07"
-      },
-      {
-        "bid": 5.6066,
-        "timestamp": 1791330893,
-        "date": "2026-10-06"
-      },
-      {
-        "bid": 5.6061,
-        "timestamp": 1791244789,
-        "date": "2026-10-05"
-      },
-      {
-        "bid": 5.8765,
-        "timestamp": 1791156889,
-        "date": "2026-10-04"
-      },
-      {
-        "bid": 5.8702,
-        "timestamp": 1790976067,
-        "date": "2026-10-02"
-      },
-      {
-        "bid": 5.8752,
-        "timestamp": 1790899140,
-        "date": "2026-10-01"
-      }
-    ],
-    "BTC-BRL": [
-      {
-        "bid": 430046,
-        "timestamp": 1793789300,
-        "date": "2026-11-04"
-      },
-      {
-        "bid": 427002,
-        "timestamp": 1793750395,
-        "date": "2026-11-03"
-      },
-      {
-        "bid": 420617,
-        "timestamp": 1793663990,
-        "date": "2026-11-02"
-      },
-      {
-        "bid": 427723,
-        "timestamp": 1793577558,
-        "date": "2026-11-01"
-      },
-      {
-        "bid": 416978,
-        "timestamp": 1793491173,
-        "date": "2026-10-31"
-      },
-      {
-        "bid": 416071,
-        "timestamp": 1793404775,
-        "date": "2026-10-30"
-      },
-      {
-        "bid": 419411,
-        "timestamp": 1793318360,
-        "date": "2026-10-29"
-      },
-      {
-        "bid": 435880,
-        "timestamp": 1793231954,
-        "date": "2026-10-28"
-      },
-      {
-        "bid": 433594,
-        "timestamp": 1793145581,
-        "date": "2026-10-27"
-      },
-      {
-        "bid": 431485,
-        "timestamp": 1793059185,
-        "date": "2026-10-26"
-      },
-      {
-        "bid": 418955,
-        "timestamp": 1792972799,
-        "date": "2026-10-25"
-      },
-      {
-        "bid": 405181,
-        "timestamp": 1792886386,
-        "date": "2026-10-24"
-      },
-      {
-        "bid": 407278,
-        "timestamp": 1792799955,
-        "date": "2026-10-23"
-      },
-      {
-        "bid": 412031,
-        "timestamp": 1792713564,
-        "date": "2026-10-22"
-      },
-      {
-        "bid": 423986,
-        "timestamp": 1792627176,
-        "date": "2026-10-21"
-      },
-      {
-        "bid": 418363,
-        "timestamp": 1792540778,
-        "date": "2026-10-20"
-      },
-      {
-        "bid": 413609,
-        "timestamp": 1792454376,
-        "date": "2026-10-19"
-      },
-      {
-        "bid": 414521,
-        "timestamp": 1792367991,
-        "date": "2026-10-18"
-      },
-      {
-        "bid": 413893,
-        "timestamp": 1792281581,
-        "date": "2026-10-17"
-      },
-      {
-        "bid": 414603,
-        "timestamp": 1792195169,
-        "date": "2026-10-16"
-      },
-      {
-        "bid": 419593,
-        "timestamp": 1792108751,
-        "date": "2026-10-15"
-      },
-      {
-        "bid": 412775,
-        "timestamp": 1792022391,
-        "date": "2026-10-14"
-      },
-      {
-        "bid": 419133,
-        "timestamp": 1791935999,
-        "date": "2026-10-13"
-      },
-      {
-        "bid": 410663,
-        "timestamp": 1791849576,
-        "date": "2026-10-12"
-      },
-      {
-        "bid": 420700,
-        "timestamp": 1791763183,
-        "date": "2026-10-11"
-      },
-      {
-        "bid": 416348,
-        "timestamp": 1791676761,
-        "date": "2026-10-10"
-      },
-      {
-        "bid": 414867,
-        "timestamp": 1791590392,
-        "date": "2026-10-09"
-      },
-      {
-        "bid": 411699,
-        "timestamp": 1791503978,
-        "date": "2026-10-08"
-      },
-      {
-        "bid": 419375,
-        "timestamp": 1791417577,
-        "date": "2026-10-07"
-      },
-      {
-        "bid": 428026,
-        "timestamp": 1791331180,
-        "date": "2026-10-06"
-      }
-    ]
-  }
+  "historico": {}
 }
