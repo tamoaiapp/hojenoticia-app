@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getCambioLatest, getQuoteTiming, MOEDA_INFO, SLUG_TO_CODE, formatBRL } from "@/lib/cambio";
+import { getCambioLatest, getQuoteSource, getQuoteTiming, MOEDA_INFO, SLUG_TO_CODE, formatBRL } from "@/lib/cambio";
 import AdsterraBanner from "@/components/AdsterraBanner";
 import AdsterraNative from "@/components/AdsterraNative";
 
@@ -47,15 +47,18 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
   }
 
   const historico = data.historico?.[code] ?? [];
-  const subiu = par.pctChange >= 0;
+  const subiu = par.pctChange !== null && par.pctChange >= 0;
   const updatedAt = new Date(data.updated_at).toLocaleString("pt-BR", { timeZone: "America/Sao_Paulo" });
-  const timing = getQuoteTiming(par.timestamp, now);
+  const timing = getQuoteTiming(par.timestamp, now, par.timestamp_precision);
+  const source = getQuoteSource(par);
 
   // Estatísticas do histórico
   const valores = historico.map(h => h.bid).filter(v => v > 0);
-  const max30 = valores.length ? Math.max(...valores) : par.high;
-  const min30 = valores.length ? Math.min(...valores) : par.low;
-  const media30 = valores.length ? valores.reduce((a, b) => a + b, 0) / valores.length : par.bid;
+  const stats = valores.length ? {
+    max: Math.max(...valores),
+    min: Math.min(...valores),
+    mean: valores.reduce((a, b) => a + b, 0) / valores.length,
+  } : null;
 
   const breadcrumbLd = {
     "@context": "https://schema.org",
@@ -88,40 +91,43 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
         <p style={{ color: "#94a3b8", fontSize: "0.82rem", marginTop: "0.4rem" }}>
           Coleta deste registro: {updatedAt} (horário de Brasília).
         </p>
-        {timing && <p style={{ color: "#64748b", fontSize: "0.85rem", marginTop: "0.3rem" }}>Negociação na fonte: <time dateTime={timing.iso}>{timing.formatted}</time> (horário de Brasília).</p>}
-        {timing?.isFromPreviousDate && <p style={{ color: "#92400e", fontSize: "0.9rem", marginTop: "0.6rem" }}>A negociação foi registrada pela fonte em data anterior a hoje. A cotação registrada pode não refletir os valores neste momento.</p>}
+        {timing && <p style={{ color: "#64748b", fontSize: "0.85rem", marginTop: "0.3rem" }}>{timing.dateOnly ? "Data do fechamento: " : "Cotação na fonte: "}<time dateTime={timing.iso}>{timing.formatted}</time>{timing.dateOnly ? "." : " (horário de Brasília)."}</p>}
+        {timing?.isFromPreviousDate && <p style={{ color: "#92400e", fontSize: "0.9rem", marginTop: "0.6rem" }}>A cotação é de uma data anterior a hoje e pode não refletir os valores neste momento. Referências diárias podem manter o último fechamento em fins de semana e feriados.</p>}
       </div>
 
       <div style={{ background: "#fff", borderRadius: 14, padding: "1.75rem", border: "1px solid #e2e8f0", marginBottom: "1.5rem" }}>
         <div style={{ fontSize: "0.85rem", color: "#94a3b8", fontWeight: 700, textTransform: "uppercase", marginBottom: "0.4rem" }}>
-          Cotação registrada
+          {par.source === "bcb-ptax" ? "Compra PTAX de fechamento" : "Compra informada pela fonte"}
         </div>
         <div style={{ fontSize: "2.8rem", fontWeight: 900, color: info.cor, lineHeight: 1 }}>
           {formatBRL(par.bid)}
         </div>
-        <div style={{ marginTop: "0.6rem", color: subiu ? "#16a34a" : "#dc2626", fontWeight: 800, fontSize: "1.1rem" }}>
-          {subiu ? "▲" : "▼"} {par.pctChange.toFixed(2)}%  ({par.varBid >= 0 ? "+" : ""}{par.varBid.toFixed(4)})
-        </div>
+        {par.pctChange !== null && par.varBid !== null && (
+          <div style={{ marginTop: "0.6rem", color: subiu ? "#16a34a" : "#dc2626", fontWeight: 800, fontSize: "1.1rem" }}>
+            {subiu ? "▲" : "▼"} {par.pctChange.toFixed(2)}% ({par.varBid >= 0 ? "+" : ""}{par.varBid.toFixed(4)}){par.source === "binance" ? " em 24h" : ""}
+          </div>
+        )}
+        {par.source === "bcb-ptax" && <p style={{ color: "#475569", marginTop: "0.75rem", lineHeight: 1.6 }}>{source.methodology}</p>}
       </div>
 
       <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem", marginBottom: "2rem" }}>
         <Stat label="Compra informada pela fonte" value={formatBRL(par.bid)} />
         <Stat label="Venda informada pela fonte" value={formatBRL(par.ask)} />
-        <Stat label="Máxima do dia registrado" value={formatBRL(par.high)} />
-        <Stat label="Mínima do dia registrado" value={formatBRL(par.low)} />
+        {par.high !== null && <Stat label={par.source === "binance" ? "Máxima em 24h" : "Máxima do dia registrado"} value={formatBRL(par.high)} />}
+        {par.low !== null && <Stat label={par.source === "binance" ? "Mínima em 24h" : "Mínima do dia registrado"} value={formatBRL(par.low)} />}
       </div>
 
-      {historico.length > 0 && (
+      {historico.length > 0 && stats && (
         <section style={{ marginBottom: "2rem" }}>
           <h2 style={{ fontSize: "1.25rem", fontWeight: 800, marginBottom: "0.75rem", color: "#0f172a" }}>
             Histórico disponível
           </h2>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "0.75rem", marginBottom: "1rem" }}>
-            <Stat label="Máxima no histórico" value={formatBRL(max30)} />
-            <Stat label="Mínima no histórico" value={formatBRL(min30)} />
-            <Stat label="Média no histórico" value={formatBRL(media30)} />
+            <Stat label="Máxima no histórico" value={formatBRL(stats.max)} />
+            <Stat label="Mínima no histórico" value={formatBRL(stats.min)} />
+            <Stat label="Média no histórico" value={formatBRL(stats.mean)} />
           </div>
-          <p style={{ color: "#64748b", fontSize: "0.85rem", marginBottom: "0.75rem" }}>A tabela mostra até 15 registros do histórico fornecido pela fonte.</p>
+          <p style={{ color: "#64748b", fontSize: "0.85rem", marginBottom: "0.75rem" }}>A tabela mostra até 15 registros disponíveis da mesma fonte: {source.name}. Mudanças de fonte iniciam uma série separada.</p>
           <div style={{ overflowX: "auto" }}>
             <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.88rem" }}>
               <thead>
@@ -150,7 +156,7 @@ export default async function MoedaPage({ params }: { params: Promise<{ moeda: s
       <section style={{ color: "#475569", lineHeight: 1.7, marginBottom: "1.5rem" }}>
         <h2 style={{ fontSize: "1.15rem", color: "#0f172a", marginBottom: "0.5rem" }}>Fonte e uso dos valores</h2>
         <p>
-          Fonte: <a href="https://docs.awesomeapi.com.br/api-de-moedas" target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>AwesomeAPI</a>.
+          Fonte: <a href={source.url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "underline" }}>{source.name}</a>. {source.methodology}{" "}
           As referências de compra e venda são campos da fonte, não preços oferecidos ao visitante.
           Os dados podem apresentar atraso e não constituem uma oferta de negociação.
         </p>

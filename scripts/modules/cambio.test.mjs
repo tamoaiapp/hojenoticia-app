@@ -30,7 +30,8 @@ function setup(t) {
   const daily = path.join(dir, `${today}.json`);
   const waits = [];
   const calls = [];
-  const options = { root, today, now, apiKey: '', wait: async ms => { waits.push(ms); } };
+  // Esta suíte isola o contrato da fonte primária; a recuperação tem suíte própria.
+  const options = { root, today, now, apiKey: '', fallbackImpl: null, wait: async ms => { waits.push(ms); } };
   const fetcher = handler => async (url, options) => {
     calls.push({ url, options });
     return handler(url, options, calls.length);

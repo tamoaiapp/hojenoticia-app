@@ -8,7 +8,7 @@ $ErrorActionPreference = 'Continue'
 $ProgressPreference = 'SilentlyContinue'
 
 # === Setup de paths ===
-$ROOT = "C:\Users\Notebook\Workspace\hojenoticia-app"
+$ROOT = Split-Path -Parent $PSScriptRoot
 $LOG_DIR = Join-Path $ROOT "scripts\logs"
 if (-not (Test-Path $LOG_DIR)) { New-Item -ItemType Directory -Path $LOG_DIR | Out-Null }
 
@@ -32,7 +32,8 @@ if (-not $online) {
 }
 
 # === Rodar daily-update (orquestrador unificado) ===
-Set-Location $ROOT
+$exitCode = 1
+Set-Location -LiteralPath $ROOT -ErrorAction Stop
 try {
     & node scripts\daily-update.mjs *>&1 | Out-File $logFile -Append -Encoding utf8
     $exitCode = $LASTEXITCODE
@@ -46,3 +47,5 @@ try {
 Get-ChildItem $LOG_DIR -Filter "*.log" |
     Where-Object { $_.LastWriteTime -lt (Get-Date).AddDays(-30) } |
     Remove-Item -Force -ErrorAction SilentlyContinue
+
+exit $exitCode

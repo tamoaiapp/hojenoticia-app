@@ -21,18 +21,21 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7.0.1
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node
-        uses: actions/setup-node@v7.1.0
+        uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '24'
 
       - name: Test exchange-rate updater
-        run: node --test scripts/modules/cambio.test.mjs
+        run: node --test scripts/modules/cambio.test.mjs scripts/modules/cambio-fallback.test.mjs scripts/modules/cambio-recovery.test.mjs
+
+      - name: Test lottery updater and failure reporting
+        run: node --test scripts/modules/loterias.test.mjs scripts/daily-update.test.mjs
 
       - name: Test calendar rules and idempotent content updates
         run: node --test scripts/holiday-calendar.test.mjs scripts/resultados-following.test.mjs scripts/modules/horoscopo.test.mjs
@@ -59,4 +62,8 @@ jobs:
 
       - name: Report updater failures
         if: steps.update.outcome == 'failure'
-        run: exit 1
+        env:
+          FAILED_MODULES: ${{ steps.update.outputs.failed_modules }}
+        run: |
+          echo "::error title=Atualização incompleta::Falha nos módulos: ${FAILED_MODULES:-consulte o log da atualização}. As alterações válidas foram preservadas."
+          exit 1
